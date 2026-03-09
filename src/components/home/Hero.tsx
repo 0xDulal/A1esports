@@ -33,12 +33,12 @@ export function Hero() {
            
            <div className="relative w-full h-full translate-y-[15%] sm:translate-y-[20%]">
             <Image 
-                src="/images/final.png" 
+                src="/images/HeroImage.png" 
                 fill 
                 className="object-contain object-bottom drop-shadow-2xl"
                 alt="A1 Esports Team"
                 priority
-                sizes="(max-width: 768px) 100vw, 90vw"
+                sizes="(max-width: 968px) 100vw, 90vw"
             />
            </div>
         </motion.div>
