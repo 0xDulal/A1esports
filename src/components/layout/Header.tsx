@@ -1,10 +1,47 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { Search, User, ShoppingBag, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { useEffect, useMemo, useState } from "react";
 
 export function Header() {
+  const [liveData, setLiveData] = useState<{
+    live: boolean;
+    stream: { title: string; url: string } | null;
+    latest?: { title: string; url: string }[];
+  }>({ live: false, stream: null, latest: [] });
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    let mounted = true;
+    const fetchLive = async () => {
+      try {
+        const res = await fetch("/api/youtube/live", { cache: "no-store" });
+        if (!res.ok) return;
+        const json = await res.json();
+        if (mounted) setLiveData(json);
+      } catch {}
+    };
+    fetchLive();
+    const id = setInterval(fetchLive, 60000);
+    return () => {
+      mounted = false;
+      clearInterval(id);
+    };
+  }, []);
+  useEffect(() => {
+    if (!liveData?.latest || liveData.latest.length < 2 || liveData.live) return;
+    const id = setInterval(() => {
+      setIdx((v) => (v + 1) % (liveData.latest?.length || 1));
+    }, 30000);
+    return () => clearInterval(id);
+  }, [liveData.live, liveData.latest]);
+  const currentLatest = useMemo(() => {
+    const list = liveData?.latest || [];
+    if (list.length === 0) return null;
+    return list[idx % list.length];
+  }, [liveData.latest, idx]);
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background text-foreground">
       <div className="flex h-16 lg:h-24">
@@ -48,16 +85,33 @@ export function Header() {
                 Investors
               </Link>
             </nav>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse"></span>
-                <span className="font-bold text-foreground">LIVE NOW</span>
+            {liveData.live && liveData.stream ? (
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse"></span>
+                  <span className="font-bold text-foreground">LIVE NOW</span>
+                </div>
+                <span className="text-muted-foreground truncate max-w-[280px]">
+                  {liveData.stream.title}
+                </span>
+                <Link href={liveData.stream.url} target="_blank" rel="noopener noreferrer" className="font-bold text-primary hover:text-primary/80 ml-2">
+                  WATCH
+                </Link>
               </div>
-              <span className="text-muted-foreground">Playing Champions Tokyo 2023</span>
-              <Link href="#" className="font-bold text-primary hover:text-primary/80 ml-2">
-                WATCH
-              </Link>
-            </div>
+            ) : currentLatest ? (
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground"></span>
+                  <span className="font-bold text-foreground">LATEST</span>
+                </div>
+                <span className="text-muted-foreground truncate max-w-[280px]">
+                  {currentLatest.title}
+                </span>
+                <Link href={currentLatest.url} target="_blank" rel="noopener noreferrer" className="font-bold text-primary hover:text-primary/80 ml-2">
+                  WATCH
+                </Link>
+              </div>
+            ) : null}
           </div>
 
           {/* Main Nav Bar */}
