@@ -118,7 +118,7 @@ export function SocialGrid({ stats }: { stats?: Stats }) {
                 className="group relative flex min-h-[200px] sm:aspect-square flex-col justify-between border-b border-r border-white/10 bg-black p-8 sm:p-12 transition-colors hover:bg-neutral-900/50 overflow-hidden"
               >
                 {/* Background Icon Watermark */}
-                <div className="absolute -right-4 -bottom-4 text-white/5 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12 pointer-events-none">
+                <div className="absolute -right-4 -bottom-4 text-white/10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12 pointer-events-none">
                   <social.icon className="h-32 w-32 sm:h-48 sm:w-48" />
                 </div>
                 {/* Top Icon */}

@@ -1,7 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Facebook } from "lucide-react";
 import Image from "next/image";
+import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
 
 const players = [
   {
@@ -41,7 +43,7 @@ export function PlayerSection() {
   return (
     <section className="w-full bg-black py-24">
       <div className="mx-auto max-w-[1800px] px-4">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -77,19 +79,19 @@ function PlayerCard({ player, index }: { player: typeof players[0]; index: numbe
     >
       {/* Background Gradient/Texture */}
       <div className="absolute top-2/6 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] opacity-5 pointer-events-none select-none">
-              <Image
-                src="/A1esports_logo_white.svg"
-                alt="A1 Esports Logo"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
+        <Image
+          src="/A1esports_logo_white.svg"
+          alt="A1 Esports Logo"
+          fill
+          className="object-contain"
+          priority
+        />
+      </div>
       <div className="absolute inset-0 bg-radial-gradient from-primary/20 via-transparent to-green-700/40" />
-      
+
       {/* Top Name (IGN) */}
-      <div className="absolute left-6 top-6 z-20">
-        <h3 className="text-lg font-bold uppercase tracking-widest text-primary transition-colors group-hover:text-white/80">
+      <div className="flex justify-center mt-6 z-20 opacity-50 blur-[0.7px] ">
+        <h3 className="text-3xl font-bold uppercase tracking-widest text-primary transition-colors  group-hover:text-white/80">
           {player.ign}
         </h3>
       </div>
@@ -97,8 +99,8 @@ function PlayerCard({ player, index }: { player: typeof players[0]; index: numbe
       {/* Player Image */}
       <div className="absolute inset-0 z-10 flex items-end justify-center">
         <div className="relative h-[80%] w-full transition-all duration-500 group-hover:scale-105">
-           {/* Placeholder handling - in real usage, these would be transparent PNGs of players */}
-           <Image
+          {/* Placeholder handling - in real usage, these would be transparent PNGs of players */}
+          <Image
             src={player.image}
             alt={player.ign}
             fill
@@ -111,22 +113,24 @@ function PlayerCard({ player, index }: { player: typeof players[0]; index: numbe
       <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-black via-black/80 to-transparent p-6 pt-32">
         {/* Country & Real Name */}
         <div className="mb-4">
-            <h4 className="text-2xl font-black uppercase tracking-tight text-white leading-none">
-                {player.name}
-            </h4>
+          <h4 className="text-2xl font-black uppercase tracking-tight text-white leading-none">
+            {player.name}
+          </h4>
         </div>
 
         {/* Role */}
         <div className="flex items-center justify-between border-t border-white/20 pt-4">
-          <span className="text-sm font-bold uppercase tracking-widest text-primary">
-            {player.role}
-          </span>
-          
-          <Image 
-            src="/A1esports_logo_white.svg" 
-            alt="A1 Esports Logo" 
-            width={16} 
-            height={16} 
+          <div className="flex justify-strat gap-4">
+            <FaFacebook size={24}/>
+        <FaInstagram size={24}/>
+        <FaYoutube size={24}/>
+          </div>
+
+          <Image
+            src="/A1esports_logo_white.svg"
+            alt="A1 Esports Logo"
+            width={16}
+            height={16}
             className="object-contain opacity-80"
           />
         </div>
