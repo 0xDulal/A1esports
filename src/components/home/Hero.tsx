@@ -38,7 +38,7 @@ export function Hero() {
                 className="object-contain object-bottom drop-shadow-2xl"
                 alt="A1 Esports Team"
                 priority
-                sizes="(max-width: 968px) 100vw, 90vw"
+                sizes="(max-width: 1300px) 100vw, 90vw"
             />
            </div>
         </motion.div>
