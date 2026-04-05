@@ -10,32 +10,32 @@ const players = [
     ign: "SiNiSTER",
     name: "MD Abdul Jabbar Shakil",
     role: "IGL",
-    image: "/images/Flash.png", // Using team photo as placeholder for now
+    image: "/images/players/SiNiSTER.png", // Using team photo as placeholder for now
     customImage: true, // Flag to handle placeholder cropping/positioning if needed
   },
   {
     ign: "ROWDY",
     name: "Emon Sheikh",
     role: "FRAGGER",
-    image: "/images/Flash.png",
+    image: "/images/players/ROWDY.png",
   },
   {
     ign: "DEATHSTORM",
     name: "Hasan Mahmood",
     role: "SNIPER",
-    image: "/images/Flash.png",
+    image: "/images/players/DEATHSTORM.png",
   },
   {
     ign: "CJBOYY",
     name: "Tahmid Aronno",
     role: "RUSHER",
-    image: "/images/Flash.png",
+    image: "/images/players/CJBOYY.png",
   },
   {
     ign: "FLASH",
     name: "Tausif Rahman",
     role: "SUPPORT",
-    image: "/images/Flash.png",
+    image: "/images/players/FLASH.png",
   },
 ];
 

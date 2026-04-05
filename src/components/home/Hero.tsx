@@ -2,15 +2,39 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 
 export function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(error => {
+        console.error("Video autoplay failed:", error);
+      });
+    }
+  }, []);
+
   return (
-    <section className="relative h-[85vh] w-full overflow-hidden bg-background flex flex-col items-center justify-end pb-0 sm:pb-12">
+    <section className="relative h-[85vh] w-full overflow-hidden bg-black flex flex-col items-center justify-end pb-4">
+      {/* Background Video */}
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none"
+      >
+        {/* Using .mp4 for better cross-browser compatibility as background video */}
+        <source src="https://stream.mux.com/4IMYGcL01xjs7ek5ANO17JC4VQVUTsojZlnw4fXzwSxc.mp4" type="video/mp4" />
+        <source src="https://stream.mux.com/4IMYGcL01xjs7ek5ANO17JC4VQVUTsojZlnw4fXzwSxc.m3u8" type="application/x-mpegURL" />
+      </video>
       {/* Background Gradient/Texture */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background" />
       
       {/* Background Large Logo */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] opacity-5 pointer-events-none select-none">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] opacity-50 pointer-events-none select-none">
         <Image
           src="/A1esports_logo_white.svg"
           alt="A1 Esports Logo"
@@ -29,9 +53,15 @@ export function Hero() {
           className="relative w-full h-full max-h-[85vh] flex items-end justify-center"
         >
            {/* Glow effect behind the team */}
-           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[60%] bg-primary/20 blur-[100px] rounded-full" />
            
-           <div className="relative w-full h-full translate-y-[15%] sm:translate-y-[20%]">
+           
+           <div 
+            className="relative w-full h-full translate-y-[15%] sm:translate-y-[20%]"
+            style={{
+              maskImage: 'linear-gradient(to top, transparent 5%, black 25%)',
+              WebkitMaskImage: 'linear-gradient(to top, transparent 5%, black 25%)'
+            }}
+           >
             <Image 
                 src="/images/HeroImage.png" 
                 fill 
@@ -48,7 +78,7 @@ export function Hero() {
       <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-background via-background/60 to-transparent z-20" />
 
       {/* Main Headline Text */}
-      <div className="relative z-30 w-full text-center px-4 mb-8 sm:mb-12">
+      <div className="relative z-30 w-full text-center px-4 mb-2 sm:mb-4">
         <motion.h2 
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
