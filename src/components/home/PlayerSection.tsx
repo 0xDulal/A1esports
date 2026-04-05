@@ -78,7 +78,7 @@ function PlayerCard({ player, index }: { player: typeof players[0]; index: numbe
       className="group relative h-[600px] w-full max-w-[300px] flex-shrink-0 cursor-pointer overflow-hidden rounded-[40px] border border-white/10 transition-colors duration-500 hover:border-primary"
     >
       {/* Background Gradient/Texture */}
-      <div className="absolute top-2/6 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] opacity-5 pointer-events-none select-none">
+      <div className="absolute top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] opacity-5 pointer-events-none select-none">
         <Image
           src="/A1esports_logo_white.svg"
           alt="A1 Esports Logo"

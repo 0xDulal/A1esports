@@ -26,9 +26,7 @@ export function Hero() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none"
       >
-        {/* Using .mp4 for better cross-browser compatibility as background video */}
-        <source src="https://stream.mux.com/4IMYGcL01xjs7ek5ANO17JC4VQVUTsojZlnw4fXzwSxc.mp4" type="video/mp4" />
-        <source src="https://stream.mux.com/4IMYGcL01xjs7ek5ANO17JC4VQVUTsojZlnw4fXzwSxc.m3u8" type="application/x-mpegURL" />
+        <source src="/videos/bgvideo.mp4" type="video/mp4" />
       </video>
       {/* Background Gradient/Texture */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background" />
@@ -58,8 +56,8 @@ export function Hero() {
            <div 
             className="relative w-full h-full translate-y-[15%] sm:translate-y-[20%]"
             style={{
-              maskImage: 'linear-gradient(to top, transparent 5%, black 25%)',
-              WebkitMaskImage: 'linear-gradient(to top, transparent 5%, black 25%)'
+              maskImage: 'linear-gradient(to top, transparent 0%, black 20%)',
+              WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 20%)'
             }}
            >
             <Image 
@@ -92,7 +90,22 @@ export function Hero() {
       </div>
       
       {/* Decorative Elements */}
-      <div className="absolute bottom-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50 z-40" />
+      <motion.div 
+        animate={{ 
+          opacity: [0.3, 0.6, 0.3],
+          boxShadow: [
+            "0 0 0px var(--primary)",
+            "0 0 20px var(--primary)",
+            "0 0 0px var(--primary)"
+          ]
+        }}
+        transition={{ 
+          duration: 4, 
+          repeat: Infinity, 
+          ease: "easeInOut" 
+        }}
+        className="absolute bottom-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent z-40" 
+      />
     </section>
   );
 }
