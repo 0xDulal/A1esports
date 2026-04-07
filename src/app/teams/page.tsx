@@ -6,6 +6,9 @@ import Link from "next/link";
 import { teams, Team } from "@/lib/teams";
 import { Trophy } from "lucide-react";
 import { PlayerCard } from "@/components/ui/PlayerCard";
+import { Section } from "@/components/ui/Section";
+import { GlowBar } from "@/components/ui/GlowBar";
+import { A1Button } from "@/components/ui/A1Button";
 
 export default function TeamsPage() {
   return (
@@ -15,7 +18,7 @@ export default function TeamsPage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black z-10" />
           <Image
-            src="/images/regular/a1team.jpg" // You might need to provide this or use a placeholder
+            src="/images/regular/a1team.jpg"
             alt="A1 Esports Teams"
             fill
             className="object-cover bg-center opacity-50"
@@ -42,8 +45,7 @@ export default function TeamsPage() {
           </motion.h1>
         </div>
 
-        {/* Decorative elements */}
-        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+        <GlowBar position="bottom" />
       </section>
 
       {/* Teams List */}
@@ -56,49 +58,45 @@ export default function TeamsPage() {
       </div>
 
       {/* Join CTA */}
-      <section className="mt-32 px-4">
-        <div className="mx-auto max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="relative overflow-hidden rounded-[3rem] bg-primary p-12 text-center"
-          >
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none">
-              <Image
-                src="/A1esports_logo_white.svg"
-                alt=""
-                fill
-                className="object-contain scale-150 rotate-12"
-              />
-            </div>
+      <Section containerClassName="max-w-4xl">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="relative overflow-hidden rounded-[3rem] bg-primary p-12 text-center"
+        >
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-10 pointer-events-none">
+            <Image
+              src="/A1esports_logo_white.svg"
+              alt=""
+              fill
+              className="object-contain scale-150 rotate-12"
+            />
+          </div>
 
-            <div className="relative z-10 space-y-6">
-              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
-                Think you have <br /> what it takes?
-              </h2>
-              <p className="text-white/80 text-lg font-medium max-w-xl mx-auto">
-                We're always looking for the next generation of talent. Whether you're a pro player, content creator, or staff member.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4 pt-4">
-                <Link
-                  href="#"
-                  className="bg-white text-primary px-8 py-4 rounded-full font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all duration-300"
-                >
+          <div className="relative z-10 space-y-6">
+            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
+              Think you have <br /> what it takes?
+            </h2>
+            <p className="text-white/80 text-lg font-medium max-w-xl mx-auto">
+              We're always looking for the next generation of talent. Whether you're a pro player, content creator, or staff member.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 pt-4">
+              <Link href="#">
+                <A1Button variant="secondary" size="lg">
                   Apply Now
-                </Link>
-                <Link
-                  href="#"
-                  className="bg-black/20 text-white border border-white/20 px-8 py-4 rounded-full font-black uppercase tracking-widest hover:bg-white hover:text-primary transition-all duration-300 backdrop-blur-sm"
-                >
+                </A1Button>
+              </Link>
+              <Link href="#">
+                <A1Button variant="outline" size="lg">
                   Contact Management
-                </Link>
-              </div>
+                </A1Button>
+              </Link>
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </motion.div>
+      </Section>
     </main>
   );
 }
@@ -132,7 +130,7 @@ function TeamSection({ team, index }: { team: Team; index: number }) {
             </span>
           </div>
           
-          <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+          <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none text-white">
             {team.name}
           </h2>
 

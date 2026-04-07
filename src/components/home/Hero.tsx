@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
+import { GlowBar } from "@/components/ui/GlowBar";
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -91,22 +92,7 @@ export function Hero() {
       </div>
       
       {/* Decorative Elements */}
-      <motion.div 
-        animate={{ 
-          opacity: [0.3, 0.6, 0.3],
-          boxShadow: [
-            "0 0 0px var(--primary)",
-            "0 0 20px var(--primary)",
-            "0 0 0px var(--primary)"
-          ]
-        }}
-        transition={{ 
-          duration: 4, 
-          repeat: Infinity, 
-          ease: "easeInOut" 
-        }}
-        className="absolute bottom-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent z-40" 
-      />
+      <GlowBar position="bottom" />
     </section>
   );
 }
