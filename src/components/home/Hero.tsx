@@ -39,6 +39,7 @@ export function Hero() {
           fill
           className="object-contain"
           priority
+          sizes="60vw"
         />
       </div>
 

@@ -80,7 +80,25 @@ export function SocialGrid({ stats }: { stats?: Stats }) {
   ];
 
   return (
-    <section className="w-full bg-black text-white">
+    <section className="relative w-full bg-black text-white">
+      {/* Decorative Top Glow Bar */}
+      <motion.div 
+        animate={{ 
+          opacity: [0.3, 0.6, 0.3],
+          boxShadow: [
+            "0 0 0px var(--primary)",
+            "0 0 20px var(--primary)",
+            "0 0 0px var(--primary)"
+          ]
+        }}
+        transition={{ 
+          duration: 4, 
+          repeat: Infinity, 
+          ease: "easeInOut" 
+        }}
+        className="absolute top-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent z-40" 
+      />
+
       <div className="mx-auto max-w-[1800px]">
         <div className="grid lg:grid-cols-2">
           {/* Left Content - "Join The Society" style */}

@@ -57,6 +57,7 @@ export function Header() {
               fill
               className="object-contain"
               priority
+              sizes="(max-width: 1024px) 40px, 48px"
             />
           </div>
           <span className="hidden text-xl font-bold tracking-[0.2em] lg:block font-sans">
@@ -125,11 +126,23 @@ export function Header() {
                 HOME
                 <span className="absolute bottom-0 left-1/2 h-[3px] w-6 -translate-x-1/2 bg-primary"></span>
               </Link>
-              {["TEAMS", "CREATORS", "SEN SOCIETY", "NEWS", "SHOP"].map(
+              <Link
+                href="/teams"
+                className="flex h-full items-center text-sm font-bold uppercase tracking-widest hover:text-primary transition-colors"
+              >
+                TEAMS
+              </Link>
+              <Link
+                href="/creators"
+                className="flex h-full items-center text-sm font-bold uppercase tracking-widest hover:text-primary transition-colors"
+              >
+                CREATORS
+              </Link>
+              {["SEN SOCIETY", "NEWS", "SHOP"].map(
                 (item) => (
                   <Link
                     key={item}
-                    href="#"
+                    href={item === "SHOP" ? "/shop" : "#"}
                     className="flex h-full items-center text-sm font-bold uppercase tracking-widest hover:text-primary transition-colors"
                   >
                     {item}
@@ -159,6 +172,7 @@ export function Header() {
                       fill
                       className="object-contain"
                       priority
+                      sizes="48px"
                     />
                   </div>
                 </div>
@@ -172,11 +186,23 @@ export function Header() {
                     >
                       HOME
                     </Link>
-                    {["TEAMS", "CREATORS", "SEN SOCIETY", "NEWS", "SHOP"].map(
+                    <Link 
+                      href="/teams" 
+                      className="text-2xl font-bold tracking-widest hover:text-primary hover:pl-2 transition-all duration-300"
+                    >
+                      TEAMS
+                    </Link>
+                    <Link 
+                      href="/creators" 
+                      className="text-2xl font-bold tracking-widest hover:text-primary hover:pl-2 transition-all duration-300"
+                    >
+                      CREATORS
+                    </Link>
+                    {["SEN SOCIETY", "NEWS", "SHOP"].map(
                       (item) => (
                         <Link
                           key={item}
-                          href="#"
+                          href={item === "SHOP" ? "/shop" : "#"}
                           className="text-2xl font-bold tracking-widest hover:text-primary hover:pl-2 transition-all duration-300"
                         >
                           {item}
