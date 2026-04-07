@@ -6,46 +6,8 @@ import { ShoppingCart, ArrowRight } from "lucide-react";
 import { Section } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { A1Button } from "@/components/ui/A1Button";
-import { ProductCard, Product } from "@/components/ui/ProductCard";
-
-const products: Product[] = [
-  {
-    id: 1,
-    title: "Away Kit | Beauty Red – Player Eddition",
-    price: 850,
-    price2: 899,
-    image: "https://a1esportsbd.com/wp-content/uploads/2026/02/POSTER-1-1024x1024.png",
-    category: "JERSEYS",
-    isSoldOut: false,
-  },
-  {
-    id: 2,
-    title: "Away Kit | Beauty Red – Fan Edition",
-    price: 650,
-    price2: 699,
-    image: "https://a1esportsbd.com/wp-content/uploads/2026/02/POSTER-2-1024x1024.png",
-    category: "JERSEYS",
-    isSoldOut: false,
-  },
-  {
-    id: 3,
-    title: "Home Kit | Signature Purple – Player Eddition",
-    price: 800,
-    price2: 899,
-    image: "https://a1esportsbd.com/wp-content/uploads/2026/02/POSTER-8-1024x1024.png",
-    category: "JERSEYS",
-    isSoldOut: false,
-  },
-  {
-    id: 4,
-    title: "Home Kit | Signature Purple – Fan Edition",
-    price: 600,
-    price2: 699,
-    image: "https://a1esportsbd.com/wp-content/uploads/2026/02/POSTER-9-1024x1024.png",
-    category: "JERSEYS",
-    isSoldOut: false,
-  },
-];
+import { ProductCard } from "@/components/ui/ProductCard";
+import { shopProducts } from "@/lib/data/shop";
 
 export function Merchandise() {
   return (
@@ -79,7 +41,7 @@ export function Merchandise() {
 
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {products.map((product, index) => (
+        {shopProducts.slice(0, 4).map((product, index) => (
           <ProductCard key={product.id} product={product} index={index} />
         ))}
       </div>

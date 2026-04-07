@@ -57,7 +57,7 @@ function AchievementCard({ item, index }: { item: any, index: number }) {
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
       whileHover={{ y: -8 }}
-      className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-black p-6 backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-primary/50 hover:shadow-[0_10px_40px_-10px_rgba(255,0,102,0.3)]"
+      className="group relative flex h-full min-h-[380px] flex-col overflow-hidden rounded-[2rem] border border-white/5 bg-gradient-to-b from-white/10 to-transparent p-8 backdrop-blur-md transition-all duration-300 hover:border-primary/40 hover:shadow-[0_20px_50px_-10px_rgba(255,0,102,0.2)]"
     >
       {/* Top Row: Rank & Tier */}
       <div className="mb-6 flex items-start justify-between">

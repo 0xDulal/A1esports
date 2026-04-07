@@ -2,11 +2,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Search, User, ShoppingBag, Menu } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useCart } from "@/context/CartContext";
 
 export function Header() {
+  const pathname = usePathname();
+  const { itemCount, setIsOpen } = useCart();
   const [liveData, setLiveData] = useState<{
     live: boolean;
     stream: { title: string; url: string } | null;
@@ -60,15 +65,15 @@ export function Header() {
               sizes="(max-width: 1024px) 40px, 48px"
             />
           </div>
-          <span className="hidden text-xl font-bold tracking-[0.2em] lg:block font-sans">
-            A1Esports
+          <span className="hidden text-xl font-black tracking-[0.2em] lg:block font-sans italic">
+            A1ESPORTS
           </span>
         </Link>
 
         {/* Right Section */}
         <div className="flex flex-1 flex-col">
           {/* Top Bar */}
-          <div className="hidden h-10 items-center justify-between border-b border-border px-6 text-[10px] font-medium uppercase tracking-wider text-muted-foreground lg:flex">
+          <div className="hidden h-10 items-center justify-between border-b border-border px-6 text-[11px] font-bold uppercase tracking-widest text-muted-foreground lg:flex">
             <nav className="flex gap-8">
               <Link href="#" className="hover:text-foreground transition-colors">
                 About
@@ -92,7 +97,7 @@ export function Header() {
                   <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse"></span>
                   <span className="font-bold text-foreground">LIVE NOW</span>
                 </div>
-                <span className="text-muted-foreground truncate max-w-[280px]">
+                <span className="text-muted-foreground truncate max-w-[200px] xl:max-w-[400px]">
                   {liveData.stream.title}
                 </span>
                 <Link href={liveData.stream.url} target="_blank" rel="noopener noreferrer" className="font-bold text-primary hover:text-primary/80 ml-2">
@@ -105,7 +110,7 @@ export function Header() {
                   <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground"></span>
                   <span className="font-bold text-foreground">LATEST</span>
                 </div>
-                <span className="text-muted-foreground truncate max-w-[280px]">
+                <span className="text-muted-foreground truncate max-w-[200px] xl:max-w-[400px]">
                   {currentLatest.title}
                 </span>
                 <Link href={currentLatest.url} target="_blank" rel="noopener noreferrer" className="font-bold text-primary hover:text-primary/80 ml-2">
@@ -121,34 +126,47 @@ export function Header() {
             <nav className="hidden h-full items-center gap-10 lg:flex">
               <Link
                 href="/"
-                className="relative flex h-full items-center text-sm font-bold uppercase tracking-widest text-primary"
+                className={cn(
+                  "relative flex h-full items-center text-sm font-bold uppercase tracking-widest transition-colors",
+                  pathname === "/" ? "text-primary" : "text-foreground hover:text-primary"
+                )}
               >
                 HOME
-                <span className="absolute bottom-0 left-1/2 h-[3px] w-6 -translate-x-1/2 bg-primary"></span>
+                {pathname === "/" && (
+                  <span className="absolute bottom-0 left-1/2 h-[3px] w-6 -translate-x-1/2 bg-primary"></span>
+                )}
               </Link>
               <Link
                 href="/teams"
-                className="flex h-full items-center text-sm font-bold uppercase tracking-widest hover:text-primary transition-colors"
+                className={cn(
+                  "relative flex h-full items-center text-sm font-bold uppercase tracking-widest transition-colors",
+                  pathname === "/teams" ? "text-primary" : "text-foreground hover:text-primary"
+                )}
               >
                 TEAMS
+                {pathname === "/teams" && (
+                  <span className="absolute bottom-0 left-1/2 h-[3px] w-6 -translate-x-1/2 bg-primary"></span>
+                )}
               </Link>
-              <Link
-                href="/creators"
-                className="flex h-full items-center text-sm font-bold uppercase tracking-widest hover:text-primary transition-colors"
-              >
-                CREATORS
-              </Link>
-              {["SEN SOCIETY", "NEWS", "SHOP"].map(
-                (item) => (
+              {["NEWS", "SHOP"].map((item) => {
+                const href = item === "SHOP" ? "/shop" : "#";
+                const isActive = pathname === href && href !== "#";
+                return (
                   <Link
                     key={item}
-                    href={item === "SHOP" ? "/shop" : "#"}
-                    className="flex h-full items-center text-sm font-bold uppercase tracking-widest hover:text-primary transition-colors"
+                    href={href}
+                    className={cn(
+                      "relative flex h-full items-center text-sm font-bold uppercase tracking-widest transition-colors",
+                      isActive ? "text-primary" : "text-foreground hover:text-primary"
+                    )}
                   >
                     {item}
+                    {isActive && (
+                      <span className="absolute bottom-0 left-1/2 h-[3px] w-6 -translate-x-1/2 bg-primary"></span>
+                    )}
                   </Link>
-                )
-              )}
+                );
+              })}
             </nav>
 
             {/* Mobile Menu Trigger */}
@@ -182,33 +200,38 @@ export function Header() {
                   <div className="flex flex-col gap-6">
                     <Link 
                       href="/" 
-                      className="text-2xl font-bold text-primary tracking-widest hover:pl-2 transition-all duration-300"
+                      className={cn(
+                        "text-2xl font-black italic tracking-widest transition-all duration-300",
+                        pathname === "/" ? "text-primary pl-2 border-l-4 border-primary" : "text-white"
+                      )}
                     >
                       HOME
                     </Link>
                     <Link 
                       href="/teams" 
-                      className="text-2xl font-bold tracking-widest hover:text-primary hover:pl-2 transition-all duration-300"
+                      className={cn(
+                        "text-2xl font-black italic tracking-widest transition-all duration-300",
+                        pathname === "/teams" ? "text-primary pl-2 border-l-4 border-primary" : "text-white"
+                      )}
                     >
                       TEAMS
                     </Link>
-                    <Link 
-                      href="/creators" 
-                      className="text-2xl font-bold tracking-widest hover:text-primary hover:pl-2 transition-all duration-300"
-                    >
-                      CREATORS
-                    </Link>
-                    {["SEN SOCIETY", "NEWS", "SHOP"].map(
-                      (item) => (
+                    {["NEWS", "SHOP"].map((item) => {
+                      const href = item === "SHOP" ? "/shop" : "#";
+                      const isActive = pathname === href && href !== "#";
+                      return (
                         <Link
                           key={item}
-                          href={item === "SHOP" ? "/shop" : "#"}
-                          className="text-2xl font-bold tracking-widest hover:text-primary hover:pl-2 transition-all duration-300"
+                          href={href}
+                          className={cn(
+                            "text-2xl font-black italic tracking-widest transition-all duration-300",
+                            isActive ? "text-primary pl-2 border-l-4 border-primary" : "text-white"
+                          )}
                         >
                           {item}
                         </Link>
-                      )
-                    )}
+                      );
+                    })}
                   </div>
 
                   <div className="h-px bg-border/50 w-full" />
@@ -238,9 +261,9 @@ export function Header() {
             {/* Mobile Logo Text */}
             <Link
               href="/"
-              className="lg:hidden text-xl font-bold tracking-[0.2em] font-sans"
+              className="lg:hidden text-xl font-black italic tracking-[0.2em] font-sans"
             >
-              A1Esports
+              A1ESPORTS
             </Link>
 
             {/* Actions */}
@@ -251,11 +274,16 @@ export function Header() {
               <button className="text-foreground hover:text-primary transition-colors hidden sm:block">
                 <User className="h-5 w-5" />
               </button>
-              <button className="relative text-foreground hover:text-primary transition-colors">
+              <button 
+                onClick={() => setIsOpen(true)}
+                className="relative text-foreground hover:text-primary transition-colors"
+              >
                 <ShoppingBag className="h-5 w-5" />
-                <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded bg-primary text-[10px] font-bold text-primary-foreground">
-                  3
-                </span>
+                {itemCount > 0 && (
+                  <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded bg-primary text-[10px] font-bold text-primary-foreground animate-in zoom-in duration-300">
+                    {itemCount}
+                  </span>
+                )}
               </button>
             </div>
           </div>

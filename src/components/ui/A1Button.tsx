@@ -34,7 +34,7 @@ export function A1Button({
     xl: "h-16 px-12 text-xl",
   };
 
-  const clipPath = variant !== "ghost" ? "[clip-path:polygon(0_0,100%_0,100%_calc(100%-15px),calc(100%-15px)_100%,0_100%)]" : "";
+  const clipPath = variant !== "ghost" ? "[clip-path:polygon(0_0,100%_0,100%_calc(100%-10px),calc(100%-10px)_100%,0_100%)]" : "";
 
   return (
     <motion.button

@@ -51,19 +51,21 @@ export default function TeamsPage() {
       {/* Teams List */}
       <div className="mx-auto max-w-[1800px] px-4 -mt-20 relative z-30">
         <div className="flex flex-col gap-32">
-          {teams.map((team, index) => (
-            <TeamSection key={team.id} team={team} index={index} />
-          ))}
+          {teams
+            .filter((team) => team.id !== "pubgm-academy")
+            .map((team, index) => (
+              <TeamSection key={team.id} team={team} index={index} />
+            ))}
         </div>
       </div>
 
       {/* Join CTA */}
-      <Section containerClassName="max-w-4xl">
+      <Section containerClassName="max-w-4xl" className="py-16 mt-8">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="relative overflow-hidden rounded-[3rem] bg-primary p-12 text-center"
+          className="relative overflow-hidden rounded-[3rem] border border-white/5 bg-gradient-to-br from-white/10 to-transparent backdrop-blur-xl p-12 text-center"
         >
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-10 pointer-events-none">
@@ -76,15 +78,15 @@ export default function TeamsPage() {
           </div>
 
           <div className="relative z-10 space-y-6">
-            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">
+            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-white italic">
               Think you have <br /> what it takes?
             </h2>
-            <p className="text-white/80 text-lg font-medium max-w-xl mx-auto">
+            <p className="text-neutral-400 text-lg font-medium max-w-xl mx-auto">
               We're always looking for the next generation of talent. Whether you're a pro player, content creator, or staff member.
             </p>
             <div className="flex flex-wrap justify-center gap-4 pt-4">
               <Link href="#">
-                <A1Button variant="secondary" size="lg">
+                <A1Button variant="primary" size="lg">
                   Apply Now
                 </A1Button>
               </Link>
@@ -148,20 +150,40 @@ function TeamSection({ team, index }: { team: Team; index: number }) {
           )}
         </div>
 
-        <div className="flex-1 w-full aspect-video relative rounded-[2rem] overflow-hidden border border-white/10">
-          <Image
-            src={team.banner || "/images/banners/placeholder.jpg"}
-            alt={team.name}
-            fill
-            className="object-cover transition-transform duration-700 hover:scale-105"
-            sizes="(max-width: 768px) 100vw, 800px"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+        <div className="flex-1 w-full aspect-video relative rounded-[2rem] overflow-hidden border border-white/5 bg-neutral-900 shadow-2xl">
+          {team.banner && (
+            <Image
+              src={team.banner}
+              alt={team.name}
+              fill
+              className="object-cover transition-transform duration-700 hover:scale-105"
+              sizes="(max-width: 768px) 100vw, 800px"
+            />
+          )}
+          
+          {/* Fallback Background / Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-black/80 to-black -z-10" />
+          
+          {/* Fallback Logo for missing image context */}
+          {!team.banner && (
+            <div className="absolute inset-0 flex items-center justify-center opacity-20">
+               <div className="relative h-48 w-48">
+                <Image
+                  src="/A1esports_logo_white.svg"
+                  alt=""
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+          )}
+          
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
         </div>
       </div>
 
       {/* Roster Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      <div className="flex flex-wrap justify-center gap-8">
         {team.players.map((player, i) => (
           <PlayerCard key={player.ign} player={player} index={i} />
         ))}

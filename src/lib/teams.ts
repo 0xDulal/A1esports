@@ -96,38 +96,44 @@ export const teams: Team[] = [
     ]
   },
   {
-    id: "pubgm-academy",
-    name: "A1 Esports Academy",
-    game: "PUBG Mobile",
-    logo: "/images/games/pubgm.png",
-    banner: "/images/banners/academy-team.jpg",
-    players: [
-      {
-        ign: "NOOB",
-        name: "TBD",
-        role: "FRAGGER",
-        image: "/images/players/placeholder.png",
-      },
-      {
-        ign: "PRO",
-        name: "TBD",
-        role: "IGL",
-        image: "/images/players/placeholder.png",
-      },
-    ]
-  },
-  {
     id: "management",
     name: "Management Team",
-    game: "Staff",
+    game: "Owner & Management",
     logo: "/A1esports_logo_white.svg",
     banner: "/images/banners/staff.jpg",
     players: [
       {
-        ign: "Zer0byte",
-        name: "Lead Developer",
-        role: "Tech",
-        image: "/images/players/placeholder.png",
+        ign: "MD Abdul Jabbar Shakil",
+        name: "SiNiSTER",
+        role: "Owner of A1 Esports",
+        image: "/images/management/shakil.jpg",
+        socials: {
+          facebook: "https://facebook.com/a1esportsbd",
+          instagram: "https://instagram.com/a1esportsbd",
+          youtube: "https://youtube.com/@a1esportsbd",
+        }
+      },
+      {
+        ign: "Srabon Shanto",
+        name: "Manager",
+        role: "Strabon Thought",
+        image: "/images/management/srabon.jpg",
+        socials: {
+          facebook: "https://facebook.com/a1esportsbd",
+          instagram: "https://instagram.com/a1esportsbd",
+          youtube: "https://youtube.com/@a1esportsbd",
+        }
+      },
+      {
+        ign: "Dulal Shikdar",
+        name: "Owner of Zer0byte",
+        role: "Lead Developer",
+        image: "/images/management/dulal.png",
+        socials: {
+          facebook: "https://facebook.com/a1esportsbd",
+          instagram: "https://instagram.com/a1esportsbd",
+          youtube: "https://youtube.com/@a1esportsbd",
+        }
       }
     ]
   }

@@ -16,9 +16,13 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/layout/Header";
 
 export const metadata: Metadata = {
-  title: "A1 Esports - Official Website",
-  description: "Official website of A1 Esports",
+  title: "A1ESPORTS - South Asia's Premier Esports Powerhouse",
+  description: "Official website of A1ESPORTS. High-performance gaming, elite rosters, and exclusive merchandise.",
 };
+
+import { CartProvider } from "@/context/CartContext";
+import { CartDrawer } from "@/components/shop/CartDrawer";
+import { CustomizationModal } from "@/components/shop/CustomizationModal";
 
 export default function RootLayout({
   children,
@@ -37,8 +41,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          {children}
+          <CartProvider>
+            <Header />
+            {children}
+            <CartDrawer />
+            <CustomizationModal />
+          </CartProvider>
         </ThemeProvider>
       </body>
     </html>

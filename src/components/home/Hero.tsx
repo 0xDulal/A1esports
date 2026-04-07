@@ -17,7 +17,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="relative h-[85vh] w-full overflow-hidden bg-black flex flex-col items-center justify-end pb-4">
+    <section className="relative h-[92vh] min-h-[700px] w-full overflow-hidden bg-[#050505] flex flex-col items-center justify-end pb-12">
       {/* Background Video */}
       <video
         ref={videoRef}
@@ -33,7 +33,7 @@ export function Hero() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background" />
       
       {/* Background Large Logo */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] opacity-50 pointer-events-none select-none">
+      <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] lg:w-[60vw] h-[80vw] lg:h-[60vw] opacity-[0.03] pointer-events-none select-none filter blur-[2px]">
         <Image
           src="/A1esports_logo_white.svg"
           alt="A1 Esports Logo"
@@ -56,10 +56,10 @@ export function Hero() {
            
            
            <div 
-            className="relative w-full h-full translate-y-[15%] sm:translate-y-[20%]"
+            className="relative w-full h-full translate-y-[10%] sm:translate-y-[15%]"
             style={{
-              maskImage: 'linear-gradient(to top, transparent 0%, black 20%)',
-              WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 20%)'
+              maskImage: 'linear-gradient(to top, transparent 5%, black 40%)',
+              WebkitMaskImage: 'linear-gradient(to top, transparent 5%, black 40%)'
             }}
            >
             <Image 
