@@ -4,7 +4,6 @@ import { Achievements } from "@/components/home/Achievements";
 import { PlayerSection } from "@/components/home/PlayerSection";
 import { Merchandise } from "@/components/home/Merchandise";
 import { AboutUs } from "@/components/home/AboutUs";
-import { Footer } from "@/components/layout/Footer";
 import { getSocialStats } from "@/lib/get-social-stats";
 import { getLiquipediaAchievements } from "@/lib/liquipedia";
 
@@ -20,7 +19,6 @@ export default async function Home() {
       <PlayerSection />
       <Merchandise />
       <Achievements achievements={achievements} />
-      <Footer />
     </main>
   );
 }

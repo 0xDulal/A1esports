@@ -16,7 +16,7 @@ export interface Team {
   name: string;
   game: string;
   logo: string;
-  banner: string;
+  banner?: string;
   players: Player[];
   achievements?: {
     title: string;
@@ -31,8 +31,8 @@ export const teams: Team[] = [
     id: "pubgm-pro",
     name: "A1 Esports Professional",
     game: "PUBG Mobile",
-    logo: "/images/games/pubgm.png",
-    banner: "/images/banners/pubgm-team.jpg",
+    logo: "/A1esports_logo_white.svg",
+    banner: undefined,
     players: [
       {
         ign: "SiNiSTER",
@@ -100,7 +100,7 @@ export const teams: Team[] = [
     name: "Management Team",
     game: "Owner & Management",
     logo: "/A1esports_logo_white.svg",
-    banner: "/images/banners/staff.jpg",
+    banner: undefined,
     players: [
       {
         ign: "MD Abdul Jabbar Shakil",

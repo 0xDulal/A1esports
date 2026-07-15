@@ -14,6 +14,7 @@ const geistMono = Geist_Mono({
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "A1ESPORTS - South Asia's Premier Esports Powerhouse",
@@ -44,6 +45,7 @@ export default function RootLayout({
           <CartProvider>
             <Header />
             {children}
+            <Footer />
             <CartDrawer />
             <CustomizationModal />
           </CartProvider>

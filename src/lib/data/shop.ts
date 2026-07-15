@@ -6,6 +6,7 @@ export interface Product {
   halfSleevePrice?: number;
   fullSleevePrice?: number;
   image: string;
+  images?: string[];
   category: "JERSEYS" | "HOODIES" | "LIFESTYLE" | "ACCESSORIES";
   isSoldOut: boolean;
   description: string;
@@ -21,6 +22,12 @@ export const shopProducts: Product[] = [
     halfSleevePrice: 850,
     fullSleevePrice: 899,
     image: "https://a1esportsbd.com/wp-content/uploads/2026/02/POSTER-1-1024x1024.png",
+    images: [
+      "https://a1esportsbd.com/wp-content/uploads/2026/02/POSTER-1-1024x1024.png",
+      "https://a1esportsbd.com/wp-content/uploads/2026/02/POSTER-2-1024x1024.png",
+      "https://a1esportsbd.com/wp-content/uploads/2026/02/POSTER-8-1024x1024.png",
+      "https://a1esportsbd.com/wp-content/uploads/2026/02/POSTER-9-1024x1024.png"
+    ],
     category: "JERSEYS",
     isSoldOut: false,
     description: "Official 2026 Season Away Kit. Lightweight, breathable, and optimized for extreme performance.",

@@ -6,15 +6,17 @@ import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { A1Button } from "@/components/ui/A1Button";
-import { ArrowLeft, ShoppingBag, Truck, ShieldCheck, Zap, Star } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Truck, ShieldCheck, Zap } from "lucide-react";
 import Link from "next/link";
 import { Section } from "@/components/ui/Section";
 import { GlowBar } from "@/components/ui/GlowBar";
+import { useState, useEffect } from "react";
 
 export default function ProductPage() {
   const params = useParams();
   const router = useRouter();
   const { addItem, openCustomModal, setIsOpen } = useCart();
+  const [selectedImage, setSelectedImage] = useState<string>();
   
   const product = shopProducts.find((p) => p.slug === params.slug);
 
@@ -28,6 +30,15 @@ export default function ProductPage() {
       </div>
     );
   }
+
+  const hasVariants = product.halfSleevePrice && product.fullSleevePrice;
+  const productImages = product.images || [product.image];
+  
+  useEffect(() => {
+    if (!selectedImage) {
+      setSelectedImage(productImages[0]);
+    }
+  }, [selectedImage, productImages]);
 
   const handleAddToCart = () => {
     if (product.canCustomise) {
@@ -58,7 +69,7 @@ export default function ProductPage() {
             <div className="relative aspect-square rounded-3xl overflow-hidden bg-neutral-900 border border-white/5 shadow-2xl group">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-50" />
               <Image 
-                src={product.image} 
+                src={selectedImage || product.image} 
                 alt={product.title} 
                 fill 
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -66,11 +77,19 @@ export default function ProductPage() {
               />
             </div>
             
-            {/* Thumbnail Grid (Mockup for now) */}
+            {/* Thumbnail Grid */}
             <div className="grid grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="aspect-square rounded-xl bg-neutral-900 border border-white/5 overflow-hidden relative opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
-                  <Image src={product.image} alt="thumbnail" fill className="object-cover" />
+              {productImages.map((img, i) => (
+                <div 
+                  key={i} 
+                  onClick={() => setSelectedImage(img)}
+                  className={`aspect-square rounded-xl bg-neutral-900 border overflow-hidden relative cursor-pointer transition-all ${
+                    selectedImage === img 
+                      ? "border-primary opacity-100" 
+                      : "border-white/5 opacity-50 hover:opacity-100"
+                  }`}
+                >
+                  <Image src={img} alt={`thumbnail ${i + 1}`} fill className="object-cover" />
                 </div>
               ))}
             </div>
@@ -95,24 +114,32 @@ export default function ProductPage() {
                   </span>
                 )}
               </h1>
-              
-              <div className="flex items-center gap-4 mt-4">
-                <div className="flex text-primary">
-                   {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
-                </div>
-                <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">
-                  (142 Reviews)
-                </span>
-              </div>
             </div>
 
             <div className="bg-neutral-900/50 rounded-2xl p-8 border border-white/5 space-y-8 mb-8">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Retail Price</p>
-                  <p className="text-4xl font-black text-white tracking-tighter">
-                    {product.price.toLocaleString()} <span className="text-lg text-primary italic">BDT</span>
-                  </p>
+                  {hasVariants ? (
+                    <div className="flex items-baseline gap-4">
+                      <div className="flex flex-col">
+                        <p className="text-xs text-neutral-500 font-bold uppercase tracking-widest">Half Sleeve</p>
+                        <p className="text-4xl font-black text-white tracking-tighter">
+                          {product.halfSleevePrice!.toLocaleString()} <span className="text-lg text-primary italic">BDT</span>
+                        </p>
+                      </div>
+                      <div className="flex flex-col">
+                        <p className="text-xs text-neutral-500 font-bold uppercase tracking-widest">Full Sleeve</p>
+                        <p className="text-4xl font-black text-primary tracking-tighter">
+                          {product.fullSleevePrice!.toLocaleString()} <span className="text-lg text-primary italic">BDT</span>
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-4xl font-black text-white tracking-tighter">
+                      {product.price.toLocaleString()} <span className="text-lg text-primary italic">BDT</span>
+                    </p>
+                  )}
                 </div>
                 {product.isSoldOut ? (
                   <div className="bg-red-500/10 text-red-500 border border-red-500/20 px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest">

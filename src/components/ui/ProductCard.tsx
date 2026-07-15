@@ -79,9 +79,18 @@ export function ProductCard({ product, index, className }: ProductCardProps) {
                 ) : (
                   <div className="flex flex-col">
                     <span className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest mb-1">Price</span>
-                    <span className="text-xl font-black text-primary tracking-tighter">
-                      {product.price.toLocaleString()} <span className="text-xs text-white/50 ml-1">BDT</span>
-                    </span>
+                    {product.halfSleevePrice && product.fullSleevePrice ? (
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-xl font-black text-primary tracking-tighter">
+                          {product.halfSleevePrice.toLocaleString()}
+                        </span>
+                        <span className="text-xs text-white/50"> - {product.fullSleevePrice.toLocaleString()} BDT</span>
+                      </div>
+                    ) : (
+                      <span className="text-xl font-black text-primary tracking-tighter">
+                        {product.price.toLocaleString()} <span className="text-xs text-white/50 ml-1">BDT</span>
+                      </span>
+                    )}
                   </div>
                 )}
               </div>
