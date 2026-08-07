@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -13,6 +14,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product, index, className }: ProductCardProps) {
   const { addItem, openCustomModal } = useCart();
+  const [imgSrc, setImgSrc] = useState(product.image);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -44,13 +46,15 @@ export function ProductCard({ product, index, className }: ProductCardProps) {
           <div className="bg-black aspect-square flex items-center justify-center overflow-hidden relative shrink-0">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none" />
             <Image
-              src={product.image}
+              src={imgSrc}
               alt={product.title}
               fill
+              onError={() => setImgSrc("/A1esports_logo_white.svg")}
               className="object-cover relative z-10 transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 640px) 100vw, 30vw"
             />
           </div>
+
 
           {/* Product Details */}
           <div className="p-4 space-y-3 text-left flex flex-col flex-1">

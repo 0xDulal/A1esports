@@ -1,7 +1,8 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { shopProducts } from "@/lib/data/shop";
+import { shopProducts as fallbackProducts, Product } from "@/lib/data/shop";
+import { getProductsFromSupabase } from "@/lib/supabase/db";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -16,9 +17,38 @@ export default function ProductPage() {
   const params = useParams();
   const router = useRouter();
   const { addItem, openCustomModal, setIsOpen } = useCart();
+
+  const [products, setProducts] = useState<Product[]>(fallbackProducts);
   const [selectedImage, setSelectedImage] = useState<string>();
-  
-  const product = shopProducts.find((p) => p.slug === params.slug);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    getProductsFromSupabase().then((data) => {
+      if (data && data.length > 0) {
+        setProducts(data);
+      }
+      setLoading(false);
+    });
+  }, []);
+
+  const product = products.find((p) => p.slug === params.slug || p.id === params.slug);
+  const productImages = product?.images || (product?.image ? [product.image] : []);
+
+  useEffect(() => {
+    if (productImages.length > 0 && !selectedImage) {
+      setSelectedImage(productImages[0]);
+    }
+  }, [productImages, selectedImage]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white">
+        <div className="animate-pulse text-xs font-black uppercase tracking-widest text-neutral-400">
+          Loading Product Details...
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -32,13 +62,6 @@ export default function ProductPage() {
   }
 
   const hasVariants = product.halfSleevePrice && product.fullSleevePrice;
-  const productImages = product.images || [product.image];
-  
-  useEffect(() => {
-    if (!selectedImage) {
-      setSelectedImage(productImages[0]);
-    }
-  }, [selectedImage, productImages]);
 
   const handleAddToCart = () => {
     if (product.canCustomise) {
@@ -51,8 +74,8 @@ export default function ProductPage() {
   return (
     <main className="min-h-screen bg-black text-white pt-24 pb-24">
       <Section>
-        <Link 
-          href="/shop" 
+        <Link
+          href="/shop"
           className="inline-flex items-center gap-2 text-neutral-500 hover:text-white transition-colors mb-8 group"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
@@ -61,31 +84,31 @@ export default function ProductPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-24">
           {/* Left: Media */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="space-y-6"
           >
             <div className="relative aspect-square rounded-3xl overflow-hidden bg-neutral-900 border border-white/5 shadow-2xl group">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-50" />
-              <Image 
-                src={selectedImage || product.image} 
-                alt={product.title} 
-                fill 
+              <Image
+                src={selectedImage || product.image || "/A1esports_logo_white.svg"}
+                alt={product.title}
+                fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
                 priority
               />
             </div>
-            
+
             {/* Thumbnail Grid */}
             <div className="grid grid-cols-4 gap-4">
               {productImages.map((img, i) => (
-                <div 
-                  key={i} 
+                <div
+                  key={i}
                   onClick={() => setSelectedImage(img)}
                   className={`aspect-square rounded-xl bg-neutral-900 border overflow-hidden relative cursor-pointer transition-all ${
-                    selectedImage === img 
-                      ? "border-primary opacity-100" 
+                    selectedImage === img
+                      ? "border-primary opacity-100"
                       : "border-white/5 opacity-50 hover:opacity-100"
                   }`}
                 >
@@ -96,7 +119,7 @@ export default function ProductPage() {
           </motion.div>
 
           {/* Right: Info */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
@@ -107,10 +130,10 @@ export default function ProductPage() {
                 {product.category} <span className="text-white/20">•</span> OFFICIAL MERCH
               </div>
               <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-tight">
-                {product.title.split('|')[0]}
-                {product.title.includes('|') && (
+                {product.title.split("|")[0]}
+                {product.title.includes("|") && (
                   <span className="text-primary italic block md:inline">
-                    {product.title.split('|')[1]}
+                    {product.title.split("|")[1]}
                   </span>
                 )}
               </h1>
@@ -125,19 +148,19 @@ export default function ProductPage() {
                       <div className="flex flex-col">
                         <p className="text-xs text-neutral-500 font-bold uppercase tracking-widest">Half Sleeve</p>
                         <p className="text-4xl font-black text-white tracking-tighter">
-                          {product.halfSleevePrice!.toLocaleString()} <span className="text-lg text-primary italic">BDT</span>
+                          ৳{product.halfSleevePrice!.toLocaleString()}
                         </p>
                       </div>
                       <div className="flex flex-col">
                         <p className="text-xs text-neutral-500 font-bold uppercase tracking-widest">Full Sleeve</p>
                         <p className="text-4xl font-black text-primary tracking-tighter">
-                          {product.fullSleevePrice!.toLocaleString()} <span className="text-lg text-primary italic">BDT</span>
+                          ৳{product.fullSleevePrice!.toLocaleString()}
                         </p>
                       </div>
                     </div>
                   ) : (
                     <p className="text-4xl font-black text-white tracking-tighter">
-                      {product.price.toLocaleString()} <span className="text-lg text-primary italic">BDT</span>
+                      ৳{product.price.toLocaleString()}
                     </p>
                   )}
                 </div>
@@ -167,16 +190,16 @@ export default function ProductPage() {
               </div>
 
               <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <A1Button 
-                  variant="primary" 
+                <A1Button
+                  variant="primary"
                   className="py-5 text-sm"
                   onClick={handleAddToCart}
                   disabled={product.isSoldOut}
                 >
                   {product.isSoldOut ? "Out of Stock" : product.canCustomise ? "Personalize Kit" : "Add to Cart"}
                 </A1Button>
-                <A1Button 
-                  variant="secondary" 
+                <A1Button
+                  variant="secondary"
                   className="py-5 text-sm"
                   disabled={product.isSoldOut}
                   onClick={() => {
@@ -184,8 +207,7 @@ export default function ProductPage() {
                       openCustomModal(product);
                     } else {
                       addItem(product);
-                      // In a real app, this would go to /checkout
-                      setIsOpen(true); 
+                      setIsOpen(true);
                     }
                   }}
                 >

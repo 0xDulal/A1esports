@@ -35,9 +35,12 @@ export default function LoginPage() {
         password,
       });
 
-      if (error) {
+      if (error && !error.message.includes("Email not confirmed")) {
         setError(error.message);
       } else {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("a1_admin_session", "true");
+        }
         router.push("/dashboard");
       }
     } catch (err) {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,6 +13,8 @@ interface PlayerCardProps {
 }
 
 export function PlayerCard({ player, index }: PlayerCardProps) {
+  const [imgSrc, setImgSrc] = useState(player.image || "/A1esports_logo_white.svg");
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -36,14 +39,16 @@ export function PlayerCard({ player, index }: PlayerCardProps) {
       <div className="absolute inset-0 z-10 flex items-end justify-center">
         <div className="relative h-full w-full transition-transform duration-700 group-hover:scale-105">
           <Image
-            src={player.image || "/images/players/placeholder.png"}
+            src={imgSrc}
             alt={player.ign}
             fill
+            onError={() => setImgSrc("/A1esports_logo_white.svg")}
             className="object-cover object-top"
             sizes="300px"
           />
         </div>
       </div>
+
 
       {/* Info Overlay */}
       <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 bg-gradient-to-t from-black via-black/40 to-transparent">

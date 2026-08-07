@@ -1,245 +1,323 @@
-# A1Esports
+# A1 Esports — Official Website
 
-A modern, feature-rich esports organization website built with Next.js, featuring player showcases, team management, merchandise shop, and real-time content integration.
+> **South Asia's Premier Esports Powerhouse**
+> Official website for A1 Esports BD — featuring team rosters, official merchandise, live stream integration, and an admin dashboard.
 
-## Overview
+---
 
-A1Esports is a comprehensive web platform for esports organizations to showcase their teams, achievements, merchandise, and content. The platform integrates multiple external services to provide a seamless experience for fans and team members.
+## 🛠️ Tech Stack
 
-### Key Features
+| Layer | Technology |
+|---|---|
+| **Framework** | [Next.js 15](https://nextjs.org/) (App Router) |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS v4 |
+| **Animations** | Framer Motion |
+| **Icons** | Lucide React, React Icons |
+| **Database / Auth** | [Supabase](https://supabase.com/) |
+| **UI Components** | Radix UI / Shadcn |
+| **Font** | Geist (Next.js built-in) |
 
-- **🏠 Home Page** - Hero section with featured content, social media statistics, player highlights, merchandise showcase, and competitive achievements
-- **👥 Team Management** - View and manage esports teams with detailed player information
-- **🛍️ Merchandise Shop** - Browse and manage team merchandise with product details and pricing
-- **📊 Dashboard** - Admin panel for managing teams, products, achievements, and settings
-- **🎮 Player Section** - Featured player profiles and statistics
-- **📈 Social Integration** - Real-time social media statistics from YouTube and other platforms
-- **🏆 Achievements** - Display competitive achievements fetched from Liquipedia
-- **🎨 Dark/Light Mode** - Theme switching support for better user experience
-- **⚡ Smooth Animations** - Modern UI interactions with Framer Motion
+---
 
-## Tech Stack
+## 📁 Project Structure
 
-### Core Framework
-- **Next.js 15** - React framework with App Router for modern, efficient server-side rendering
-- **React 19** - Latest React for component-based UI
-- **TypeScript** - Type-safe development
+```
+d:/A1esports/
+├── public/
+│   ├── A1esports_logo_white.svg        # Main brand logo
+│   ├── images/
+│   │   ├── HeroImage.png               # Hero section team image
+│   │   ├── players/                    # Player profile images (SiNiSTER, ROWDY, etc.)
+│   │   ├── management/                 # Management team photos
+│   │   └── regular/                    # General images (a1team.jpg)
+│   └── videos/
+│       └── bgvideo.mp4                 # Hero section background video
+│
+├── src/
+│   ├── app/                            # Next.js App Router pages
+│   │   ├── page.tsx                    # Home page
+│   │   ├── layout.tsx                  # Root layout (Header, Footer, Cart)
+│   │   ├── globals.css                 # Global styles + Tailwind tokens
+│   │   ├── login/page.tsx              # Admin login
+│   │   ├── teams/page.tsx              # Teams showcase page
+│   │   ├── shop/
+│   │   │   ├── page.tsx                # Shop listing
+│   │   │   └── [slug]/page.tsx         # Product detail
+│   │   ├── dashboard/                  # Protected admin dashboard
+│   │   │   ├── layout.tsx              # Dashboard sidebar layout
+│   │   │   ├── page.tsx                # Dashboard overview
+│   │   │   ├── products/page.tsx       # Manage products
+│   │   │   ├── teams/page.tsx          # Manage teams
+│   │   │   ├── achievements/page.tsx   # Manage achievements
+│   │   │   └── settings/page.tsx       # Admin settings
+│   │   └── api/
+│   │       ├── youtube/live/route.ts   # YouTube live stream API
+│   │       └── supabase/health/route.ts # Supabase health check
+│   │
+│   ├── components/
+│   │   ├── home/                       # Homepage section components
+│   │   │   ├── Hero.tsx
+│   │   │   ├── AboutUs.tsx
+│   │   │   ├── SocialGrid.tsx
+│   │   │   ├── PlayerSection.tsx
+│   │   │   ├── Merchandise.tsx
+│   │   │   └── Achievements.tsx
+│   │   ├── layout/                     # Global layout components
+│   │   │   ├── Header.tsx
+│   │   │   └── Footer.tsx
+│   │   ├── shop/                       # Shop-specific components
+│   │   │   ├── CartDrawer.tsx
+│   │   │   └── CustomizationModal.tsx
+│   │   └── ui/                         # Reusable UI components
+│   │       ├── A1Button.tsx
+│   │       ├── PlayerCard.tsx
+│   │       ├── ProductCard.tsx
+│   │       ├── Section.tsx
+│   │       ├── SectionHeader.tsx
+│   │       ├── GlowBar.tsx
+│   │       ├── button.tsx              # Shadcn Button
+│   │       ├── dialog.tsx              # Shadcn Dialog
+│   │       ├── input.tsx               # Shadcn Input
+│   │       └── sheet.tsx               # Shadcn Sheet (drawer)
+│   │
+│   ├── context/
+│   │   └── CartContext.tsx             # Global cart state
+│   │
+│   └── lib/
+│       ├── teams.ts                    # Team & player static data + types
+│       ├── liquipedia.ts               # Achievements data (static)
+│       ├── get-social-stats.ts         # YouTube API subscriber fetch
+│       ├── utils.ts                    # `cn()` utility
+│       ├── data/
+│       │   └── shop.ts                 # Product data + types
+│       └── supabase/
+│           ├── client.ts               # Supabase browser client
+│           └── rest.ts                 # Supabase REST helpers
+```
 
-### Styling & UI
-- **Tailwind CSS v4** - Utility-first CSS framework
-- **shadcn/ui** - High-quality, reusable React components
-- **Framer Motion** - Smooth animations and transitions
-- **Lucide React** - Icon library for UI elements
-- **next-themes** - Easy theme switching (dark/light mode)
+---
 
-### Backend & Data
-- **Supabase** - Backend-as-a-Service for database and authentication
-- **Cheerio** - HTML parsing for web scraping
-- **Liquipedia API** - Esports achievement data integration
-- **YouTube API** - Social media statistics integration
-
-### Development Tools
-- **ESLint** - Code quality and consistency
-- **Tailwind Merge** - Utility class merging
-- **Class Variance Authority** - Component styling patterns
-
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+ installed
-- npm or yarn package manager
-- Git for version control
+
+- **Node.js** 18.17+ 
+- **npm** or **yarn**
 
 ### Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/0xDulal/A1esports.git
-   cd A1esports
-   ```
+```bash
+# Clone the repository
+git clone <repo-url>
+cd A1esports
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+# Install dependencies
+npm install
+```
 
-3. Set up environment variables by creating a `.env.local` file:
-   ```env
-   # YouTube API Configuration
-   YOUTUBE_API_KEY=your_youtube_api_key_here
-   YOUTUBE_CHANNEL_IDS=channel_url_1,channel_url_2
+### Environment Variables
 
-   # Supabase Configuration
-   SUPABASE_URL=your_supabase_url
-   SUPABASE_ANON_KEY=your_supabase_anon_key
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
+Create a `.env.local` file (or edit `.env`) with the following:
 
-### Development
+```env
+# YouTube API
+YOUTUBE_API_KEY=your_youtube_api_key_here
+YOUTUBE_CHANNEL_IDS=https://www.youtube.com/@a1esportsbd
 
-Run the development server:
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+> ⚠️ **Note:** The current `.env` uses `SUPABASE_PUBLISHABLE_KEY` instead of `SUPABASE_ANON_KEY`. The Supabase JS SDK requires `NEXT_PUBLIC_SUPABASE_ANON_KEY`. This must be corrected for authentication to work.
+
+### Run Development Server
+
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Production Build
+---
 
-Build for production:
+## 📄 Pages & Routes
+
+| Route | Description | Status |
+|---|---|---|
+| `/` | Homepage with hero, about, social, players, merch, achievements | ✅ Live |
+| `/teams` | Full team roster showcase (PUBG Mobile Pro + Management) | ✅ Live |
+| `/shop` | Merchandise shop with category filters | ✅ Live |
+| `/shop/[slug]` | Individual product detail page | ✅ Live |
+| `/login` | Admin login (Supabase auth) | ✅ Live |
+| `/dashboard` | Admin dashboard overview | ✅ Live |
+| `/dashboard/products` | Manage shop products | ⚠️ Display only |
+| `/dashboard/teams` | Manage teams & players | ⚠️ Display only |
+| `/dashboard/achievements` | Manage tournament achievements | ⚠️ Display only |
+| `/dashboard/settings` | Admin settings | ⚠️ UI only |
+| `/checkout` | Order checkout | ❌ Not built |
+| `/news` | News & blog | ❌ Not built |
+| `/contact` | Contact form | ❌ Not built |
+
+---
+
+## 🛒 Shop Features
+
+- **Product Categories:** Jerseys, Hoodies, Lifestyle, Accessories
+- **Sorting:** Featured, Price Low-to-High, Price High-to-Low
+- **Customization:** Add player name on jerseys (free customization)
+- **Sleeve Variants:** Half sleeve / Full sleeve pricing
+- **Cart:** Persistent localStorage cart with quantity management
+- **Currency:** BDT (Bangladeshi Taka)
+
+---
+
+## 🔐 Admin Dashboard
+
+Access the admin panel at `/login`.
+
+**Capabilities:**
+- View overview stats (products, players, teams, revenue)
+- Browse product listings
+- Browse team rosters
+- View achievement records
+- ⚠️ *CRUD operations (Add/Edit/Delete) are not yet wired to the database*
+
+---
+
+## 🌐 API Endpoints
+
+### `GET /api/youtube/live`
+
+Checks if a configured YouTube channel is currently live streaming.
+
+**Response:**
+```json
+{
+  "live": false,
+  "stream": null,
+  "latest": [
+    { "title": "...", "url": "...", "videoId": "..." }
+  ]
+}
+```
+
+Configure the channel via `YOUTUBE_CHANNEL_IDS` env var (supports handles like `@a1esportsbd` or full URLs).
+
+### `GET /api/supabase/health`
+
+Returns Supabase connection status.
+
+---
+
+## 🎨 Design System
+
+The site uses a custom design system built on Tailwind CSS v4 with the following tokens:
+
+- **Primary Color:** `var(--primary)` — A1 Red/Crimson
+- **Background:** Pure black `#050505`
+- **Typography:** Geist Sans / Geist Mono
+- **Theme:** Dark mode (default), supports system preference
+
+Key design patterns:
+- Glassmorphism cards (`backdrop-blur`, `bg-white/10`)
+- Animated counters (Framer Motion springs)
+- Scroll-reveal animations (`whileInView`)
+- Glow effects (`shadow-[0_0_40px_rgba(255,0,102,0.1)]`)
+
+---
+
+## 🧩 Key Components
+
+### `CartContext`
+Global cart state provider. Manages items, quantities, totals, and the customization modal state. Persists to `localStorage`.
+
+### `Header`
+Sticky navigation with:
+- Desktop multi-level nav
+- Mobile sheet menu
+- YouTube live/latest video ticker
+- Cart item count badge
+
+### `ProductCard`
+Displays product with hover effects, sold-out state, price, and Add to Cart / Customize buttons.
+
+### `CustomizationModal`
+Jersey personalization flow — select size (XS–3XL), sleeve type (half/full), and custom name.
+
+### `CartDrawer`
+Side panel cart with line items, quantity controls, subtotal, and checkout button.
+
+---
+
+## 👥 Teams
+
+### A1 Esports Professional (PUBG Mobile)
+| IGN | Real Name | Role |
+|---|---|---|
+| SiNiSTER | MD Abdul Jabbar Shakil | IGL |
+| ROWDY | Emon Sheikh | Fragger |
+| DEATHSTORM | Hasan Mahmood | Sniper |
+| CJBOYY | Tahmid Aronno | Rusher |
+| FLASH | Tausif Rahman | Support |
+
+### Management
+| Name | Role |
+|---|---|
+| MD Abdul Jabbar Shakil | Owner |
+| Srabon Shanto | Manager |
+| Dulal Shikdar | Lead Developer |
+
+---
+
+## 🔗 Social Media
+
+| Platform | Handle |
+|---|---|
+| Facebook | [@a1esportsbd](https://facebook.com/a1esportsbd) |
+| Instagram | [@a1esports.bd](https://www.instagram.com/a1esports.bd) |
+| YouTube | [@a1esportsbd](https://youtube.com/@a1esportsbd) |
+| Discord | [discord.gg/EKRQMA83](https://discord.gg/EKRQMA83) |
+
+---
+
+## 🗓️ Roadmap
+
+### Phase 1 — Critical (In Progress)
+- [ ] Fix Supabase ANON key configuration
+- [ ] Create Supabase database tables
+- [ ] Build `/checkout` page with order form
+- [ ] Wire Admin dashboard to Supabase (CRUD)
+
+### Phase 2 — Important
+- [ ] Order management in Admin dashboard
+- [ ] News / Blog pages
+- [ ] Contact page
+- [ ] Player application / tryout form
+
+### Phase 3 — Polish
+- [ ] More product listings (hoodies category)
+- [ ] SEO metadata per page
+- [ ] Custom 404 page
+- [ ] Search functionality
+- [ ] Privacy Policy and Terms of Service pages
+
+---
+
+## 👨‍💻 Development
+
+Built by **Zer0byte** for A1 Esports BD.
+
 ```bash
-npm run build
+npm run dev      # Start development server
+npm run build    # Production build
+npm run start    # Start production server
+npm run lint     # Run ESLint
 ```
 
-Start the production server:
-```bash
-npm start
-```
+---
 
-### Linting
-
-Check code quality:
-```bash
-npm run lint
-```
-
-## Project Structure
-
-```
-src/
-├── app/                          # Next.js App Router
-│   ├── dashboard/                # Admin dashboard
-│   │   ├── teams/               # Team management
-│   │   ├── products/            # Merchandise management
-│   │   ├── achievements/        # Achievement management
-│   │   └── settings/            # Dashboard settings
-│   ├── shop/                     # Merchandise shop
-│   │   └── [slug]/              # Product detail page
-│   ├── teams/                    # Teams showcase
-│   ├── creators/                 # Creator profiles
-│   ├── login/                    # Authentication page
-│   ├── api/                      # API routes
-│   │   ├── supabase/            # Database operations
-│   │   └── youtube/             # YouTube API integration
-│   ├── globals.css              # Global styles
-│   ├── layout.tsx               # Root layout
-│   └── page.tsx                 # Home page
-├── components/                   # React components
-│   ├── home/                     # Homepage components
-│   │   ├── Hero.tsx            # Hero section
-│   │   ├── SocialGrid.tsx       # Social stats display
-│   │   ├── Achievements.tsx     # Achievements section
-│   │   ├── PlayerSection.tsx    # Player showcase
-│   │   ├── Merchandise.tsx      # Merchandise preview
-│   │   └── AboutUs.tsx          # About section
-│   ├── layout/                   # Layout components
-│   ├── shop/                     # Shop components
-│   ├── ui/                       # shadcn/ui components
-│   └── theme-provider.tsx        # Theme configuration
-├── context/                      # React Context providers
-├── lib/                          # Utility functions
-│   ├── get-social-stats.ts      # Fetch social statistics
-│   ├── liquipedia.ts            # Liquipedia API integration
-│   └── [other utilities]
-└── styles/                       # Additional stylesheets
-```
-
-## Key Features Explained
-
-### Home Page (`src/app/page.tsx`)
-- Displays hero banner with call-to-action
-- Shows social media statistics (YouTube subscribers, followers)
-- Features player highlights and profiles
-- Showcases team merchandise
-- Displays recent competitive achievements from Liquipedia
-
-### Dashboard (`src/app/dashboard/`)
-- Secure admin panel for team management
-- Product/merchandise management
-- Achievement tracking and updates
-- User settings and configuration
-
-### Shop (`src/app/shop/`)
-- Browse merchandise products
-- Product filtering and search
-- Detailed product pages with images and pricing
-- Integration with Supabase for inventory management
-
-### API Routes (`src/app/api/`)
-- Supabase integration endpoints
-- YouTube channel statistics fetching
-- Data aggregation and processing
-
-## Environment Variables
-
-Required environment variables for proper functionality:
-
-| Variable | Description |
-|----------|-------------|
-| `YOUTUBE_API_KEY` | YouTube Data API key for fetching channel statistics |
-| `YOUTUBE_CHANNEL_IDS` | Comma-separated list of YouTube channel URLs to track |
-| `SUPABASE_URL` | Supabase project URL |
-| `SUPABASE_ANON_KEY` | Supabase anonymous key |
-| `NEXT_PUBLIC_SUPABASE_URL` | Public Supabase URL (exposed to client) |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public Supabase key (exposed to client) |
-
-## Integrations
-
-### YouTube API
-Fetches real-time channel statistics including:
-- Subscriber counts
-- Video view counts
-- Channel activity metrics
-
-### Liquipedia API
-Retrieves esports achievements:
-- Tournament results
-- Team rankings
-- Historical performance data
-
-### Supabase
-Handles:
-- Database storage for teams, products, users
-- Authentication and authorization
-- Real-time data updates
-
-## Scripts
-
-- `npm run dev` - Start development server with hot reload
-- `npm run build` - Build optimized production bundle
-- `npm start` - Start production server
-- `npm run lint` - Run ESLint for code quality checks
-
-## Contributing
-
-1. Create a feature branch (`git checkout -b feature/amazing-feature`)
-2. Commit changes (`git commit -m 'Add amazing feature'`)
-3. Push to branch (`git push origin feature/amazing-feature`)
-4. Open a Pull Request
-
-## License
-
-This project is private and owned by A1Esports organization.
-
-## Support
-
-For issues, questions, or suggestions, please reach out to the development team or create an issue in the repository.
-
-## Roadmap
-
-- [ ] Enhanced player statistics dashboard
-- [ ] Real-time tournament tracking
-- [ ] Community forums and discussion boards
-- [ ] Fan engagement features
-- [ ] Mobile app
-- [ ] Advanced analytics and reporting
-
-## Related Links
-
-- [A1Esports Official Website](https://a1esportsbd.com)
-- [YouTube Channel](https://www.youtube.com/@a1esportsbd)
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [shadcn/ui Components](https://ui.shadcn.com)
-- [Supabase Documentation](https://supabase.com/docs)
+*© 2026 A1 Esports. All rights reserved.*

@@ -14,10 +14,10 @@ const footerLinks = {
     { name: "Careers", href: "#" },
   ],
   support: [
-    { name: "Contact Us", href: "#" },
-    { name: "Privacy Policy", href: "#" },
-    { name: "Terms of Service", href: "#" },
-    { name: "FAQ", href: "#" },
+    { name: "Contact Us", href: "/contact" },
+    { name: "Privacy Policy", href: "/privacy-policy" },
+    { name: "Terms of Service", href: "/terms-of-service" },
+    { name: "Tryouts / Apply", href: "/apply" },
   ],
   shop: [
     { name: "New Arrivals", href: "/shop" },
@@ -142,8 +142,8 @@ export function Footer() {
             Developed by Zer0byte
           </p>
           <div className="flex items-center gap-8">
-            <Link href="#" className="text-neutral-600 hover:text-neutral-400 text-xs transition-colors">Privacy Policy</Link>
-            <Link href="#" className="text-neutral-600 hover:text-neutral-400 text-xs transition-colors">Terms of Service</Link>
+            <Link href="/privacy-policy" className="text-neutral-600 hover:text-neutral-400 text-xs transition-colors">Privacy Policy</Link>
+            <Link href="/terms-of-service" className="text-neutral-600 hover:text-neutral-400 text-xs transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>

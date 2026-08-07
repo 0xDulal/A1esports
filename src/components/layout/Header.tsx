@@ -75,19 +75,19 @@ export function Header() {
           {/* Top Bar */}
           <div className="hidden h-10 items-center justify-between border-b border-border px-6 text-[11px] font-bold uppercase tracking-widest text-muted-foreground lg:flex">
             <nav className="flex gap-8">
-              <Link href="#" className="hover:text-foreground transition-colors">
+              <Link href="/about" className={cn("hover:text-foreground transition-colors", pathname === "/about" && "text-primary font-black")}>
                 About
               </Link>
-              <Link href="#" className="hover:text-foreground transition-colors">
+              <Link href="/history" className={cn("hover:text-foreground transition-colors", pathname === "/history" && "text-primary font-black")}>
                 History
               </Link>
-              <Link href="#" className="hover:text-foreground transition-colors">
+              <Link href="/championships" className={cn("hover:text-foreground transition-colors", pathname === "/championships" && "text-primary font-black")}>
                 Championships
               </Link>
-              <Link href="#" className="hover:text-foreground transition-colors">
+              <Link href="/sponsors" className={cn("hover:text-foreground transition-colors", pathname === "/sponsors" && "text-primary font-black")}>
                 Sponsors
               </Link>
-              <Link href="#" className="hover:text-foreground transition-colors">
+              <Link href="/investors" className={cn("hover:text-foreground transition-colors", pathname === "/investors" && "text-primary font-black")}>
                 Investors
               </Link>
             </nav>
@@ -149,7 +149,7 @@ export function Header() {
                 )}
               </Link>
               {["NEWS", "SHOP"].map((item) => {
-                const href = item === "SHOP" ? "/shop" : "#";
+                const href = item === "SHOP" ? "/shop" : item === "NEWS" ? "/news" : "#";
                 const isActive = pathname === href && href !== "#";
                 return (
                   <Link
@@ -217,7 +217,7 @@ export function Header() {
                       TEAMS
                     </Link>
                     {["NEWS", "SHOP"].map((item) => {
-                      const href = item === "SHOP" ? "/shop" : "#";
+                      const href = item === "SHOP" ? "/shop" : item === "NEWS" ? "/news" : "#";
                       const isActive = pathname === href && href !== "#";
                       return (
                         <Link
@@ -238,13 +238,22 @@ export function Header() {
 
                   {/* Secondary Navigation */}
                   <div className="flex flex-col gap-4">
-                    {["About", "History", "Championships", "Sponsors", "Investors"].map((item) => (
-                      <Link 
-                        key={item}
-                        href="#" 
-                        className="text-sm font-medium text-muted-foreground uppercase tracking-wider hover:text-foreground hover:translate-x-1 transition-all"
+                    {[
+                      { name: "About", href: "/about" },
+                      { name: "History", href: "/history" },
+                      { name: "Championships", href: "/championships" },
+                      { name: "Sponsors", href: "/sponsors" },
+                      { name: "Investors", href: "/investors" },
+                    ].map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className={cn(
+                          "text-sm font-medium text-muted-foreground uppercase tracking-wider hover:text-foreground hover:translate-x-1 transition-all",
+                          pathname === item.href && "text-primary font-black"
+                        )}
                       >
-                        {item}
+                        {item.name}
                       </Link>
                     ))}
                   </div>

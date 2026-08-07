@@ -13,10 +13,12 @@ export async function getSocialStats() {
         `https://www.googleapis.com/youtube/v3/channels?part=statistics&forHandle=a1esportsbd&key=${apiKey}`,
         { next: { revalidate: 3600 } }
       );
-      const data = await res.json();
-      if (data.items?.[0]?.statistics?.subscriberCount) {
-        const count = Number(data.items[0].statistics.subscriberCount);
-        stats.youtube = formatCount(count);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.items?.[0]?.statistics?.subscriberCount) {
+          const count = Number(data.items[0].statistics.subscriberCount);
+          stats.youtube = formatCount(count);
+        }
       }
     }
   } catch (e) {

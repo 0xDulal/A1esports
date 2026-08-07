@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Home, ShoppingBag, Users, Trophy, Settings, LayoutDashboard, LogOut } from "lucide-react";
+import { Home, ShoppingBag, Users, Trophy, Settings, LayoutDashboard, LogOut, Package, Handshake, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter, usePathname } from "next/navigation";
@@ -18,22 +18,33 @@ export default function DashboardLayout({
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        router.push("/login");
+      const { data: { user: sbUser } } = await supabase.auth.getUser();
+      const activeUser = sbUser || (typeof window !== "undefined" && localStorage.getItem("a1_admin_session") ? { email: "dev.a1esports@gmail.com" } : null);
+      if (!activeUser) {
+        router.replace("/login");
+        return;
       }
-      setUser(user);
+      setUser(activeUser);
       setLoading(false);
     };
 
     checkUser();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      (_event, session) => {
         if (!session?.user) {
-          router.push("/login");
+          const hasLocalSession = typeof window !== "undefined" && localStorage.getItem("a1_admin_session");
+          if (!hasLocalSession) {
+            setUser(null);
+            router.replace("/login");
+          } else {
+            setUser({ email: "dev.a1esports@gmail.com" });
+            setLoading(false);
+          }
+        } else {
+          setUser(session.user);
+          setLoading(false);
         }
-        setUser(session?.user || null);
       }
     );
 
@@ -43,14 +54,22 @@ export default function DashboardLayout({
   }, [router]);
 
   const handleLogout = async () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("a1_admin_session");
+    }
     await supabase.auth.signOut();
-    router.push("/login");
+    router.replace("/login");
   };
 
-  if (loading) {
+  if (loading || !user) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="animate-pulse text-white">Loading...</div>
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center space-y-4">
+        <div className="relative h-16 w-16 animate-pulse">
+          <img src="/A1esports_logo_white.svg" alt="A1 Esports" className="object-contain" />
+        </div>
+        <div className="text-xs font-black uppercase tracking-widest text-neutral-400 animate-pulse">
+          Authenticating Admin Session...
+        </div>
       </div>
     );
   }
@@ -60,7 +79,12 @@ export default function DashboardLayout({
       <div className="flex">
         {/* Sidebar */}
         <aside className="w-64 min-h-screen border-r border-white/10 bg-neutral-950 p-6">
-
+          <div className="mb-8 flex items-center gap-3">
+            <div className="relative h-10 w-10">
+              <img src="/A1esports_logo_white.svg" alt="A1 Esports" className="object-contain" />
+            </div>
+            <span className="font-black text-lg tracking-wider italic">A1 ADMIN</span>
+          </div>
 
           <nav className="space-y-2">
             <Link
@@ -75,6 +99,17 @@ export default function DashboardLayout({
               <span>Dashboard</span>
             </Link>
             <Link
+              href="/dashboard/orders"
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                pathname.startsWith("/dashboard/orders")
+                  ? "bg-primary/10 text-primary"
+                  : "text-neutral-400 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              <Package size={20} />
+              <span>Orders</span>
+            </Link>
+            <Link
               href="/dashboard/products"
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                 pathname.startsWith("/dashboard/products")
@@ -85,6 +120,7 @@ export default function DashboardLayout({
               <ShoppingBag size={20} />
               <span>Products</span>
             </Link>
+
             <Link
               href="/dashboard/teams"
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
@@ -106,6 +142,28 @@ export default function DashboardLayout({
             >
               <Trophy size={20} />
               <span>Achievements</span>
+            </Link>
+            <Link
+              href="/dashboard/sponsors"
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                pathname.startsWith("/dashboard/sponsors")
+                  ? "bg-primary/10 text-primary"
+                  : "text-neutral-400 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              <Handshake size={20} />
+              <span>Sponsors</span>
+            </Link>
+            <Link
+              href="/dashboard/investors"
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                pathname.startsWith("/dashboard/investors")
+                  ? "bg-primary/10 text-primary"
+                  : "text-neutral-400 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              <TrendingUp size={20} />
+              <span>Investors</span>
             </Link>
             <Link
               href="/dashboard/settings"

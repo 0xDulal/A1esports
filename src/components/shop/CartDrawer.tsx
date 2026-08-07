@@ -146,9 +146,11 @@ export function CartDrawer() {
             </div>
 
             <div className="grid grid-cols-1 gap-3 pt-2">
-              <A1Button variant="primary" className="py-4 text-sm">
-                Proceed to Checkout
-              </A1Button>
+              <Link href="/checkout" onClick={() => setIsOpen(false)} className="w-full">
+                <A1Button variant="primary" className="w-full py-4 text-sm">
+                  Proceed to Checkout
+                </A1Button>
+              </Link>
               <button 
                 onClick={() => setIsOpen(false)}
                 className="text-neutral-500 hover:text-white text-[10px] font-black uppercase tracking-[0.2em] transition-colors"
