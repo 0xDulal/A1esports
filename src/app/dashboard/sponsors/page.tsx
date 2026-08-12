@@ -1,14 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Edit, Trash2, Handshake, Save, X, ExternalLink, Upload } from "lucide-react";
-import { Sponsor, defaultSponsors } from "@/lib/sponsors";
-import { sbInsert, sbUpdate, sbDelete, sbSelect } from "@/lib/supabase/rest";
+import { Plus, Edit, Trash2, Handshake, Save, X, ExternalLink, GripVertical, ArrowUp, ArrowDown } from "lucide-react";
+import {
+  Sponsor,
+  getSponsors,
+  saveSponsorToSupabase,
+  saveAllSponsorsToSupabase,
+  deleteSponsorFromSupabase,
+  saveLocalSponsors,
+} from "@/lib/sponsors";
 
 export default function AdminSponsorsPage() {
-  const [sponsors, setSponsors] = useState<Sponsor[]>(defaultSponsors);
+  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -23,10 +30,8 @@ export default function AdminSponsorsPage() {
   }, []);
 
   const fetchSponsors = async () => {
-    const data = await sbSelect<Sponsor>("sponsors");
-    if (data && data.length > 0) {
-      setSponsors(data);
-    }
+    const data = await getSponsors();
+    setSponsors(data);
   };
 
   const isImageUrl = (url?: string) => {
@@ -56,35 +61,98 @@ export default function AdminSponsorsPage() {
     setIsModalOpen(true);
   };
 
+  // Drag & Drop Reordering Handlers
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === index) return;
+
+    const newArr = [...sponsors];
+    const draggedItem = newArr[draggedIndex];
+    newArr.splice(draggedIndex, 1);
+    newArr.splice(index, 0, draggedItem);
+
+    const reordered = newArr.map((item, idx) => ({ ...item, display_order: idx + 1 }));
+    setDraggedIndex(index);
+    setSponsors(reordered);
+  };
+
+  const handleDragEnd = async () => {
+    setDraggedIndex(null);
+    saveLocalSponsors(sponsors);
+    await saveAllSponsorsToSupabase(sponsors);
+  };
+
+  const handleMoveUp = async (index: number) => {
+    if (index <= 0) return;
+    const newArr = [...sponsors];
+    const temp = newArr[index];
+    newArr[index] = newArr[index - 1];
+    newArr[index - 1] = temp;
+
+    const reordered = newArr.map((item, idx) => ({ ...item, display_order: idx + 1 }));
+    setSponsors(reordered);
+    saveLocalSponsors(reordered);
+    await saveAllSponsorsToSupabase(reordered);
+  };
+
+  const handleMoveDown = async (index: number) => {
+    if (index >= sponsors.length - 1) return;
+    const newArr = [...sponsors];
+    const temp = newArr[index];
+    newArr[index] = newArr[index + 1];
+    newArr[index + 1] = temp;
+
+    const reordered = newArr.map((item, idx) => ({ ...item, display_order: idx + 1 }));
+    setSponsors(reordered);
+    saveLocalSponsors(reordered);
+    await saveAllSponsorsToSupabase(reordered);
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = {
+
+    const logoValue = logo || name.toUpperCase();
+    const targetId = editingId || `sp-${Date.now()}`;
+
+    const newSponsor: Sponsor = {
+      id: targetId,
       name,
       category,
       badge,
       description,
-      logo: logo || name.toUpperCase(),
+      logo: logoValue,
       websiteUrl,
+      display_order: editingId
+        ? sponsors.find((s) => s.id === editingId)?.display_order ?? 1
+        : sponsors.length + 1,
     };
 
+    let updatedList: Sponsor[] = [];
     if (editingId) {
-      await sbUpdate("sponsors", editingId, payload);
-      setSponsors((prev) =>
-        prev.map((s) => (s.id === editingId ? { ...s, ...payload } : s))
-      );
+      updatedList = sponsors.map((s) => (s.id === editingId ? newSponsor : s));
     } else {
-      const newId = `sp-${Date.now()}`;
-      const newSponsor = { id: newId, ...payload };
-      await sbInsert("sponsors", newSponsor);
-      setSponsors((prev) => [newSponsor, ...prev]);
+      updatedList = [...sponsors, newSponsor];
     }
+
+    setSponsors(updatedList);
+    saveLocalSponsors(updatedList);
     setIsModalOpen(false);
+
+    await saveSponsorToSupabase(newSponsor);
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this sponsor?")) return;
-    await sbDelete("sponsors", id);
-    setSponsors((prev) => prev.filter((s) => s.id !== id));
+    const updatedList = sponsors.filter((s) => s.id !== id);
+    setSponsors(updatedList);
+    saveLocalSponsors(updatedList);
+
+    await deleteSponsorFromSupabase(id);
   };
 
   return (
@@ -95,7 +163,7 @@ export default function AdminSponsorsPage() {
             <Handshake className="text-primary" /> Sponsor Management
           </h1>
           <p className="text-sm text-neutral-400">
-            Manage partners, equipment sponsors, and brand logos
+            Drag rows to reorder partners and sponsors on the live site
           </p>
         </div>
 
@@ -107,12 +175,13 @@ export default function AdminSponsorsPage() {
         </button>
       </div>
 
-      {/* Sponsors Table */}
+      {/* Sponsors Table with Drag & Drop */}
       <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px]">
             <thead className="bg-white/5">
               <tr>
+                <th className="text-left p-4 font-bold text-neutral-400 w-20">Reorder</th>
                 <th className="text-left p-4 font-bold text-neutral-400">Sponsor Logo</th>
                 <th className="text-left p-4 font-bold text-neutral-400">Name</th>
                 <th className="text-left p-4 font-bold text-neutral-400">Category</th>
@@ -121,8 +190,45 @@ export default function AdminSponsorsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {sponsors.map((s) => (
-                <tr key={s.id} className="hover:bg-white/5 transition-colors">
+              {sponsors.map((s, idx) => (
+                <tr
+                  key={s.id}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, idx)}
+                  onDragOver={(e) => handleDragOver(e, idx)}
+                  onDragEnd={handleDragEnd}
+                  className={`transition-colors select-none ${
+                    draggedIndex === idx
+                      ? "bg-primary/20 border-y border-primary/50 opacity-60"
+                      : "hover:bg-white/5"
+                  }`}
+                >
+                  <td className="p-4">
+                    <div className="flex items-center gap-1.5">
+                      <div
+                        title="Click and drag to reorder"
+                        className="cursor-grab active:cursor-grabbing p-2 rounded-lg bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-primary transition-colors flex items-center justify-center"
+                      >
+                        <GripVertical size={18} />
+                      </div>
+                      <div className="flex flex-col gap-0.5">
+                        <button
+                          onClick={() => handleMoveUp(idx)}
+                          disabled={idx === 0}
+                          className="text-neutral-500 hover:text-white disabled:opacity-20"
+                        >
+                          <ArrowUp size={12} />
+                        </button>
+                        <button
+                          onClick={() => handleMoveDown(idx)}
+                          disabled={idx === sponsors.length - 1}
+                          className="text-neutral-500 hover:text-white disabled:opacity-20"
+                        >
+                          <ArrowDown size={12} />
+                        </button>
+                      </div>
+                    </div>
+                  </td>
                   <td className="p-4">
                     {isImageUrl(s.logo) ? (
                       <div className="relative h-10 w-24 rounded-lg bg-neutral-800 border border-white/10 p-1 flex items-center justify-center overflow-hidden">

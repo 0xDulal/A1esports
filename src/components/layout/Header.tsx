@@ -18,6 +18,7 @@ export function Header() {
     latest?: { title: string; url: string }[];
   }>({ live: false, stream: null, latest: [] });
   const [idx, setIdx] = useState(0);
+
   useEffect(() => {
     let mounted = true;
     const fetchLive = async () => {
@@ -35,6 +36,7 @@ export function Header() {
       clearInterval(id);
     };
   }, []);
+
   useEffect(() => {
     if (!liveData?.latest || liveData.latest.length < 2 || liveData.live) return;
     const id = setInterval(() => {
@@ -42,11 +44,18 @@ export function Header() {
     }, 30000);
     return () => clearInterval(id);
   }, [liveData.live, liveData.latest]);
+
   const currentLatest = useMemo(() => {
     const list = liveData?.latest || [];
     if (list.length === 0) return null;
     return list[idx % list.length];
   }, [liveData.latest, idx]);
+
+  // Hide Header completely on Admin Dashboard routes
+  if (pathname?.startsWith("/dashboard")) {
+    return null;
+  }
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background text-foreground">
       <div className="flex h-16 lg:h-24">
@@ -258,7 +267,7 @@ export function Header() {
                     ))}
                   </div>
                   
-                  {/* Mobile Social/Extra (Optional placeholder) */}
+                  {/* Mobile Social/Extra */}
                   <div className="mt-auto pt-4 flex items-center gap-2 text-xs text-muted-foreground uppercase tracking-widest">
                     <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse"></span>
                     <span>Live Now: Champions Tokyo</span>

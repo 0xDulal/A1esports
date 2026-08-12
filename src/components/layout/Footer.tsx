@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { FaDiscord, FaYoutube, FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
-import { Mail, MapPin, Phone, ArrowUpRight } from "lucide-react";
+import { Mail, MapPin, ArrowUpRight } from "lucide-react";
 
 const footerLinks = {
   company: [
@@ -36,6 +36,13 @@ const socialLinks = [
 ];
 
 export function Footer() {
+  const pathname = usePathname();
+
+  // Hide Footer completely on Admin Dashboard routes
+  if (pathname?.startsWith("/dashboard")) {
+    return null;
+  }
+
   return (
     <footer className="relative w-full bg-black border-t border-white/5 pt-24 pb-12 overflow-hidden">
       {/* Background Glow */}

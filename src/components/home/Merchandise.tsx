@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ShoppingCart, ArrowRight } from "lucide-react";
@@ -7,9 +8,20 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { A1Button } from "@/components/ui/A1Button";
 import { ProductCard } from "@/components/ui/ProductCard";
-import { shopProducts } from "@/lib/data/shop";
+import { Product } from "@/lib/data/shop";
+import { getProductsFromSupabase } from "@/lib/supabase/db";
 
 export function Merchandise() {
+  const [recentProducts, setRecentProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    getProductsFromSupabase().then((data) => {
+      if (data && data.length > 0) {
+        setRecentProducts(data.slice(0, 4));
+      }
+    });
+  }, []);
+
   return (
     <Section withGlow aria-labelledby="merch-heading" className="py-24">
       {/* Header Section */}
@@ -39,10 +51,10 @@ export function Merchandise() {
         </motion.div>
       </div>
 
-      {/* Product Grid */}
+      {/* Product Grid - Most Recent 4 Products */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {shopProducts.slice(0, 4).map((product, index) => (
-          <ProductCard key={product.id} product={product} index={index} />
+        {recentProducts.map((product, index) => (
+          <ProductCard key={product.id || product.slug} product={product} index={index} />
         ))}
       </div>
     </Section>

@@ -79,7 +79,7 @@ export async function getLiquipediaAchievements(): Promise<Achievement[]> {
         "User-Agent": "A1EsportsWebsite/1.0 (contact@a1esportsbd.com)",
         Accept: "application/json",
       },
-      cache: "no-store",
+      next: { revalidate: 3600 },
       signal: controller.signal,
     });
     clearTimeout(timeoutId);

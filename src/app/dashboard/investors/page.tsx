@@ -1,14 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Edit, Trash2, TrendingUp, Save, X } from "lucide-react";
-import { InvestorHighlight, defaultInvestors } from "@/lib/investors";
-import { sbInsert, sbUpdate, sbDelete, sbSelect } from "@/lib/supabase/rest";
+import { Plus, Edit, Trash2, TrendingUp, Save, X, GripVertical, ArrowUp, ArrowDown } from "lucide-react";
+import {
+  InvestorHighlight,
+  getInvestors,
+  saveInvestorToSupabase,
+  saveAllInvestorsToSupabase,
+  deleteInvestorFromSupabase,
+  saveLocalInvestors,
+} from "@/lib/investors";
 
 export default function AdminInvestorsPage() {
-  const [investors, setInvestors] = useState<InvestorHighlight[]>(defaultInvestors);
+  const [investors, setInvestors] = useState<InvestorHighlight[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
@@ -22,10 +29,8 @@ export default function AdminInvestorsPage() {
   }, []);
 
   const fetchInvestors = async () => {
-    const data = await sbSelect<InvestorHighlight>("investors");
-    if (data && data.length > 0) {
-      setInvestors(data);
-    }
+    const data = await getInvestors();
+    setInvestors(data);
   };
 
   const isImageUrl = (url?: string) => {
@@ -53,34 +58,95 @@ export default function AdminInvestorsPage() {
     setIsModalOpen(true);
   };
 
+  // Drag & Drop Reordering Handlers
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === index) return;
+
+    const newArr = [...investors];
+    const draggedItem = newArr[draggedIndex];
+    newArr.splice(draggedIndex, 1);
+    newArr.splice(index, 0, draggedItem);
+
+    const reordered = newArr.map((item, idx) => ({ ...item, display_order: idx + 1 }));
+    setDraggedIndex(index);
+    setInvestors(reordered);
+  };
+
+  const handleDragEnd = async () => {
+    setDraggedIndex(null);
+    saveLocalInvestors(investors);
+    await saveAllInvestorsToSupabase(investors);
+  };
+
+  const handleMoveUp = async (index: number) => {
+    if (index <= 0) return;
+    const newArr = [...investors];
+    const temp = newArr[index];
+    newArr[index] = newArr[index - 1];
+    newArr[index - 1] = temp;
+
+    const reordered = newArr.map((item, idx) => ({ ...item, display_order: idx + 1 }));
+    setInvestors(reordered);
+    saveLocalInvestors(reordered);
+    await saveAllInvestorsToSupabase(reordered);
+  };
+
+  const handleMoveDown = async (index: number) => {
+    if (index >= investors.length - 1) return;
+    const newArr = [...investors];
+    const temp = newArr[index];
+    newArr[index] = newArr[index + 1];
+    newArr[index + 1] = temp;
+
+    const reordered = newArr.map((item, idx) => ({ ...item, display_order: idx + 1 }));
+    setInvestors(reordered);
+    saveLocalInvestors(reordered);
+    await saveAllInvestorsToSupabase(reordered);
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = {
+
+    const targetId = editingId || `inv-${Date.now()}`;
+    const newInv: InvestorHighlight = {
+      id: targetId,
       title,
       category,
       metric,
       description,
       logo,
+      display_order: editingId
+        ? investors.find((i) => i.id === editingId)?.display_order ?? 1
+        : investors.length + 1,
     };
 
+    let updatedList: InvestorHighlight[] = [];
     if (editingId) {
-      await sbUpdate("investors", editingId, payload);
-      setInvestors((prev) =>
-        prev.map((i) => (i.id === editingId ? { ...i, ...payload } : i))
-      );
+      updatedList = investors.map((i) => (i.id === editingId ? newInv : i));
     } else {
-      const newId = `inv-${Date.now()}`;
-      const newInv = { id: newId, ...payload };
-      await sbInsert("investors", newInv);
-      setInvestors((prev) => [newInv, ...prev]);
+      updatedList = [...investors, newInv];
     }
+
+    setInvestors(updatedList);
+    saveLocalInvestors(updatedList);
     setIsModalOpen(false);
+
+    await saveInvestorToSupabase(newInv);
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this investor metric?")) return;
-    await sbDelete("investors", id);
-    setInvestors((prev) => prev.filter((i) => i.id !== id));
+    const updatedList = investors.filter((i) => i.id !== id);
+    setInvestors(updatedList);
+    saveLocalInvestors(updatedList);
+
+    await deleteInvestorFromSupabase(id);
   };
 
   return (
@@ -91,7 +157,7 @@ export default function AdminInvestorsPage() {
             <TrendingUp className="text-primary" /> Investor Highlights & Logos
           </h1>
           <p className="text-sm text-neutral-400">
-            Manage investment highlights, metrics, logos, and growth pillars
+            Drag rows to reorder metrics, highlights, and logos on the live site
           </p>
         </div>
 
@@ -103,12 +169,13 @@ export default function AdminInvestorsPage() {
         </button>
       </div>
 
-      {/* Investors Table */}
+      {/* Investors Table with Drag & Drop */}
       <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px]">
             <thead className="bg-white/5">
               <tr>
+                <th className="text-left p-4 font-bold text-neutral-400 w-20">Reorder</th>
                 <th className="text-left p-4 font-bold text-neutral-400">Logo</th>
                 <th className="text-left p-4 font-bold text-neutral-400">Metric</th>
                 <th className="text-left p-4 font-bold text-neutral-400">Title</th>
@@ -117,8 +184,45 @@ export default function AdminInvestorsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {investors.map((i) => (
-                <tr key={i.id} className="hover:bg-white/5 transition-colors">
+              {investors.map((i, idx) => (
+                <tr
+                  key={i.id}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, idx)}
+                  onDragOver={(e) => handleDragOver(e, idx)}
+                  onDragEnd={handleDragEnd}
+                  className={`transition-colors select-none ${
+                    draggedIndex === idx
+                      ? "bg-primary/20 border-y border-primary/50 opacity-60"
+                      : "hover:bg-white/5"
+                  }`}
+                >
+                  <td className="p-4">
+                    <div className="flex items-center gap-1.5">
+                      <div
+                        title="Click and drag to reorder"
+                        className="cursor-grab active:cursor-grabbing p-2 rounded-lg bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-primary transition-colors flex items-center justify-center"
+                      >
+                        <GripVertical size={18} />
+                      </div>
+                      <div className="flex flex-col gap-0.5">
+                        <button
+                          onClick={() => handleMoveUp(idx)}
+                          disabled={idx === 0}
+                          className="text-neutral-500 hover:text-white disabled:opacity-20"
+                        >
+                          <ArrowUp size={12} />
+                        </button>
+                        <button
+                          onClick={() => handleMoveDown(idx)}
+                          disabled={idx === investors.length - 1}
+                          className="text-neutral-500 hover:text-white disabled:opacity-20"
+                        >
+                          <ArrowDown size={12} />
+                        </button>
+                      </div>
+                    </div>
+                  </td>
                   <td className="p-4">
                     {isImageUrl(i.logo) ? (
                       <div className="relative h-10 w-24 rounded-lg bg-neutral-800 border border-white/10 p-1 flex items-center justify-center overflow-hidden">
