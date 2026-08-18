@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Home, ShoppingBag, Users, Trophy, Settings, LayoutDashboard, LogOut, Package, Handshake, TrendingUp } from "lucide-react";
+import { Home, ShoppingBag, Users, Trophy, Settings, LayoutDashboard, LogOut, Package, Handshake, TrendingUp, Tag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter, usePathname } from "next/navigation";
