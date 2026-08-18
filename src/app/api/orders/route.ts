@@ -127,7 +127,20 @@ export async function GET() {
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { id, order_status, payment_status, customer_name, customer_phone, shipping_address } = body;
+    const {
+      id,
+      order_status,
+      payment_status,
+      customer_name,
+      customer_email,
+      customer_phone,
+      shipping_address,
+      payment_method,
+      payment_number,
+      transaction_id,
+      payment_proof_url,
+      total_amount,
+    } = body;
 
     if (!id) {
       return NextResponse.json({ error: "Order ID is required" }, { status: 400 });
@@ -137,8 +150,14 @@ export async function PUT(req: Request) {
     if (order_status !== undefined) updates.order_status = order_status;
     if (payment_status !== undefined) updates.payment_status = payment_status;
     if (customer_name !== undefined) updates.customer_name = customer_name;
+    if (customer_email !== undefined) updates.customer_email = customer_email;
     if (customer_phone !== undefined) updates.customer_phone = customer_phone;
     if (shipping_address !== undefined) updates.shipping_address = shipping_address;
+    if (payment_method !== undefined) updates.payment_method = payment_method;
+    if (payment_number !== undefined) updates.payment_number = payment_number;
+    if (transaction_id !== undefined) updates.transaction_id = transaction_id;
+    if (payment_proof_url !== undefined) updates.payment_proof_url = payment_proof_url;
+    if (total_amount !== undefined) updates.total_amount = Number(total_amount);
 
     // Update in local cache
     localOrdersCache = localOrdersCache.map((o) => (o.id === id ? { ...o, ...updates } : o));
