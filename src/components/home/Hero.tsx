@@ -17,7 +17,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="relative h-[calc(100dvh-4rem)] lg:h-[calc(100dvh-6rem)] min-h-[520px] sm:min-h-[620px] lg:min-h-[750px] w-full overflow-hidden bg-[#050505] flex flex-col items-center justify-end pb-6 sm:pb-8 lg:pb-12">
+    <section className="relative h-[60vh] sm:h-[calc(100dvh-4rem)] lg:h-[calc(100dvh-6rem)] min-h-[400px] sm:min-h-[620px] lg:min-h-[750px] w-full overflow-hidden bg-[#050505] flex flex-col items-center justify-end pb-4 sm:pb-8 lg:pb-12">
       {/* Background Video */}
       <video
         ref={videoRef}
@@ -45,12 +45,12 @@ export function Hero() {
       </div>
 
       {/* Hero Image Composition */}
-      <div className="relative z-10 flex items-end justify-center w-full max-w-[1600px] h-full mx-auto px-2 sm:px-4 mt-8 sm:mt-4">
+      <div className="relative z-10 flex items-end justify-center w-full max-w-[1600px] h-full mx-auto px-2 sm:px-4 mt-4 sm:mt-4">
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="relative w-full h-full max-h-[70vh] sm:max-h-[85vh] flex items-end justify-center"
+          className="relative w-full h-full max-h-[50vh] sm:max-h-[85vh] flex items-end justify-center"
         >
            {/* Glow effect behind the team */}
            
@@ -78,16 +78,19 @@ export function Hero() {
       <div className="absolute bottom-0 left-0 right-0 h-1/2 sm:h-2/3 bg-gradient-to-t from-background via-background/60 to-transparent z-20 pointer-events-none" />
 
       {/* Main Headline Text */}
-      <div className="relative z-30 w-full text-center px-2 sm:px-4 mb-1 sm:mb-4">
+      <div className="relative z-30 w-full text-center px-2 sm:px-4 mb-2 sm:mb-4">
         <motion.h2 
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-          className="text-2xl min-[360px]:text-3xl min-[440px]:text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-white uppercase tracking-tight sm:tracking-tighter leading-[0.95] sm:leading-[0.9]"
+          className="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white uppercase tracking-tight sm:tracking-tighter leading-[0.95] sm:leading-[0.9] flex flex-col items-center justify-center gap-1 sm:gap-2"
         >
-          <span className="inline-block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">#Be The One,</span>
-          <span className="mx-1.5 sm:mx-4 md:mx-6 inline-block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">Be</span>
-          <span className="inline-block text-transparent bg-clip-text bg-gradient-to-b from-primary to-primary/60">A1</span>
+          <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">
+            #Be The One,
+          </span>
+          <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">
+            Be <span className="inline-block text-transparent bg-clip-text bg-gradient-to-b from-primary to-primary/60">A1</span>
+          </span>
         </motion.h2>
       </div>
       
