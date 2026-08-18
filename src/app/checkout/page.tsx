@@ -91,7 +91,8 @@ export default function CheckoutPage() {
     : 0;
 
   const discountAmount = appliedCoupon ? appliedCoupon.calculated_discount : 0;
-  const grandTotal = Math.max(0, total - discountAmount + shippingCost);
+  const is100PercentCoupon = appliedCoupon && (appliedCoupon.discount_type === "percentage" && appliedCoupon.discount_value >= 100 || discountAmount >= total);
+  const grandTotal = is100PercentCoupon ? 0 : Math.max(0, total - discountAmount + shippingCost);
 
   // Apply Coupon Handler
   const handleApplyCoupon = async (e: React.FormEvent) => {
@@ -152,8 +153,8 @@ export default function CheckoutPage() {
     e.preventDefault();
     if (items.length === 0) return;
 
-    // Validate Digital Payment Fields
-    if (isDigitalPayment) {
+    // Validate Digital Payment Fields if not 100% free order
+    if (isDigitalPayment && grandTotal > 0) {
       if (!paymentNumber.trim()) {
         setError(`Please enter the ${selectedMethod.name} sender mobile number used for payment.`);
         return;
@@ -175,10 +176,10 @@ export default function CheckoutPage() {
           customer: formData,
           items,
           total: grandTotal,
-          paymentMethod: selectedMethod.name,
-          paymentNumber: isDigitalPayment ? paymentNumber : "",
-          transactionId: isDigitalPayment ? transactionId : "",
-          paymentProofUrl: isDigitalPayment ? paymentProofUrl : "",
+          paymentMethod: grandTotal === 0 ? "Free Coupon (100% OFF)" : selectedMethod.name,
+          paymentNumber: grandTotal === 0 ? "COUPON-FREE" : (isDigitalPayment ? paymentNumber : ""),
+          transactionId: grandTotal === 0 ? "COUPON-FREE" : (isDigitalPayment ? transactionId : ""),
+          paymentProofUrl: grandTotal === 0 ? "" : (isDigitalPayment ? paymentProofUrl : ""),
           couponCode: appliedCoupon ? appliedCoupon.code : "",
           discountAmount: discountAmount,
         }),
@@ -625,12 +626,14 @@ export default function CheckoutPage() {
 
                   <div className="flex justify-between text-xs text-neutral-400 uppercase font-bold tracking-wider">
                     <span>Delivery Charge ({formData.city.toLowerCase().includes("dhaka") ? "Inside Dhaka" : "Outside Dhaka"})</span>
-                    <span className="text-white">{shippingCost} BDT</span>
+                    <span className="text-white">{is100PercentCoupon ? "0 BDT (Waived)" : `${shippingCost} BDT`}</span>
                   </div>
 
                   <div className="flex justify-between items-end pt-3 border-t border-white/10">
                     <span className="text-sm font-black uppercase text-white tracking-wider">Total Payable</span>
-                    <span className="text-2xl font-black text-primary tracking-tighter">{grandTotal} BDT</span>
+                    <span className="text-2xl font-black text-primary tracking-tighter">
+                      {grandTotal === 0 ? "0 BDT (FREE)" : `${grandTotal} BDT`}
+                    </span>
                   </div>
                 </div>
 
@@ -641,7 +644,11 @@ export default function CheckoutPage() {
                   className="w-full py-4 text-sm uppercase tracking-widest font-black"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Processing Order..." : `Confirm Order • ${grandTotal} BDT`}
+                  {isSubmitting
+                    ? "Processing Order..."
+                    : grandTotal === 0
+                    ? "Claim Free Product Order • 0 BDT"
+                    : `Confirm Order • ${grandTotal} BDT`}
                 </A1Button>
 
                 <div className="flex items-center justify-center gap-2 text-[10px] text-neutral-500 font-bold uppercase tracking-widest pt-2">

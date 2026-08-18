@@ -137,17 +137,14 @@ export default function TeamsPage() {
       <div className="sticky top-20 z-40 bg-black/80 backdrop-blur-xl border-y border-white/10 py-4 mb-16">
         <div className="mx-auto max-w-7xl px-4 flex flex-wrap justify-center gap-3">
           {TABS.map((tab) => (
-            <button
+            <A1Button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-6 py-2.5 rounded-full text-xs font-black tracking-widest uppercase transition-all duration-300 border ${
-                activeTab === tab.id
-                  ? "bg-primary border-primary text-black shadow-[0_0_20px_rgba(255,0,102,0.4)]"
-                  : "bg-white/5 border-white/10 text-neutral-400 hover:text-white hover:border-white/20"
-              }`}
+              variant={activeTab === tab.id ? "primary" : "outline"}
+              size="sm"
             >
               {tab.label}
-            </button>
+            </A1Button>
           ))}
         </div>
       </div>

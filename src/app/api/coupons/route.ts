@@ -55,6 +55,17 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Invalid or expired coupon code." }, { status: 400 });
       }
 
+      // Check max usage / claim limit
+      const maxUses = Number(coupon.max_uses || 0);
+      const usesCount = Number(coupon.uses_count || 0);
+
+      if (maxUses > 0 && usesCount >= maxUses) {
+        return NextResponse.json(
+          { error: `Coupon "${cleanCode}" has reached its maximum claim limit (${usesCount}/${maxUses} used).` },
+          { status: 400 }
+        );
+      }
+
       if (coupon.min_order_amount && orderTotal < coupon.min_order_amount) {
         return NextResponse.json(
           { error: `Minimum order total of ৳${coupon.min_order_amount} required for coupon ${cleanCode}.` },
@@ -63,25 +74,34 @@ export async function POST(req: Request) {
       }
 
       let discount = 0;
-      if (coupon.discount_type === "percentage") {
-        discount = Math.round((orderTotal * coupon.discount_value) / 100);
+      const isPercentage100 = coupon.discount_type === "percentage" && Number(coupon.discount_value) >= 100;
+
+      if (isPercentage100) {
+        discount = orderTotal; // 100% full discount, price becomes 0
+      } else if (coupon.discount_type === "percentage") {
+        discount = Math.round((orderTotal * Number(coupon.discount_value)) / 100);
       } else {
-        discount = coupon.discount_value;
+        discount = Math.min(orderTotal, Number(coupon.discount_value));
       }
+
+      const isFullDiscount = discount >= orderTotal || isPercentage100;
 
       return NextResponse.json({
         success: true,
         coupon: {
           code: coupon.code,
           discount_type: coupon.discount_type,
-          discount_value: coupon.discount_value,
+          discount_value: Number(coupon.discount_value),
           calculated_discount: discount,
+          is_full_discount: isFullDiscount,
+          max_uses: maxUses > 0 ? maxUses : null,
+          uses_count: usesCount,
         },
       });
     }
 
     // Admin: Create new coupon
-    const { code, discount_type, discount_value, min_order_amount, is_active } = body;
+    const { code, discount_type, discount_value, min_order_amount, max_uses, is_active } = body;
     if (!code || !discount_type || discount_value === undefined) {
       return NextResponse.json({ error: "Code, discount type, and value are required." }, { status: 400 });
     }
@@ -92,13 +112,17 @@ export async function POST(req: Request) {
       discount_type,
       discount_value: Number(discount_value),
       min_order_amount: Number(min_order_amount || 0),
+      max_uses: max_uses ? Number(max_uses) : null,
+      uses_count: 0,
       is_active: is_active ?? true,
       created_at: new Date().toISOString(),
     };
 
     try {
       await supabase.from("coupons").insert([newCoupon]);
-    } catch {}
+    } catch (e: any) {
+      console.warn("Supabase insert warning:", e);
+    }
 
     return NextResponse.json({ success: true, coupon: newCoupon });
   } catch (err: any) {
@@ -109,7 +133,7 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { id, is_active, discount_value, min_order_amount } = body;
+    const { id, is_active, discount_value, min_order_amount, max_uses } = body;
 
     if (!id) {
       return NextResponse.json({ error: "Coupon ID is required" }, { status: 400 });
@@ -120,8 +144,9 @@ export async function PUT(req: Request) {
         .from("coupons")
         .update({
           ...(is_active !== undefined && { is_active }),
-          ...(discount_value !== undefined && { discount_value }),
-          ...(min_order_amount !== undefined && { min_order_amount }),
+          ...(discount_value !== undefined && { discount_value: Number(discount_value) }),
+          ...(min_order_amount !== undefined && { min_order_amount: Number(min_order_amount) }),
+          ...(max_uses !== undefined && { max_uses: max_uses ? Number(max_uses) : null }),
         })
         .eq("id", id);
     } catch {}

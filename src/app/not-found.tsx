@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ShieldAlert, Home } from "lucide-react";
+import { A1Button } from "@/components/ui/A1Button";
 
 export default function NotFound() {
   return (
@@ -20,17 +21,15 @@ export default function NotFound() {
         </div>
 
         <div className="pt-4 flex flex-col sm:flex-row justify-center gap-3">
-          <Link
-            href="/"
-            className="px-6 py-3 bg-primary text-black font-black uppercase text-xs tracking-widest rounded-xl hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
-          >
-            <Home size={16} /> Back to Home
+          <Link href="/">
+            <A1Button variant="primary" size="md">
+              <Home size={16} className="mr-2" /> Back to Home
+            </A1Button>
           </Link>
-          <Link
-            href="/shop"
-            className="px-6 py-3 bg-white/5 border border-white/10 text-white font-black uppercase text-xs tracking-widest rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-2"
-          >
-            Visit Store
+          <Link href="/shop">
+            <A1Button variant="outline" size="md">
+              Visit Store
+            </A1Button>
           </Link>
         </div>
       </div>

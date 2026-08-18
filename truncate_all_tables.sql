@@ -9,3 +9,6 @@ TRUNCATE TABLE public.players CASCADE;
 TRUNCATE TABLE public.achievements CASCADE;
 TRUNCATE TABLE public.teams CASCADE;
 TRUNCATE TABLE public.news_articles CASCADE;
+TRUNCATE TABLE public.payment_methods CASCADE;
+TRUNCATE TABLE public.coupons CASCADE;
+TRUNCATE TABLE public.site_settings CASCADE;

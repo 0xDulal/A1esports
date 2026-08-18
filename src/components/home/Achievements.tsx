@@ -5,6 +5,7 @@ import { Trophy, Calendar, Medal, ExternalLink, Filter } from "lucide-react";
 import { motion, useSpring, useTransform, useInView, AnimatePresence } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { A1Button } from "@/components/ui/A1Button";
 import Link from "next/link";
 
 const LIQUIPEDIA_URL = "https://liquipedia.net/pubgmobile/A1_RG_Esports/Results";
@@ -99,7 +100,7 @@ export function Achievements({ achievements }: { achievements: any[] }) {
 
   return (
     <Section withGlow className="py-12 sm:py-24">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6 mb-8 sm:mb-12">
+      <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-8 sm:mb-16 gap-6">
         <SectionHeader
           title={
             <>
@@ -113,15 +114,22 @@ export function Achievements({ achievements }: { achievements: any[] }) {
         />
 
         {/* Liquipedia Direct Results Link Button */}
-        <Link
-          href={LIQUIPEDIA_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white/5 hover:bg-primary/20 border border-white/10 hover:border-primary/40 text-[10px] sm:text-xs font-black uppercase tracking-widest text-white transition-all duration-300 group shrink-0"
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
         >
-          <span>View Liquipedia Results</span>
-          <ExternalLink size={14} className="text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </Link>
+          <Link
+            href={LIQUIPEDIA_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <A1Button size="lg" className="group">
+              View Liquipedia Results
+              <ExternalLink className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+            </A1Button>
+          </Link>
+        </motion.div>
       </div>
 
       {/* Filter Controls Bar */}

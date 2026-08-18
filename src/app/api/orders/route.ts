@@ -25,6 +25,7 @@ export async function POST(req: Request) {
       );
     }
 
+    const isFreeOrder = total === 0 || (paymentMethod && paymentMethod.includes("100%"));
     const orderId = `A1-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
     const newOrder = {
       id: orderId,
@@ -41,7 +42,7 @@ export async function POST(req: Request) {
       payment_proof_url: paymentProofUrl || "",
       coupon_code: couponCode || "",
       discount_amount: discountAmount || 0,
-      payment_status: paymentMethod === "COD" ? "Pending" : "Awaiting Verification",
+      payment_status: isFreeOrder ? "Paid (100% Coupon)" : paymentMethod === "COD" ? "Pending" : "Awaiting Verification",
       order_status: "Processing",
       created_at: new Date().toISOString(),
     };
@@ -54,6 +55,29 @@ export async function POST(req: Request) {
 
       if (error) {
         console.warn("Supabase order insert warning:", error.message);
+      }
+
+      // Increment Coupon Uses Counter if couponCode was used
+      if (couponCode) {
+        const cleanCode = couponCode.trim().toUpperCase();
+        const { data: cpnData } = await supabase
+          .from("coupons")
+          .select("id, uses_count, max_uses")
+          .eq("code", cleanCode)
+          .single();
+
+        if (cpnData) {
+          const currentCount = Number(cpnData.uses_count || 0);
+          const newCount = currentCount + 1;
+          const maxUses = Number(cpnData.max_uses || 0);
+
+          const updates: any = { uses_count: newCount };
+          if (maxUses > 0 && newCount >= maxUses) {
+            updates.is_active = false;
+          }
+
+          await supabase.from("coupons").update(updates).eq("id", cpnData.id);
+        }
       }
     } catch (e) {
       console.warn("Supabase connection warning:", e);

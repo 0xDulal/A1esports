@@ -144,24 +144,56 @@ ALTER TABLE public.coupons ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
 
 -- Allow public read access on products, teams, players, achievements, news, payment_methods, coupons, site_settings
+DROP POLICY IF EXISTS "Public Read Products" ON public.products;
 CREATE POLICY "Public Read Products" ON public.products FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public Read Teams" ON public.teams;
 CREATE POLICY "Public Read Teams" ON public.teams FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public Read Players" ON public.players;
 CREATE POLICY "Public Read Players" ON public.players FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public Read Achievements" ON public.achievements;
 CREATE POLICY "Public Read Achievements" ON public.achievements FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public Read News" ON public.news_articles;
 CREATE POLICY "Public Read News" ON public.news_articles FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public Read Orders" ON public.orders;
 CREATE POLICY "Public Read Orders" ON public.orders FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public Read Payment Methods" ON public.payment_methods;
 CREATE POLICY "Public Read Payment Methods" ON public.payment_methods FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public Read Coupons" ON public.coupons;
 CREATE POLICY "Public Read Coupons" ON public.coupons FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Public Read Site Settings" ON public.site_settings;
 CREATE POLICY "Public Read Site Settings" ON public.site_settings FOR SELECT USING (true);
 
 -- Allow public access for admin and checkout operations
+DROP POLICY IF EXISTS "Public Insert Orders" ON public.orders;
 CREATE POLICY "Public Insert Orders" ON public.orders FOR ALL USING (true);
+
+DROP POLICY IF EXISTS "Public Insert Products" ON public.products;
 CREATE POLICY "Public Insert Products" ON public.products FOR ALL USING (true);
+
+DROP POLICY IF EXISTS "Public Insert Teams" ON public.teams;
 CREATE POLICY "Public Insert Teams" ON public.teams FOR ALL USING (true);
+
+DROP POLICY IF EXISTS "Public Insert Players" ON public.players;
 CREATE POLICY "Public Insert Players" ON public.players FOR ALL USING (true);
+
+DROP POLICY IF EXISTS "Public Insert Achievements" ON public.achievements;
 CREATE POLICY "Public Insert Achievements" ON public.achievements FOR ALL USING (true);
+
+DROP POLICY IF EXISTS "Public Access Payment Methods" ON public.payment_methods;
 CREATE POLICY "Public Access Payment Methods" ON public.payment_methods FOR ALL USING (true);
+
+DROP POLICY IF EXISTS "Public Access Coupons" ON public.coupons;
 CREATE POLICY "Public Access Coupons" ON public.coupons FOR ALL USING (true);
+
+DROP POLICY IF EXISTS "Public Access Site Settings" ON public.site_settings;
 CREATE POLICY "Public Access Site Settings" ON public.site_settings FOR ALL USING (true);
 
 -- ====================================================================
@@ -172,9 +204,16 @@ INSERT INTO storage.buckets (id, name, public)
 VALUES ('images', 'images', true)
 ON CONFLICT (id) DO NOTHING;
 
+DROP POLICY IF EXISTS "Public Storage Select" ON storage.objects;
 CREATE POLICY "Public Storage Select" ON storage.objects FOR SELECT USING (bucket_id = 'images');
+
+DROP POLICY IF EXISTS "Public Storage Insert" ON storage.objects;
 CREATE POLICY "Public Storage Insert" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'images');
+
+DROP POLICY IF EXISTS "Public Storage Update" ON storage.objects;
 CREATE POLICY "Public Storage Update" ON storage.objects FOR UPDATE USING (bucket_id = 'images');
+
+DROP POLICY IF EXISTS "Public Storage Delete" ON storage.objects;
 CREATE POLICY "Public Storage Delete" ON storage.objects FOR DELETE USING (bucket_id = 'images');
 
 -- ====================================================================
@@ -223,10 +262,11 @@ INSERT INTO public.payment_methods (id, name, type, account_number, instructions
 ('pm-rocket', 'Rocket', 'digital', '01700000000-7', 'Send Money (Personal) to 01700000000-7', true)
 ON CONFLICT (id) DO NOTHING;
 
--- Insert Sample Coupon
-INSERT INTO public.coupons (id, code, discount_type, discount_value, min_order_amount, is_active) VALUES
-('cpn-a1welcome', 'A1WELCOME', 'fixed', 100, 500, true),
-('cpn-a1esports10', 'A1ESPORTS10', 'percentage', 10, 1000, true)
+-- Insert Sample Coupons
+INSERT INTO public.coupons (id, code, discount_type, discount_value, min_order_amount, max_uses, uses_count, is_active) VALUES
+('cpn-winnerpmc', 'WINNERPMC', 'percentage', 100, 0, 3, 0, true),
+('cpn-a1welcome', 'A1WELCOME', 'fixed', 100, 500, 0, 0, true),
+('cpn-a1esports10', 'A1ESPORTS10', 'percentage', 10, 1000, 0, 0, true)
 ON CONFLICT (id) DO NOTHING;
 
 -- Insert Default Site Settings

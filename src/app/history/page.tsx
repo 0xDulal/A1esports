@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { History as HistoryIcon, Trophy, Flag, Star, Globe, Shield, Sparkles, ChevronRight, Zap, Medal } from "lucide-react";
 import Link from "next/link";
+import { A1Button } from "@/components/ui/A1Button";
 
 interface Milestone {
   year: string;
@@ -231,9 +232,11 @@ export default function HistoryPage() {
             href="https://liquipedia.net/pubgmobile/A1_RG_Esports/Results"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-black font-black uppercase text-xs tracking-widest hover:bg-primary/90 transition-all shadow-[0_0_30px_rgba(255,0,102,0.4)]"
+            className="inline-block"
           >
-            Access Liquipedia Matches
+            <A1Button variant="primary" size="lg">
+              Access Liquipedia Matches
+            </A1Button>
           </Link>
         </div>
       </section>

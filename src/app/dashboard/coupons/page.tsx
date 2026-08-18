@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Tag, Plus, Trash2, RefreshCw, CheckCircle2, XCircle } from "lucide-react";
+import { Tag, Plus, Trash2, RefreshCw, CheckCircle2, XCircle, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function AdminCoupons() {
@@ -13,6 +13,7 @@ export default function AdminCoupons() {
     discount_type: "fixed" as "fixed" | "percentage",
     discount_value: "",
     min_order_amount: "",
+    max_uses: "",
     is_active: true,
   });
 
@@ -49,6 +50,7 @@ export default function AdminCoupons() {
           discount_type: "fixed",
           discount_value: "",
           min_order_amount: "",
+          max_uses: "",
           is_active: true,
         });
         fetchCoupons();
@@ -84,17 +86,27 @@ export default function AdminCoupons() {
     }
   };
 
+  // Helper preset to set 100% Free Coupon
+  const apply100PercentPreset = () => {
+    setFormData((prev) => ({
+      ...prev,
+      discount_type: "percentage",
+      discount_value: "100",
+      min_order_amount: "0",
+    }));
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold mb-2">Coupons & Discounts</h1>
-          <p className="text-neutral-400">Create and manage promo codes for storefront checkout</p>
+          <p className="text-neutral-400">Create promo codes, set claim limits (e.g. WinnerPMC), and 100% free discounts</p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={fetchCoupons}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-colors text-xs uppercase"
           >
             <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
             Refresh
@@ -119,52 +131,86 @@ export default function AdminCoupons() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px]">
+            <table className="w-full min-w-[700px]">
               <thead className="bg-white/5">
                 <tr>
                   <th className="text-left p-4 font-bold text-neutral-400">Code</th>
                   <th className="text-left p-4 font-bold text-neutral-400">Discount</th>
+                  <th className="text-left p-4 font-bold text-neutral-400">Claim Usage Limit</th>
                   <th className="text-left p-4 font-bold text-neutral-400">Min. Order</th>
                   <th className="text-left p-4 font-bold text-neutral-400">Status</th>
                   <th className="text-left p-4 font-bold text-neutral-400">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                {coupons.map((coupon) => (
-                  <tr key={coupon.id} className="hover:bg-white/5 transition-colors">
-                    <td className="p-4 font-mono font-bold text-primary text-base">{coupon.code}</td>
-                    <td className="p-4 font-bold text-white">
-                      {coupon.discount_type === "percentage"
-                        ? `${coupon.discount_value}% OFF`
-                        : `৳${coupon.discount_value} OFF`}
-                    </td>
-                    <td className="p-4 text-sm text-neutral-300 font-medium">
-                      {coupon.min_order_amount > 0 ? `৳${coupon.min_order_amount}` : "No Limit"}
-                    </td>
-                    <td className="p-4">
-                      <button
-                        onClick={() => handleToggleStatus(coupon)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase transition-colors ${
-                          coupon.is_active
-                            ? "bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/30"
-                            : "bg-neutral-800 text-neutral-400 border border-white/10 hover:bg-neutral-700"
-                        }`}
-                      >
-                        {coupon.is_active ? <CheckCircle2 size={12} /> : <XCircle size={12} />}
-                        {coupon.is_active ? "Active" : "Inactive"}
-                      </button>
-                    </td>
-                    <td className="p-4">
-                      <button
-                        onClick={() => handleDeleteCoupon(coupon.id)}
-                        className="p-2 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors"
-                        title="Delete Coupon"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {coupons.map((coupon) => {
+                  const maxUses = Number(coupon.max_uses || 0);
+                  const usesCount = Number(coupon.uses_count || 0);
+                  const isLimitReached = maxUses > 0 && usesCount >= maxUses;
+                  const is100Percent = coupon.discount_type === "percentage" && Number(coupon.discount_value) >= 100;
+
+                  return (
+                    <tr key={coupon.id} className="hover:bg-white/5 transition-colors">
+                      <td className="p-4 font-mono font-bold text-primary text-base flex items-center gap-2">
+                        {coupon.code}
+                        {is100Percent && (
+                          <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] uppercase font-sans">
+                            FREE (৳0)
+                          </span>
+                        )}
+                      </td>
+                      <td className="p-4 font-bold text-white">
+                        {is100Percent
+                          ? "100% OFF (FULL PRICE FREE)"
+                          : coupon.discount_type === "percentage"
+                          ? `${coupon.discount_value}% OFF`
+                          : `৳${coupon.discount_value} OFF`}
+                      </td>
+                      <td className="p-4 text-sm font-medium">
+                        {maxUses > 0 ? (
+                          <span
+                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-mono font-bold ${
+                              isLimitReached
+                                ? "bg-red-500/20 text-red-400 border border-red-500/30"
+                                : "bg-white/5 text-neutral-300 border border-white/10"
+                            }`}
+                          >
+                            {usesCount} / {maxUses} claims {isLimitReached && "(Limit Reached)"}
+                          </span>
+                        ) : (
+                          <span className="text-neutral-400 text-xs uppercase tracking-wider font-bold">
+                            Unlimited ({usesCount} used)
+                          </span>
+                        )}
+                      </td>
+                      <td className="p-4 text-sm text-neutral-300 font-medium">
+                        {coupon.min_order_amount > 0 ? `৳${coupon.min_order_amount}` : "No Limit"}
+                      </td>
+                      <td className="p-4">
+                        <button
+                          onClick={() => handleToggleStatus(coupon)}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase transition-colors ${
+                            coupon.is_active && !isLimitReached
+                              ? "bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/30"
+                              : "bg-neutral-800 text-neutral-400 border border-white/10 hover:bg-neutral-700"
+                          }`}
+                        >
+                          {coupon.is_active && !isLimitReached ? <CheckCircle2 size={12} /> : <XCircle size={12} />}
+                          {isLimitReached ? "Limit Reached" : coupon.is_active ? "Active" : "Inactive"}
+                        </button>
+                      </td>
+                      <td className="p-4">
+                        <button
+                          onClick={() => handleDeleteCoupon(coupon.id)}
+                          className="p-2 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors"
+                          title="Delete Coupon"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -179,6 +225,23 @@ export default function AdminCoupons() {
           </DialogHeader>
 
           <form onSubmit={handleCreateCoupon} className="space-y-4 pt-2">
+            {/* Quick Preset */}
+            <div className="p-3 rounded-xl bg-purple-950/40 border border-purple-500/30 flex items-center justify-between gap-2">
+              <div className="text-xs text-purple-200">
+                <span className="font-bold flex items-center gap-1">
+                  <Sparkles size={14} className="text-primary" /> 100% Free Product Coupon
+                </span>
+                <span className="text-[10px] text-purple-300 block">Makes price ৳0 for full product purchase</span>
+              </div>
+              <button
+                type="button"
+                onClick={apply100PercentPreset}
+                className="px-3 py-1 bg-primary text-black font-black rounded-lg text-[10px] uppercase tracking-wider shrink-0 hover:bg-primary/90"
+              >
+                Apply Preset
+              </button>
+            </div>
+
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
                 Coupon Code *
@@ -186,7 +249,7 @@ export default function AdminCoupons() {
               <input
                 type="text"
                 required
-                placeholder="e.g. A1SUMMER"
+                placeholder="e.g. WinnerPMC"
                 value={formData.code}
                 onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
                 className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm font-mono uppercase focus:outline-none focus:border-primary text-white"
@@ -215,7 +278,7 @@ export default function AdminCoupons() {
                 <input
                   type="number"
                   required
-                  placeholder="e.g. 100 or 15"
+                  placeholder="100 for 100% Free"
                   value={formData.discount_value}
                   onChange={(e) => setFormData({ ...formData, discount_value: e.target.value })}
                   className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
@@ -223,17 +286,33 @@ export default function AdminCoupons() {
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
-                Minimum Order Amount (BDT)
-              </label>
-              <input
-                type="number"
-                placeholder="0 for no minimum"
-                value={formData.min_order_amount}
-                onChange={(e) => setFormData({ ...formData, min_order_amount: e.target.value })}
-                className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
+                  Claim Limit (Max Uses)
+                </label>
+                <input
+                  type="number"
+                  placeholder="e.g. 3 (0 for unlimited)"
+                  value={formData.max_uses}
+                  onChange={(e) => setFormData({ ...formData, max_uses: e.target.value })}
+                  className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                />
+                <span className="text-[10px] text-neutral-500 block mt-1">Total times code can be claimed</span>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
+                  Min. Order Total (BDT)
+                </label>
+                <input
+                  type="number"
+                  placeholder="0 for no minimum"
+                  value={formData.min_order_amount}
+                  onChange={(e) => setFormData({ ...formData, min_order_amount: e.target.value })}
+                  className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                />
+              </div>
             </div>
 
             <div className="pt-4 flex justify-end gap-3">
