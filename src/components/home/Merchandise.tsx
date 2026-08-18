@@ -23,9 +23,9 @@ export function Merchandise() {
   }, []);
 
   return (
-    <Section withGlow aria-labelledby="merch-heading" className="py-24">
+    <Section withGlow aria-labelledby="merch-heading" className="py-12 sm:py-24">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+      <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-8 sm:mb-16 gap-6">
         <SectionHeader
           title={
             <>

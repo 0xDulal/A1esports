@@ -44,12 +44,12 @@ export function Footer() {
   }
 
   return (
-    <footer className="relative w-full bg-black border-t border-white/5 pt-24 pb-12 overflow-hidden">
+    <footer className="relative w-full bg-black border-t border-white/5 pt-12 sm:pt-24 pb-8 sm:pb-12 overflow-hidden">
       {/* Background Glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 lg:gap-8 mb-12 sm:mb-20">
           {/* Brand Column */}
           <div className="flex flex-col gap-8">
             <Link href="/" className="flex items-center gap-3">

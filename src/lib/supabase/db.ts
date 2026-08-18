@@ -100,3 +100,129 @@ export async function getNewsFromSupabase(): Promise<NewsArticle[]> {
     return newsArticles;
   }
 }
+
+export type PaymentMethod = {
+  id: string;
+  name: string;
+  type: "cod" | "digital";
+  account_number: string;
+  instructions: string;
+  is_active: boolean;
+};
+
+export const DEFAULT_PAYMENT_METHODS: PaymentMethod[] = [
+  {
+    id: "pm-cod",
+    name: "Cash on Delivery",
+    type: "cod",
+    account_number: "",
+    instructions: "Pay in cash upon delivery to your doorstep",
+    is_active: true,
+  },
+  {
+    id: "pm-bkash",
+    name: "bKash",
+    type: "digital",
+    account_number: "01700000000",
+    instructions: "Send Money (Personal) to 01700000000",
+    is_active: true,
+  },
+  {
+    id: "pm-nagad",
+    name: "Nagad",
+    type: "digital",
+    account_number: "01700000000",
+    instructions: "Send Money (Personal) to 01700000000",
+    is_active: true,
+  },
+  {
+    id: "pm-rocket",
+    name: "Rocket",
+    type: "digital",
+    account_number: "01700000000-7",
+    instructions: "Send Money (Personal) to 01700000000-7",
+    is_active: true,
+  },
+];
+
+export async function getPaymentMethodsFromSupabase(): Promise<PaymentMethod[]> {
+  try {
+    const { data, error } = await supabase.from("payment_methods").select("*");
+    if (error || !data || data.length === 0) {
+      return DEFAULT_PAYMENT_METHODS;
+    }
+    return data as PaymentMethod[];
+  } catch {
+    return DEFAULT_PAYMENT_METHODS;
+  }
+}
+
+export type Coupon = {
+  id: string;
+  code: string;
+  discount_type: "percentage" | "fixed";
+  discount_value: number;
+  min_order_amount: number;
+  max_uses?: number;
+  uses_count?: number;
+  is_active: boolean;
+  expires_at?: string;
+};
+
+export const DEFAULT_COUPONS: Coupon[] = [
+  {
+    id: "cpn-a1welcome",
+    code: "A1WELCOME",
+    discount_type: "fixed",
+    discount_value: 100,
+    min_order_amount: 500,
+    is_active: true,
+  },
+  {
+    id: "cpn-a1esports10",
+    code: "A1ESPORTS10",
+    discount_type: "percentage",
+    discount_value: 10,
+    min_order_amount: 1000,
+    is_active: true,
+  },
+];
+
+export async function getCouponsFromSupabase(): Promise<Coupon[]> {
+  try {
+    const { data, error } = await supabase.from("coupons").select("*");
+    if (error || !data || data.length === 0) {
+      return DEFAULT_COUPONS;
+    }
+    return data as Coupon[];
+  } catch {
+    return DEFAULT_COUPONS;
+  }
+}
+
+export type DeliveryCharges = {
+  inside_dhaka: number;
+  outside_dhaka: number;
+};
+
+export const DEFAULT_DELIVERY_CHARGES: DeliveryCharges = {
+  inside_dhaka: 60,
+  outside_dhaka: 120,
+};
+
+export async function getDeliveryChargesFromSupabase(): Promise<DeliveryCharges> {
+  try {
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "delivery_charges")
+      .single();
+    if (error || !data || !data.value) {
+      return DEFAULT_DELIVERY_CHARGES;
+    }
+    return data.value as DeliveryCharges;
+  } catch {
+    return DEFAULT_DELIVERY_CHARGES;
+  }
+}
+

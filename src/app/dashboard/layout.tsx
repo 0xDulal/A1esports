@@ -138,6 +138,17 @@ export default function DashboardLayout({
               <span>Orders</span>
             </Link>
             <Link
+              href="/dashboard/coupons"
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                pathname.startsWith("/dashboard/coupons")
+                  ? "bg-primary/10 text-primary"
+                  : "text-neutral-400 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              <Tag size={20} />
+              <span>Coupons</span>
+            </Link>
+            <Link
               href="/dashboard/products"
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                 pathname.startsWith("/dashboard/products")

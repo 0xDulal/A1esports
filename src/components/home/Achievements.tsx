@@ -98,8 +98,8 @@ export function Achievements({ achievements }: { achievements: any[] }) {
   }, [achievements, selectedPlace, selectedTier]);
 
   return (
-    <Section withGlow className="py-24">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
+    <Section withGlow className="py-12 sm:py-24">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6 mb-8 sm:mb-12">
         <SectionHeader
           title={
             <>
@@ -117,7 +117,7 @@ export function Achievements({ achievements }: { achievements: any[] }) {
           href={LIQUIPEDIA_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 hover:bg-primary/20 border border-white/10 hover:border-primary/40 text-xs font-black uppercase tracking-widest text-white transition-all duration-300 group shrink-0"
+          className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white/5 hover:bg-primary/20 border border-white/10 hover:border-primary/40 text-[10px] sm:text-xs font-black uppercase tracking-widest text-white transition-all duration-300 group shrink-0"
         >
           <span>View Liquipedia Results</span>
           <ExternalLink size={14} className="text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -125,7 +125,7 @@ export function Achievements({ achievements }: { achievements: any[] }) {
       </div>
 
       {/* Filter Controls Bar */}
-      <div className="bg-neutral-900/80 border border-white/10 rounded-2xl p-4 mb-10 space-y-4 backdrop-blur-xl">
+      <div className="bg-neutral-900/80 border border-white/10 rounded-2xl p-3 sm:p-4 mb-8 sm:mb-10 space-y-4 backdrop-blur-xl">
         <div className="flex flex-wrap items-center justify-between gap-4">
           {/* Place Filter */}
           <div className="flex flex-wrap items-center gap-2">
@@ -224,7 +224,7 @@ function AchievementCard({ item, index }: { item: any; index: number }) {
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ delay: index * 0.05 }}
       whileHover={{ y: -8 }}
-      className="group relative flex h-full min-h-[360px] flex-col overflow-hidden rounded-[2rem] border border-white/5 bg-gradient-to-b from-white/10 to-transparent p-8 backdrop-blur-md transition-all duration-300 hover:border-primary/40 hover:shadow-[0_20px_50px_-10px_rgba(255,0,102,0.2)]"
+      className="group relative flex h-full min-h-[320px] sm:min-h-[360px] flex-col overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-white/5 bg-gradient-to-b from-white/10 to-transparent p-5 sm:p-8 backdrop-blur-md transition-all duration-300 hover:border-primary/40 hover:shadow-[0_20px_50px_-10px_rgba(255,0,102,0.2)]"
     >
       {/* Top Row: Rank & Tier */}
       <div className="mb-6 flex items-start justify-between">

@@ -80,7 +80,7 @@ export function SocialGrid({ stats }: { stats?: Stats }) {
   ];
 
   return (
-    <Section className="pb-24" containerClassName="max-w-7xl">
+    <Section className="pb-12 sm:pb-24" containerClassName="max-w-7xl">
       <GlowBar position="top" className="-top-[1px]" />
 
       <SectionHeader
@@ -92,7 +92,7 @@ export function SocialGrid({ stats }: { stats?: Stats }) {
         subtitle="Social Presence"
         icon={Share2}
         align="center"
-        className="mb-20 pt-20"
+        className="mb-10 sm:mb-20 pt-10 sm:pt-20"
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -102,7 +102,7 @@ export function SocialGrid({ stats }: { stats?: Stats }) {
             href={social.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative flex flex-col justify-between overflow-hidden rounded-[2.5rem] border border-white/5 bg-neutral-900/50 p-8 transition-all duration-500 hover:border-primary/50 hover:bg-neutral-900/80 hover:shadow-[0_0_40px_rgba(255,0,102,0.1)]"
+            className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 bg-neutral-900/50 p-6 sm:p-8 transition-all duration-500 hover:border-primary/50 hover:bg-neutral-900/80 hover:shadow-[0_0_40px_rgba(255,0,102,0.1)]"
           >
             {/* Background Icon Watermark */}
             <div className="absolute -right-8 -top-8 opacity-5 transition-transform duration-700 group-hover:scale-110 group-hover:opacity-10">
@@ -121,7 +121,7 @@ export function SocialGrid({ stats }: { stats?: Stats }) {
             </div>
 
             {/* Content Section */}
-            <div className="relative z-10 mt-16">
+            <div className="relative z-10 mt-10 sm:mt-16">
               <AnimatedCounter value={social.followers} label={social.label} />
               
               {/* Hover Indicator */}

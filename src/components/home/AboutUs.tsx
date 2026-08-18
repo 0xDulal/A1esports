@@ -31,7 +31,7 @@ const stats = [
 
 export function AboutUs() {
   return (
-    <Section id="about" className="pt-32 pb-24">
+    <Section id="about" className="pt-16 sm:pt-32 pb-12 sm:pb-24">
       {/* Background Decorative Logo */}
       <div className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/3 opacity-5 pointer-events-none select-none z-0">
         <Image
@@ -43,7 +43,7 @@ export function AboutUs() {
         />
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-16 items-center relative z-10 pt-12">
+      <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center relative z-10 pt-4 sm:pt-12">
         {/* Left Side: Content */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -62,17 +62,17 @@ export function AboutUs() {
           <SectionHeader
             title={
               <>
-                Redefining <br />
+                Redefining{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">
                   South Asian
-                </span> <br />
+                </span>{" "}
                 Esports
               </>
             }
             className="mb-8"
           />
 
-          <div className="space-y-6 text-neutral-400 text-lg leading-relaxed max-w-xl">
+          <div className="space-y-4 sm:space-y-6 text-neutral-400 text-base sm:text-lg leading-relaxed max-w-xl">
             <p>
               Founded in 2020, <span className="text-white font-bold">A1 Esports</span> has rapidly ascended to become South Asia's premier esports powerhouse. We are more than just a team; we are a visionary movement dedicated to excellence, performance, and the growth of the gaming ecosystem.
             </p>
@@ -82,7 +82,7 @@ export function AboutUs() {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mt-12 pt-12 pb-12 border-t border-white/10">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 mt-8 sm:mt-12 pt-8 sm:pt-12 pb-8 sm:pb-12 border-t border-white/10">
             {stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -91,7 +91,7 @@ export function AboutUs() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
               >
-                <div className="text-2xl md:text-3xl font-black text-white mb-1">
+                <div className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">
                   {stat.value}
                 </div>
                 <div className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">

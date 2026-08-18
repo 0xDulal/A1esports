@@ -27,15 +27,53 @@ CREATE TABLE IF NOT EXISTS public.products (
 CREATE TABLE IF NOT EXISTS public.orders (
   id TEXT PRIMARY KEY,
   customer_name TEXT NOT NULL,
-  customer_email TEXT NOT NULL,
+  customer_email TEXT DEFAULT '',
   customer_phone TEXT NOT NULL,
+  country TEXT DEFAULT 'Bangladesh',
   shipping_address TEXT NOT NULL,
   items JSONB NOT NULL,
   total_amount NUMERIC NOT NULL,
   payment_method TEXT DEFAULT 'COD',
+  payment_number TEXT DEFAULT '',
+  transaction_id TEXT DEFAULT '',
+  payment_proof_url TEXT DEFAULT '',
+  coupon_code TEXT DEFAULT '',
+  discount_amount NUMERIC DEFAULT 0,
   payment_status TEXT DEFAULT 'Pending',
   order_status TEXT DEFAULT 'Processing',
   created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 3B. PAYMENT METHODS TABLE
+CREATE TABLE IF NOT EXISTS public.payment_methods (
+  id TEXT PRIMARY KEY DEFAULT ('pm-' || gen_random_uuid()),
+  name TEXT NOT NULL,
+  type TEXT DEFAULT 'digital',
+  account_number TEXT DEFAULT '',
+  instructions TEXT DEFAULT '',
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 3C. COUPONS TABLE
+CREATE TABLE IF NOT EXISTS public.coupons (
+  id TEXT PRIMARY KEY DEFAULT ('cpn-' || gen_random_uuid()),
+  code TEXT UNIQUE NOT NULL,
+  discount_type TEXT NOT NULL CHECK (discount_type IN ('percentage', 'fixed')),
+  discount_value NUMERIC NOT NULL,
+  min_order_amount NUMERIC DEFAULT 0,
+  max_uses INTEGER DEFAULT 0,
+  uses_count INTEGER DEFAULT 0,
+  is_active BOOLEAN DEFAULT true,
+  expires_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 3D. SITE SETTINGS TABLE
+CREATE TABLE IF NOT EXISTS public.site_settings (
+  key TEXT PRIMARY KEY,
+  value JSONB NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- 4. TEAMS TABLE
@@ -101,21 +139,30 @@ ALTER TABLE public.teams ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.players ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.achievements ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.news_articles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.payment_methods ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.coupons ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
 
--- Allow public read access on products, teams, players, achievements, news
+-- Allow public read access on products, teams, players, achievements, news, payment_methods, coupons, site_settings
 CREATE POLICY "Public Read Products" ON public.products FOR SELECT USING (true);
 CREATE POLICY "Public Read Teams" ON public.teams FOR SELECT USING (true);
 CREATE POLICY "Public Read Players" ON public.players FOR SELECT USING (true);
 CREATE POLICY "Public Read Achievements" ON public.achievements FOR SELECT USING (true);
 CREATE POLICY "Public Read News" ON public.news_articles FOR SELECT USING (true);
 CREATE POLICY "Public Read Orders" ON public.orders FOR SELECT USING (true);
+CREATE POLICY "Public Read Payment Methods" ON public.payment_methods FOR SELECT USING (true);
+CREATE POLICY "Public Read Coupons" ON public.coupons FOR SELECT USING (true);
+CREATE POLICY "Public Read Site Settings" ON public.site_settings FOR SELECT USING (true);
 
--- Allow public insert access for checkout orders and admin operations
-CREATE POLICY "Public Insert Orders" ON public.orders FOR INSERT WITH CHECK (true);
+-- Allow public access for admin and checkout operations
+CREATE POLICY "Public Insert Orders" ON public.orders FOR ALL USING (true);
 CREATE POLICY "Public Insert Products" ON public.products FOR ALL USING (true);
 CREATE POLICY "Public Insert Teams" ON public.teams FOR ALL USING (true);
 CREATE POLICY "Public Insert Players" ON public.players FOR ALL USING (true);
 CREATE POLICY "Public Insert Achievements" ON public.achievements FOR ALL USING (true);
+CREATE POLICY "Public Access Payment Methods" ON public.payment_methods FOR ALL USING (true);
+CREATE POLICY "Public Access Coupons" ON public.coupons FOR ALL USING (true);
+CREATE POLICY "Public Access Site Settings" ON public.site_settings FOR ALL USING (true);
 
 -- ====================================================================
 -- 9. SUPABASE STORAGE BUCKETS SETUP FOR IMAGES
@@ -167,3 +214,23 @@ INSERT INTO public.achievements (id, team_id, title, rank, event, year, date, ti
 ('ach-1', 'pubgm-pro', 'Champions', '1st', 'PMPL South Asia Spring 2023', '2023', '2023-05-10', 'A-Tier', '$10,000'),
 ('ach-2', 'pubgm-pro', 'Finalists', 'Top 16', 'PMGC 2022', '2022', '2022-12-15', 'S-Tier', '$25,000')
 ON CONFLICT (id) DO NOTHING;
+
+-- Insert Payment Methods
+INSERT INTO public.payment_methods (id, name, type, account_number, instructions, is_active) VALUES
+('pm-cod', 'Cash on Delivery', 'cod', '', 'Pay in cash upon delivery to your doorstep', true),
+('pm-bkash', 'bKash', 'digital', '01700000000', 'Send Money (Personal) to 01700000000', true),
+('pm-nagad', 'Nagad', 'digital', '01700000000', 'Send Money (Personal) to 01700000000', true),
+('pm-rocket', 'Rocket', 'digital', '01700000000-7', 'Send Money (Personal) to 01700000000-7', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Insert Sample Coupon
+INSERT INTO public.coupons (id, code, discount_type, discount_value, min_order_amount, is_active) VALUES
+('cpn-a1welcome', 'A1WELCOME', 'fixed', 100, 500, true),
+('cpn-a1esports10', 'A1ESPORTS10', 'percentage', 10, 1000, true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Insert Default Site Settings
+INSERT INTO public.site_settings (key, value) VALUES
+('delivery_charges', '{"inside_dhaka": 60, "outside_dhaka": 120}'::jsonb)
+ON CONFLICT (key) DO NOTHING;
+

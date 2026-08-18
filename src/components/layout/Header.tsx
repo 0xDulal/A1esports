@@ -62,9 +62,9 @@ export function Header() {
         {/* Logo Section */}
         <Link
           href="/"
-          className="flex w-20 shrink-0 items-center justify-center border-r border-border bg-background lg:w-64 lg:justify-center lg:gap-2"
+          className="flex w-16 sm:w-20 shrink-0 items-center justify-center border-r border-border bg-background lg:w-64 lg:justify-center lg:gap-2"
         >
-          <div className="relative h-10 w-10 lg:h-12 lg:w-12">
+          <div className="relative h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12">
             <Image
               src="/A1esports_logo_white.svg"
               alt="A1 Esports Logo"
@@ -130,7 +130,7 @@ export function Header() {
           </div>
 
           {/* Main Nav Bar */}
-          <div className="flex flex-1 items-center justify-between px-6">
+          <div className="flex flex-1 items-center justify-between px-3 sm:px-6">
             {/* Desktop Nav */}
             <nav className="hidden h-full items-center gap-10 lg:flex">
               <Link
@@ -181,12 +181,12 @@ export function Header() {
             {/* Mobile Menu Trigger */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="lg:hidden text-foreground hover:bg-accent hover:text-accent-foreground">
-                  <Menu className="h-6 w-6" />
+                <Button variant="ghost" size="icon" className="lg:hidden text-foreground hover:bg-accent hover:text-accent-foreground p-1 sm:p-2">
+                  <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
                   <span className="sr-only">Toggle menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="bg-background text-foreground border-r border-border w-[300px] sm:w-[400px] p-0">
+              <SheetContent side="left" className="bg-background text-foreground border-r border-border w-[280px] sm:w-[380px] p-0">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 <SheetDescription className="sr-only">Main navigation menu for mobile devices</SheetDescription>
                 
@@ -279,26 +279,26 @@ export function Header() {
             {/* Mobile Logo Text */}
             <Link
               href="/"
-              className="lg:hidden text-xl font-black italic tracking-[0.2em] font-sans"
+              className="lg:hidden text-base min-[400px]:text-lg sm:text-xl font-black italic tracking-[0.15em] sm:tracking-[0.2em] font-sans truncate px-1"
             >
               A1ESPORTS
             </Link>
 
             {/* Actions */}
-            <div className="flex items-center gap-6 lg:border-l lg:border-border lg:pl-8 h-full">
-              <button className="text-foreground hover:text-primary transition-colors">
-                <Search className="h-5 w-5" />
+            <div className="flex items-center gap-3 min-[400px]:gap-4 sm:gap-6 lg:border-l lg:border-border lg:pl-8 h-full">
+              <button className="text-foreground hover:text-primary transition-colors p-1">
+                <Search className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
-              <button className="text-foreground hover:text-primary transition-colors hidden sm:block">
+              <button className="text-foreground hover:text-primary transition-colors hidden sm:block p-1">
                 <User className="h-5 w-5" />
               </button>
               <button 
                 onClick={() => setIsOpen(true)}
-                className="relative text-foreground hover:text-primary transition-colors"
+                className="relative text-foreground hover:text-primary transition-colors p-1"
               >
-                <ShoppingBag className="h-5 w-5" />
+                <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" />
                 {itemCount > 0 && (
-                  <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded bg-primary text-[10px] font-bold text-primary-foreground animate-in zoom-in duration-300">
+                  <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded bg-primary text-[10px] font-bold text-primary-foreground animate-in zoom-in duration-300">
                     {itemCount}
                   </span>
                 )}

@@ -13,7 +13,7 @@ export function PlayerSection() {
   const players = proTeam ? proTeam.players : [];
 
   return (
-    <Section className="py-24">
+    <Section className="py-12 sm:py-24">
       <SectionHeader
         title={
           <>
