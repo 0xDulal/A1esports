@@ -8,11 +8,11 @@ import {
   saveSponsorToSupabase,
   saveAllSponsorsToSupabase,
   deleteSponsorFromSupabase,
-  saveLocalSponsors,
 } from "@/lib/sponsors";
 
 export default function AdminSponsorsPage() {
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -30,8 +30,10 @@ export default function AdminSponsorsPage() {
   }, []);
 
   const fetchSponsors = async () => {
+    setLoading(true);
     const data = await getSponsors();
-    setSponsors(data);
+    setSponsors(data || []);
+    setLoading(false);
   };
 
   const isImageUrl = (url?: string) => {
@@ -83,7 +85,6 @@ export default function AdminSponsorsPage() {
 
   const handleDragEnd = async () => {
     setDraggedIndex(null);
-    saveLocalSponsors(sponsors);
     await saveAllSponsorsToSupabase(sponsors);
   };
 
@@ -96,7 +97,6 @@ export default function AdminSponsorsPage() {
 
     const reordered = newArr.map((item, idx) => ({ ...item, display_order: idx + 1 }));
     setSponsors(reordered);
-    saveLocalSponsors(reordered);
     await saveAllSponsorsToSupabase(reordered);
   };
 
@@ -109,7 +109,6 @@ export default function AdminSponsorsPage() {
 
     const reordered = newArr.map((item, idx) => ({ ...item, display_order: idx + 1 }));
     setSponsors(reordered);
-    saveLocalSponsors(reordered);
     await saveAllSponsorsToSupabase(reordered);
   };
 
@@ -140,7 +139,6 @@ export default function AdminSponsorsPage() {
     }
 
     setSponsors(updatedList);
-    saveLocalSponsors(updatedList);
     setIsModalOpen(false);
 
     await saveSponsorToSupabase(newSponsor);
@@ -150,7 +148,6 @@ export default function AdminSponsorsPage() {
     if (!confirm("Are you sure you want to delete this sponsor?")) return;
     const updatedList = sponsors.filter((s) => s.id !== id);
     setSponsors(updatedList);
-    saveLocalSponsors(updatedList);
 
     await deleteSponsorFromSupabase(id);
   };
@@ -163,7 +160,7 @@ export default function AdminSponsorsPage() {
             <Handshake className="text-primary" /> Sponsor Management
           </h1>
           <p className="text-sm text-neutral-400">
-            Drag rows to reorder partners and sponsors on the live site
+            Drag rows to reorder partners and sponsors on the live site ({sponsors.length} sponsors)
           </p>
         </div>
 
@@ -175,114 +172,127 @@ export default function AdminSponsorsPage() {
         </button>
       </div>
 
-      {/* Sponsors Table with Drag & Drop */}
-      <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px]">
-            <thead className="bg-white/5">
-              <tr>
-                <th className="text-left p-4 font-bold text-neutral-400 w-20">Reorder</th>
-                <th className="text-left p-4 font-bold text-neutral-400">Sponsor Logo</th>
-                <th className="text-left p-4 font-bold text-neutral-400">Name</th>
-                <th className="text-left p-4 font-bold text-neutral-400">Category</th>
-                <th className="text-left p-4 font-bold text-neutral-400">Badge</th>
-                <th className="text-left p-4 font-bold text-neutral-400">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              {sponsors.map((s, idx) => (
-                <tr
-                  key={s.id}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, idx)}
-                  onDragOver={(e) => handleDragOver(e, idx)}
-                  onDragEnd={handleDragEnd}
-                  className={`transition-colors select-none ${
-                    draggedIndex === idx
-                      ? "bg-primary/20 border-y border-primary/50 opacity-60"
-                      : "hover:bg-white/5"
-                  }`}
-                >
-                  <td className="p-4">
-                    <div className="flex items-center gap-1.5">
-                      <div
-                        title="Click and drag to reorder"
-                        className="cursor-grab active:cursor-grabbing p-2 rounded-lg bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-primary transition-colors flex items-center justify-center"
-                      >
-                        <GripVertical size={18} />
-                      </div>
-                      <div className="flex flex-col gap-0.5">
-                        <button
-                          onClick={() => handleMoveUp(idx)}
-                          disabled={idx === 0}
-                          className="text-neutral-500 hover:text-white disabled:opacity-20"
-                        >
-                          <ArrowUp size={12} />
-                        </button>
-                        <button
-                          onClick={() => handleMoveDown(idx)}
-                          disabled={idx === sponsors.length - 1}
-                          className="text-neutral-500 hover:text-white disabled:opacity-20"
-                        >
-                          <ArrowDown size={12} />
-                        </button>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    {isImageUrl(s.logo) ? (
-                      <div className="relative h-10 w-24 rounded-lg bg-neutral-800 border border-white/10 p-1 flex items-center justify-center overflow-hidden">
-                        <img src={s.logo} alt={s.name} className="max-h-full max-w-full object-contain" />
-                      </div>
-                    ) : (
-                      <span className="px-3 py-1 bg-white/10 border border-white/10 rounded-lg text-xs font-black text-primary font-sans italic">
-                        {s.logo}
-                      </span>
-                    )}
-                  </td>
-                  <td className="p-4 font-bold text-white">
-                    <div className="flex items-center gap-2">
-                      {s.name}
-                      {s.websiteUrl && (
-                        <a
-                          href={s.websiteUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-neutral-400 hover:text-primary"
-                        >
-                          <ExternalLink size={12} />
-                        </a>
-                      )}
-                    </div>
-                  </td>
-                  <td className="p-4 text-neutral-300 text-sm">{s.category}</td>
-                  <td className="p-4">
-                    <span className="px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold">
-                      {s.badge}
-                    </span>
-                  </td>
-                  <td className="p-4">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleOpenEdit(s)}
-                        className="p-2 hover:bg-white/10 text-white rounded-lg transition-colors"
-                      >
-                        <Edit size={16} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(s.id)}
-                        className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {loading ? (
+        <div className="py-20 text-center text-neutral-400 font-bold uppercase tracking-widest animate-pulse">
+          Loading sponsors data...
         </div>
-      </div>
+      ) : sponsors.length === 0 ? (
+        <div className="py-16 text-center text-neutral-400 bg-neutral-900 border border-white/10 rounded-2xl flex flex-col items-center gap-3">
+          <Handshake size={40} className="text-neutral-600" />
+          <p className="font-bold text-lg text-white">No Sponsors Found</p>
+          <p className="text-sm text-neutral-500">
+            Click &quot;Add Sponsor&quot; above to create your first brand partnership profile.
+          </p>
+        </div>
+      ) : (
+        <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px]">
+              <thead className="bg-white/5">
+                <tr>
+                  <th className="text-left p-4 font-bold text-neutral-400 w-20">Reorder</th>
+                  <th className="text-left p-4 font-bold text-neutral-400">Sponsor Logo</th>
+                  <th className="text-left p-4 font-bold text-neutral-400">Name</th>
+                  <th className="text-left p-4 font-bold text-neutral-400">Category</th>
+                  <th className="text-left p-4 font-bold text-neutral-400">Badge</th>
+                  <th className="text-left p-4 font-bold text-neutral-400">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {sponsors.map((s, idx) => (
+                  <tr
+                    key={s.id}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, idx)}
+                    onDragOver={(e) => handleDragOver(e, idx)}
+                    onDragEnd={handleDragEnd}
+                    className={`transition-colors select-none ${
+                      draggedIndex === idx
+                        ? "bg-primary/20 border-y border-primary/50 opacity-60"
+                        : "hover:bg-white/5"
+                    }`}
+                  >
+                    <td className="p-4">
+                      <div className="flex items-center gap-1.5">
+                        <div
+                          title="Click and drag to reorder"
+                          className="cursor-grab active:cursor-grabbing p-2 rounded-lg bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-primary transition-colors flex items-center justify-center"
+                        >
+                          <GripVertical size={18} />
+                        </div>
+                        <div className="flex flex-col gap-0.5">
+                          <button
+                            onClick={() => handleMoveUp(idx)}
+                            disabled={idx === 0}
+                            className="text-neutral-500 hover:text-white disabled:opacity-20"
+                          >
+                            <ArrowUp size={12} />
+                          </button>
+                          <button
+                            onClick={() => handleMoveDown(idx)}
+                            disabled={idx === sponsors.length - 1}
+                            className="text-neutral-500 hover:text-white disabled:opacity-20"
+                          >
+                            <ArrowDown size={12} />
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      {isImageUrl(s.logo) ? (
+                        <div className="relative h-10 w-24 rounded-lg bg-neutral-800 border border-white/10 p-1 flex items-center justify-center overflow-hidden">
+                          <img src={s.logo} alt={s.name} className="max-h-full max-w-full object-contain" />
+                        </div>
+                      ) : (
+                        <span className="px-3 py-1 bg-white/10 border border-white/10 rounded-lg text-xs font-black text-primary font-sans italic">
+                          {s.logo}
+                        </span>
+                      )}
+                    </td>
+                    <td className="p-4 font-bold text-white">
+                      <div className="flex items-center gap-2">
+                        {s.name}
+                        {s.websiteUrl && (
+                          <a
+                            href={s.websiteUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-neutral-400 hover:text-primary"
+                          >
+                            <ExternalLink size={12} />
+                          </a>
+                        )}
+                      </div>
+                    </td>
+                    <td className="p-4 text-neutral-300 text-sm">{s.category}</td>
+                    <td className="p-4">
+                      <span className="px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold">
+                        {s.badge}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleOpenEdit(s)}
+                          className="p-2 hover:bg-white/10 text-white rounded-lg transition-colors"
+                        >
+                          <Edit size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(s.id)}
+                          className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* Modal */}
       {isModalOpen && (

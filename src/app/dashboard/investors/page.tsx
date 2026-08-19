@@ -8,11 +8,11 @@ import {
   saveInvestorToSupabase,
   saveAllInvestorsToSupabase,
   deleteInvestorFromSupabase,
-  saveLocalInvestors,
 } from "@/lib/investors";
 
 export default function AdminInvestorsPage() {
   const [investors, setInvestors] = useState<InvestorHighlight[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -29,8 +29,10 @@ export default function AdminInvestorsPage() {
   }, []);
 
   const fetchInvestors = async () => {
+    setLoading(true);
     const data = await getInvestors();
-    setInvestors(data);
+    setInvestors(data || []);
+    setLoading(false);
   };
 
   const isImageUrl = (url?: string) => {
@@ -80,7 +82,6 @@ export default function AdminInvestorsPage() {
 
   const handleDragEnd = async () => {
     setDraggedIndex(null);
-    saveLocalInvestors(investors);
     await saveAllInvestorsToSupabase(investors);
   };
 
@@ -93,7 +94,6 @@ export default function AdminInvestorsPage() {
 
     const reordered = newArr.map((item, idx) => ({ ...item, display_order: idx + 1 }));
     setInvestors(reordered);
-    saveLocalInvestors(reordered);
     await saveAllInvestorsToSupabase(reordered);
   };
 
@@ -106,7 +106,6 @@ export default function AdminInvestorsPage() {
 
     const reordered = newArr.map((item, idx) => ({ ...item, display_order: idx + 1 }));
     setInvestors(reordered);
-    saveLocalInvestors(reordered);
     await saveAllInvestorsToSupabase(reordered);
   };
 
@@ -134,7 +133,6 @@ export default function AdminInvestorsPage() {
     }
 
     setInvestors(updatedList);
-    saveLocalInvestors(updatedList);
     setIsModalOpen(false);
 
     await saveInvestorToSupabase(newInv);
@@ -144,7 +142,6 @@ export default function AdminInvestorsPage() {
     if (!confirm("Are you sure you want to delete this investor metric?")) return;
     const updatedList = investors.filter((i) => i.id !== id);
     setInvestors(updatedList);
-    saveLocalInvestors(updatedList);
 
     await deleteInvestorFromSupabase(id);
   };
@@ -157,7 +154,7 @@ export default function AdminInvestorsPage() {
             <TrendingUp className="text-primary" /> Investor Highlights & Logos
           </h1>
           <p className="text-sm text-neutral-400">
-            Drag rows to reorder metrics, highlights, and logos on the live site
+            Drag rows to reorder metrics, highlights, and logos on the live site ({investors.length} items)
           </p>
         </div>
 
@@ -169,94 +166,107 @@ export default function AdminInvestorsPage() {
         </button>
       </div>
 
-      {/* Investors Table with Drag & Drop */}
-      <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px]">
-            <thead className="bg-white/5">
-              <tr>
-                <th className="text-left p-4 font-bold text-neutral-400 w-20">Reorder</th>
-                <th className="text-left p-4 font-bold text-neutral-400">Logo</th>
-                <th className="text-left p-4 font-bold text-neutral-400">Metric</th>
-                <th className="text-left p-4 font-bold text-neutral-400">Title</th>
-                <th className="text-left p-4 font-bold text-neutral-400">Category</th>
-                <th className="text-left p-4 font-bold text-neutral-400">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              {investors.map((i, idx) => (
-                <tr
-                  key={i.id}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, idx)}
-                  onDragOver={(e) => handleDragOver(e, idx)}
-                  onDragEnd={handleDragEnd}
-                  className={`transition-colors select-none ${
-                    draggedIndex === idx
-                      ? "bg-primary/20 border-y border-primary/50 opacity-60"
-                      : "hover:bg-white/5"
-                  }`}
-                >
-                  <td className="p-4">
-                    <div className="flex items-center gap-1.5">
-                      <div
-                        title="Click and drag to reorder"
-                        className="cursor-grab active:cursor-grabbing p-2 rounded-lg bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-primary transition-colors flex items-center justify-center"
-                      >
-                        <GripVertical size={18} />
-                      </div>
-                      <div className="flex flex-col gap-0.5">
-                        <button
-                          onClick={() => handleMoveUp(idx)}
-                          disabled={idx === 0}
-                          className="text-neutral-500 hover:text-white disabled:opacity-20"
-                        >
-                          <ArrowUp size={12} />
-                        </button>
-                        <button
-                          onClick={() => handleMoveDown(idx)}
-                          disabled={idx === investors.length - 1}
-                          className="text-neutral-500 hover:text-white disabled:opacity-20"
-                        >
-                          <ArrowDown size={12} />
-                        </button>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    {isImageUrl(i.logo) ? (
-                      <div className="relative h-10 w-24 rounded-lg bg-neutral-800 border border-white/10 p-1 flex items-center justify-center overflow-hidden">
-                        <img src={i.logo} alt={i.title} className="max-h-full max-w-full object-contain" />
-                      </div>
-                    ) : (
-                      <span className="text-xs text-neutral-500 font-bold uppercase">No Logo</span>
-                    )}
-                  </td>
-                  <td className="p-4 font-black text-primary">{i.metric}</td>
-                  <td className="p-4 font-bold text-white">{i.title}</td>
-                  <td className="p-4 text-neutral-300 text-sm">{i.category}</td>
-                  <td className="p-4">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleOpenEdit(i)}
-                        className="p-2 hover:bg-white/10 text-white rounded-lg transition-colors"
-                      >
-                        <Edit size={16} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(i.id)}
-                        className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {loading ? (
+        <div className="py-20 text-center text-neutral-400 font-bold uppercase tracking-widest animate-pulse">
+          Loading investor highlights...
         </div>
-      </div>
+      ) : investors.length === 0 ? (
+        <div className="py-16 text-center text-neutral-400 bg-neutral-900 border border-white/10 rounded-2xl flex flex-col items-center gap-3">
+          <TrendingUp size={40} className="text-neutral-600" />
+          <p className="font-bold text-lg text-white">No Investor Highlights Found</p>
+          <p className="text-sm text-neutral-500">
+            Click &quot;Add Highlight&quot; above to add investor metrics and strategic highlights.
+          </p>
+        </div>
+      ) : (
+        <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px]">
+              <thead className="bg-white/5">
+                <tr>
+                  <th className="text-left p-4 font-bold text-neutral-400 w-20">Reorder</th>
+                  <th className="text-left p-4 font-bold text-neutral-400">Logo</th>
+                  <th className="text-left p-4 font-bold text-neutral-400">Metric</th>
+                  <th className="text-left p-4 font-bold text-neutral-400">Title</th>
+                  <th className="text-left p-4 font-bold text-neutral-400">Category</th>
+                  <th className="text-left p-4 font-bold text-neutral-400">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {investors.map((i, idx) => (
+                  <tr
+                    key={i.id}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, idx)}
+                    onDragOver={(e) => handleDragOver(e, idx)}
+                    onDragEnd={handleDragEnd}
+                    className={`transition-colors select-none ${
+                      draggedIndex === idx
+                        ? "bg-primary/20 border-y border-primary/50 opacity-60"
+                        : "hover:bg-white/5"
+                    }`}
+                  >
+                    <td className="p-4">
+                      <div className="flex items-center gap-1.5">
+                        <div
+                          title="Click and drag to reorder"
+                          className="cursor-grab active:cursor-grabbing p-2 rounded-lg bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-primary transition-colors flex items-center justify-center"
+                        >
+                          <GripVertical size={18} />
+                        </div>
+                        <div className="flex flex-col gap-0.5">
+                          <button
+                            onClick={() => handleMoveUp(idx)}
+                            disabled={idx === 0}
+                            className="text-neutral-500 hover:text-white disabled:opacity-20"
+                          >
+                            <ArrowUp size={12} />
+                          </button>
+                          <button
+                            onClick={() => handleMoveDown(idx)}
+                            disabled={idx === investors.length - 1}
+                            className="text-neutral-500 hover:text-white disabled:opacity-20"
+                          >
+                            <ArrowDown size={12} />
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      {isImageUrl(i.logo) ? (
+                        <div className="relative h-10 w-24 rounded-lg bg-neutral-800 border border-white/10 p-1 flex items-center justify-center overflow-hidden">
+                          <img src={i.logo} alt={i.title} className="max-h-full max-w-full object-contain" />
+                        </div>
+                      ) : (
+                        <span className="text-xs text-neutral-500 font-bold uppercase">No Logo</span>
+                      )}
+                    </td>
+                    <td className="p-4 font-black text-primary">{i.metric}</td>
+                    <td className="p-4 font-bold text-white">{i.title}</td>
+                    <td className="p-4 text-neutral-300 text-sm">{i.category}</td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleOpenEdit(i)}
+                          className="p-2 hover:bg-white/10 text-white rounded-lg transition-colors"
+                        >
+                          <Edit size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(i.id)}
+                          className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* Modal */}
       {isModalOpen && (

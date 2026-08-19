@@ -10,60 +10,9 @@ export interface InvestorHighlight {
   display_order?: number;
 }
 
-export const defaultInvestors: InvestorHighlight[] = [
-  {
-    id: "inv-1",
-    title: "South Asian Market Leader",
-    category: "Market Position",
-    metric: "1.5M+ Fans",
-    description: "Commanding the region's largest fan engagement in PUBG Mobile, with expanding operations in regional leagues.",
-    logo: "",
-    display_order: 1,
-  },
-  {
-    id: "inv-2",
-    title: "Multi-Channel Revenue Model",
-    category: "Financials",
-    metric: "4 Revenue Streams",
-    description: "Diversified revenue model spanning e-commerce merchandise, brand sponsorships, tournament prize pools, and digital content.",
-    logo: "",
-    display_order: 2,
-  },
-  {
-    id: "inv-3",
-    title: "Bootcamp & HQ Infrastructure",
-    category: "Assets",
-    metric: "Dhaka HQ",
-    description: "Dedicated pro bootcamps, media production facilities, and strategic infrastructure in Dhaka.",
-    logo: "",
-    display_order: 3,
-  },
-];
-
-const LOCAL_STORAGE_KEY = "a1_investors_list_v1";
-
-export function getLocalInvestors(): InvestorHighlight[] | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    }
-  } catch {}
-  return null;
-}
-
-export function saveLocalInvestors(investors: InvestorHighlight[]) {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(investors));
-  } catch {}
-}
+export const defaultInvestors: InvestorHighlight[] = [];
 
 export async function getInvestors(): Promise<InvestorHighlight[]> {
-  const local = getLocalInvestors();
-
   try {
     let { data, error } = await supabase
       .from("investors")
@@ -77,7 +26,7 @@ export async function getInvestors(): Promise<InvestorHighlight[]> {
       error = fallback.error;
     }
 
-    if (!error && data && data.length > 0) {
+    if (!error && data) {
       const mapped: InvestorHighlight[] = data.map((i: any, idx: number) => ({
         id: String(i.id),
         title: i.title,
@@ -90,14 +39,13 @@ export async function getInvestors(): Promise<InvestorHighlight[]> {
       if (data[0]?.display_order !== undefined) {
         mapped.sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
       }
-      saveLocalInvestors(mapped);
       return mapped;
     }
   } catch (err) {
     console.warn("Supabase fetch note for investors:", err);
   }
 
-  return local || defaultInvestors;
+  return [];
 }
 
 export async function saveInvestorToSupabase(investor: InvestorHighlight): Promise<boolean> {

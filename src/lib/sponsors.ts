@@ -11,73 +11,9 @@ export interface Sponsor {
   display_order?: number;
 }
 
-export const defaultSponsors: Sponsor[] = [
-  {
-    id: "sp-1",
-    name: "Airtel Bangladesh",
-    category: "Title & Telecom Partner",
-    badge: "Official Sponsor",
-    description: "Empowering fast 4G/5G connectivity and supporting competitive esports events across Bangladesh.",
-    logo: "AIRTEL",
-    websiteUrl: "https://bd.airtel.com",
-    display_order: 1,
-  },
-  {
-    id: "sp-2",
-    name: "ROG - Republic of Gamers",
-    category: "Hardware & Device Partner",
-    badge: "Gear Partner",
-    description: "Providing high-performance gaming hardware, monitors, and laptops for A1 bootcamps and stage setups.",
-    logo: "ROG",
-    websiteUrl: "https://rog.asus.com",
-    display_order: 2,
-  },
-  {
-    id: "sp-3",
-    name: "Red Bull",
-    category: "Energy Drink Partner",
-    badge: "Official Partner",
-    description: "Fueling the focus, stamina, and training of A1 Esports pro athletes.",
-    logo: "RED BULL",
-    websiteUrl: "https://redbull.com",
-    display_order: 3,
-  },
-  {
-    id: "sp-4",
-    name: "Logitech G",
-    category: "Peripherals Partner",
-    badge: "Official Partner",
-    description: "Equipping our athletes with LIGHTSPEED wireless gaming mice and mechanical keyboards.",
-    logo: "LOGITECH G",
-    websiteUrl: "https://logitechg.com",
-    display_order: 4,
-  },
-];
-
-const LOCAL_STORAGE_KEY = "a1_sponsors_list_v1";
-
-export function getLocalSponsors(): Sponsor[] | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    }
-  } catch {}
-  return null;
-}
-
-export function saveLocalSponsors(sponsors: Sponsor[]) {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sponsors));
-  } catch {}
-}
+export const defaultSponsors: Sponsor[] = [];
 
 export async function getSponsors(): Promise<Sponsor[]> {
-  const local = getLocalSponsors();
-
   try {
     let { data, error } = await supabase
       .from("sponsors")
@@ -91,7 +27,7 @@ export async function getSponsors(): Promise<Sponsor[]> {
       error = fallback.error;
     }
 
-    if (!error && data && data.length > 0) {
+    if (!error && data) {
       const mapped: Sponsor[] = data.map((s: any, idx: number) => ({
         id: String(s.id),
         name: s.name,
@@ -105,14 +41,13 @@ export async function getSponsors(): Promise<Sponsor[]> {
       if (data[0]?.display_order !== undefined) {
         mapped.sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
       }
-      saveLocalSponsors(mapped);
       return mapped;
     }
   } catch (err) {
     console.warn("Supabase fetch note for sponsors:", err);
   }
 
-  return local || defaultSponsors;
+  return [];
 }
 
 export async function saveSponsorToSupabase(sponsor: Sponsor): Promise<boolean> {
