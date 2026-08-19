@@ -4,7 +4,7 @@ import { teams, Team } from "@/lib/teams";
 import { newsArticles, NewsArticle } from "@/lib/data/news";
 
 /**
- * Fetch products directly from Supabase Cloud DB with fallback to static dataset.
+ * Fetch products directly from Supabase Cloud DB.
  */
 export async function getProductsFromSupabase(): Promise<Product[]> {
   try {
@@ -13,8 +13,8 @@ export async function getProductsFromSupabase(): Promise<Product[]> {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (error || !data || data.length === 0) {
-      return shopProducts;
+    if (error || !data) {
+      return [];
     }
 
     return data.map((item: any) => ({
@@ -32,7 +32,7 @@ export async function getProductsFromSupabase(): Promise<Product[]> {
       canCustomise: item.can_customise || false,
     }));
   } catch {
-    return shopProducts;
+    return [];
   }
 }
 
@@ -44,8 +44,8 @@ export async function getTeamsFromSupabase(): Promise<Team[]> {
     const { data: teamsData, error: tErr } = await supabase.from("teams").select("*");
     const { data: playersData } = await supabase.from("players").select("*");
 
-    if (tErr || !teamsData || teamsData.length === 0) {
-      return teams;
+    if (tErr || !teamsData) {
+      return [];
     }
 
     return teamsData.map((t: any) => ({
@@ -65,7 +65,7 @@ export async function getTeamsFromSupabase(): Promise<Team[]> {
         })),
     }));
   } catch {
-    return teams;
+    return [];
   }
 }
 
@@ -79,8 +79,8 @@ export async function getNewsFromSupabase(): Promise<NewsArticle[]> {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (error || !data || data.length === 0) {
-      return newsArticles;
+    if (error || !data) {
+      return [];
     }
 
     return data.map((item: any) => ({
@@ -97,7 +97,7 @@ export async function getNewsFromSupabase(): Promise<NewsArticle[]> {
       tags: item.tags || [],
     }));
   } catch {
-    return newsArticles;
+    return [];
   }
 }
 
@@ -110,50 +110,17 @@ export type PaymentMethod = {
   is_active: boolean;
 };
 
-export const DEFAULT_PAYMENT_METHODS: PaymentMethod[] = [
-  {
-    id: "pm-cod",
-    name: "Cash on Delivery",
-    type: "cod",
-    account_number: "",
-    instructions: "Pay in cash upon delivery to your doorstep",
-    is_active: true,
-  },
-  {
-    id: "pm-bkash",
-    name: "bKash",
-    type: "digital",
-    account_number: "01700000000",
-    instructions: "Send Money (Personal) to 01700000000",
-    is_active: true,
-  },
-  {
-    id: "pm-nagad",
-    name: "Nagad",
-    type: "digital",
-    account_number: "01700000000",
-    instructions: "Send Money (Personal) to 01700000000",
-    is_active: true,
-  },
-  {
-    id: "pm-rocket",
-    name: "Rocket",
-    type: "digital",
-    account_number: "01700000000-7",
-    instructions: "Send Money (Personal) to 01700000000-7",
-    is_active: true,
-  },
-];
+export const DEFAULT_PAYMENT_METHODS: PaymentMethod[] = [];
 
 export async function getPaymentMethodsFromSupabase(): Promise<PaymentMethod[]> {
   try {
     const { data, error } = await supabase.from("payment_methods").select("*");
-    if (error || !data || data.length === 0) {
-      return DEFAULT_PAYMENT_METHODS;
+    if (error || !data) {
+      return [];
     }
     return data as PaymentMethod[];
   } catch {
-    return DEFAULT_PAYMENT_METHODS;
+    return [];
   }
 }
 
@@ -169,34 +136,17 @@ export type Coupon = {
   expires_at?: string;
 };
 
-export const DEFAULT_COUPONS: Coupon[] = [
-  {
-    id: "cpn-a1welcome",
-    code: "A1WELCOME",
-    discount_type: "fixed",
-    discount_value: 100,
-    min_order_amount: 500,
-    is_active: true,
-  },
-  {
-    id: "cpn-a1esports10",
-    code: "A1ESPORTS10",
-    discount_type: "percentage",
-    discount_value: 10,
-    min_order_amount: 1000,
-    is_active: true,
-  },
-];
+export const DEFAULT_COUPONS: Coupon[] = [];
 
 export async function getCouponsFromSupabase(): Promise<Coupon[]> {
   try {
     const { data, error } = await supabase.from("coupons").select("*");
-    if (error || !data || data.length === 0) {
-      return DEFAULT_COUPONS;
+    if (error || !data) {
+      return [];
     }
     return data as Coupon[];
   } catch {
-    return DEFAULT_COUPONS;
+    return [];
   }
 }
 
