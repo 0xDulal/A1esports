@@ -83,12 +83,12 @@ export function Hero() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-          className="text-4xl min-[360px]:text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white uppercase tracking-tight sm:tracking-tighter leading-[0.95] sm:leading-[0.9] flex flex-col items-center justify-center gap-1 sm:gap-2"
+          className="text-4xl min-[360px]:text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl font-black text-white uppercase tracking-tight sm:tracking-tighter leading-[0.95] sm:leading-[0.9] flex flex-col lg:flex-row items-center justify-center gap-1 sm:gap-2 lg:gap-4 lg:whitespace-nowrap"
         >
-          <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">
+          <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">
             #Be The One,
           </span>
-          <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">
+          <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">
             Be <span className="inline-block text-transparent bg-clip-text bg-gradient-to-b from-primary to-primary/60">A1</span>
           </span>
         </motion.h2>

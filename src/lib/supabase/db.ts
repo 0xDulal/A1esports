@@ -226,3 +226,92 @@ export async function getDeliveryChargesFromSupabase(): Promise<DeliveryCharges>
   }
 }
 
+export type DBItemAchievement = {
+  id?: string;
+  title: string;
+  rank: string;
+  event: string;
+  year: string;
+  date?: string;
+  tier?: string;
+  prize?: string;
+};
+
+export async function getAchievementsFromSupabase(): Promise<any[]> {
+  try {
+    const { data, error } = await supabase
+      .from("achievements")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      return [];
+    }
+
+    return data.map((item: any) => ({
+      id: item.id,
+      date: item.date || item.year || new Date().toISOString().split("T")[0],
+      place: item.rank || item.title || "1st",
+      tier: item.tier || "B-Tier",
+      tournament: item.event || item.title || "Tournament",
+      prize: item.prize || "$0",
+    }));
+  } catch {
+    return [];
+  }
+}
+
+export async function getAchievementSourceMode(): Promise<"merged" | "liquipedia" | "custom"> {
+  try {
+    const { data } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "achievement_source")
+      .single();
+    return data?.value?.mode || "merged";
+  } catch {
+    return "merged";
+  }
+}
+
+export async function getCombinedAchievements(): Promise<any[]> {
+  const { getLiquipediaAchievements } = await import("@/lib/liquipedia");
+
+  try {
+    const mode = await getAchievementSourceMode();
+
+    if (mode === "liquipedia") {
+      return await getLiquipediaAchievements();
+    }
+
+    const customItems = await getAchievementsFromSupabase();
+
+    if (mode === "custom") {
+      return customItems.length > 0 ? customItems : await getLiquipediaAchievements();
+    }
+
+    // Default 'merged': Combine Liquipedia + Custom achievements
+    const liquipediaItems = await getLiquipediaAchievements();
+    const existingTournaments = new Set(
+      liquipediaItems.map((item) => item.tournament.toLowerCase().trim())
+    );
+
+    const uniqueCustom = customItems.filter(
+      (c) => !existingTournaments.has(c.tournament.toLowerCase().trim())
+    );
+
+    const merged = [...liquipediaItems, ...uniqueCustom];
+
+    merged.sort((a, b) => {
+      const timeA = a.date ? new Date(a.date).getTime() : 0;
+      const timeB = b.date ? new Date(b.date).getTime() : 0;
+      return timeB - timeA;
+    });
+
+    return merged;
+  } catch {
+    return await getLiquipediaAchievements();
+  }
+}
+
+

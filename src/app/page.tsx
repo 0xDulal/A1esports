@@ -5,11 +5,11 @@ import { PlayerSection } from "@/components/home/PlayerSection";
 import { Merchandise } from "@/components/home/Merchandise";
 import { AboutUs } from "@/components/home/AboutUs";
 import { getSocialStats } from "@/lib/get-social-stats";
-import { getLiquipediaAchievements } from "@/lib/liquipedia";
+import { getCombinedAchievements } from "@/lib/supabase/db";
 
 export default async function Home() {
   const stats = await getSocialStats();
-  const achievements = await getLiquipediaAchievements();
+  const achievements = await getCombinedAchievements();
   
   return (
     <main className="flex min-h-screen flex-col">

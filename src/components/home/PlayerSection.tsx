@@ -1,16 +1,26 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { teams } from "@/lib/teams";
+import { useEffect, useState } from "react";
+import { teams as fallbackTeams, Team, Player } from "@/lib/teams";
+import { getTeamsFromSupabase } from "@/lib/supabase/db";
 import { PlayerCard } from "@/components/ui/PlayerCard";
 import { Section } from "@/components/ui/Section";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Users } from "lucide-react";
 
 export function PlayerSection() {
-  // Get the main professional team (PUBG Mobile Pro) for the homepage
-  const proTeam = teams.find(t => t.id === "pubgm-pro");
-  const players = proTeam ? proTeam.players : [];
+  const [teamList, setTeamList] = useState<Team[]>(fallbackTeams);
+
+  useEffect(() => {
+    getTeamsFromSupabase().then((data) => {
+      if (data && data.length > 0) {
+        setTeamList(data);
+      }
+    });
+  }, []);
+
+  const proTeam = teamList.find((t) => t.id === "pubgm-pro") || teamList[0];
+  const players: Player[] = proTeam ? proTeam.players : [];
 
   return (
     <Section className="py-12 sm:py-24">

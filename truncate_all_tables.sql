@@ -1,14 +1,22 @@
 -- ====================================================================
--- A1 ESPORTS — TRUNCATE ALL DATABASE TABLES & RESET SEED DATA
--- Copy and paste this script in Supabase Dashboard -> SQL Editor to clear all data
+-- A1 ESPORTS — SAFE TRUNCATE ALL DATABASE TABLES & RESET SEED DATA
+-- Copy and paste this script in Supabase Dashboard -> SQL Editor to clear existing data safely
 -- ====================================================================
 
-TRUNCATE TABLE public.orders CASCADE;
-TRUNCATE TABLE public.products CASCADE;
-TRUNCATE TABLE public.players CASCADE;
-TRUNCATE TABLE public.achievements CASCADE;
-TRUNCATE TABLE public.teams CASCADE;
-TRUNCATE TABLE public.news_articles CASCADE;
-TRUNCATE TABLE public.payment_methods CASCADE;
-TRUNCATE TABLE public.coupons CASCADE;
-TRUNCATE TABLE public.site_settings CASCADE;
+DO $$ 
+DECLARE 
+    r RECORD;
+BEGIN 
+    FOR r IN (
+        SELECT tablename 
+        FROM pg_tables 
+        WHERE schemaname = 'public' 
+          AND tablename IN (
+            'orders', 'products', 'players', 'achievements', 'teams', 
+            'news_articles', 'payment_methods', 'coupons', 'site_settings', 
+            'sponsors', 'investors'
+          )
+    ) LOOP
+        EXECUTE 'TRUNCATE TABLE public.' || quote_ident(r.tablename) || ' CASCADE';
+    END LOOP;
+END $$;

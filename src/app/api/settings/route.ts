@@ -6,22 +6,26 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const [pmRes, settingsRes] = await Promise.all([
+    const [pmRes, settingsRes, achSourceRes] = await Promise.all([
       supabase.from("payment_methods").select("*").order("created_at", { ascending: true }),
       supabase.from("site_settings").select("value").eq("key", "delivery_charges").single(),
+      supabase.from("site_settings").select("value").eq("key", "achievement_source").single(),
     ]);
 
     const paymentMethods = pmRes.data && pmRes.data.length > 0 ? pmRes.data : DEFAULT_PAYMENT_METHODS;
     const deliveryCharges = settingsRes.data?.value || DEFAULT_DELIVERY_CHARGES;
+    const achievementSource = achSourceRes.data?.value?.mode || "merged";
 
     return NextResponse.json({
       paymentMethods,
       deliveryCharges,
+      achievementSource,
     });
   } catch (err) {
     return NextResponse.json({
       paymentMethods: DEFAULT_PAYMENT_METHODS,
       deliveryCharges: DEFAULT_DELIVERY_CHARGES,
+      achievementSource: "merged",
     });
   }
 }
@@ -30,6 +34,22 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { action } = body;
+
+    // Action: Update achievement source mode
+    if (action === "update_achievement_source") {
+      const { mode } = body;
+      const payload = {
+        key: "achievement_source",
+        value: { mode: mode || "merged" },
+        updated_at: new Date().toISOString(),
+      };
+
+      try {
+        await supabase.from("site_settings").upsert(payload);
+      } catch {}
+
+      return NextResponse.json({ success: true, achievementSource: mode });
+    }
 
     // Action: Update delivery charges
     if (action === "update_delivery") {
