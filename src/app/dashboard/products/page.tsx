@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Plus, Edit, Trash2, X, Upload, Image as ImageIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { toast } from "sonner";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -77,6 +78,7 @@ export default function AdminProducts() {
     const targetId = deleteId;
     setProducts((prev) => prev.filter((p) => String(p.id) !== String(targetId)));
     await sbDelete("products", targetId);
+    toast.success("Product deleted successfully");
   };
 
   const addGalleryImage = (url: string) => {

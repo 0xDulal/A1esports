@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { toast } from "sonner";
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -62,10 +63,11 @@ export default function AdminOrders() {
       const res = await fetch(`/api/orders?id=${confirmSingleDeleteId}`, { method: "DELETE" });
       if (res.ok) {
         setSelectedOrder(null);
+        toast.success("Order deleted successfully.");
         fetchOrders();
       }
     } catch (e) {
-      console.error("Failed to delete order", e);
+      toast.error("Failed to delete order.");
     } finally {
       setConfirmSingleDeleteId(null);
     }
@@ -83,11 +85,12 @@ export default function AdminOrders() {
       });
 
       if (res.ok) {
+        toast.success(`Deleted ${selectedIds.length} selected orders.`);
         setSelectedIds([]);
         fetchOrders();
       }
     } catch (e) {
-      console.error("Failed bulk delete", e);
+      toast.error("Failed bulk delete.");
     } finally {
       setConfirmBulkDeleteOpen(false);
     }

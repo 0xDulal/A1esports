@@ -19,15 +19,25 @@ export default function DashboardLayout({
   const router = useRouter();
 
   useEffect(() => {
+    let mounted = true;
     const checkUser = async () => {
-      const { data: { user: sbUser } } = await supabase.auth.getUser();
-      const activeUser = sbUser || (typeof window !== "undefined" && localStorage.getItem("a1_admin_session") ? { email: "dev.a1esports@gmail.com" } : null);
-      if (!activeUser) {
-        router.replace("/login");
-        return;
+      try {
+        const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 800));
+        const userPromise = supabase.auth.getUser();
+        const res: any = await Promise.race([userPromise, timeoutPromise]);
+        const sbUser = res?.data?.user;
+
+        if (!sbUser && mounted) {
+          router.replace("/login");
+          return;
+        }
+        if (mounted && sbUser) {
+          setUser(sbUser);
+          setLoading(false);
+        }
+      } catch {
+        if (mounted) router.replace("/login");
       }
-      setUser(activeUser);
-      setLoading(false);
     };
 
     checkUser();
@@ -35,14 +45,8 @@ export default function DashboardLayout({
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         if (!session?.user) {
-          const hasLocalSession = typeof window !== "undefined" && localStorage.getItem("a1_admin_session");
-          if (!hasLocalSession) {
-            setUser(null);
-            router.replace("/login");
-          } else {
-            setUser({ email: "dev.a1esports@gmail.com" });
-            setLoading(false);
-          }
+          setUser(null);
+          router.replace("/login");
         } else {
           setUser(session.user);
           setLoading(false);
@@ -56,9 +60,6 @@ export default function DashboardLayout({
   }, [router]);
 
   const handleLogout = async () => {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("a1_admin_session");
-    }
     await supabase.auth.signOut();
     router.replace("/login");
   };

@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Plus, Edit, Trash2, UserPlus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { toast } from "sonner";
 
 const PRESET_ROLES = [
   "IGL",
@@ -94,6 +95,7 @@ export default function AdminTeams() {
     const targetId = deleteTeamId;
     setTeamsList((prev) => prev.filter((t) => String(t.id) !== String(targetId)));
     await sbDelete("teams", targetId);
+    toast.success("Team deleted successfully");
   };
 
   const handleConfirmDeletePlayer = async () => {
@@ -118,11 +120,11 @@ export default function AdminTeams() {
       if (player.id) {
         await sbDelete("players", player.id);
       }
-      // Fallback delete by team_id & ign to guarantee deletion from Supabase
       const { supabase } = await import("@/lib/supabase/client");
       await supabase.from("players").delete().match({ team_id: teamId, ign: player.ign });
-    } catch (err) {
-      console.error("Failed deleting player from Supabase:", err);
+      toast.success(`Player "${player.ign}" removed from roster`);
+    } catch {
+      toast.error("Failed to delete player from database");
     }
   };
 

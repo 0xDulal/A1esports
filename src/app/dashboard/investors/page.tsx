@@ -10,6 +10,7 @@ import {
   deleteInvestorFromSupabase,
 } from "@/lib/investors";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { toast } from "sonner";
 
 export default function AdminInvestorsPage() {
   const [investors, setInvestors] = useState<InvestorHighlight[]>([]);
@@ -137,6 +138,7 @@ export default function AdminInvestorsPage() {
     setIsModalOpen(false);
 
     await saveInvestorToSupabase(newInv);
+    toast.success(editingId ? "Investor updated!" : "New investor added!");
   };
 
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -146,6 +148,7 @@ export default function AdminInvestorsPage() {
     const targetId = deleteId;
     setInvestors((prev) => prev.filter((i) => String(i.id) !== String(targetId)));
     await deleteInvestorFromSupabase(targetId);
+    toast.success("Investor deleted successfully");
   };
 
   return (

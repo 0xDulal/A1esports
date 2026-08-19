@@ -38,8 +38,8 @@ const socialLinks = [
 export function Footer() {
   const pathname = usePathname();
 
-  // Hide Footer completely on Admin Dashboard routes
-  if (pathname?.startsWith("/dashboard")) {
+  // Hide Footer completely on Admin Dashboard & Login routes
+  if (pathname?.startsWith("/dashboard") || pathname === "/login") {
     return null;
   }
 

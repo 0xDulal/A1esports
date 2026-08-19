@@ -4,33 +4,33 @@ import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { teams as fallbackTeams, Team } from "@/lib/teams";
-import { getTeamsFromSupabase } from "@/lib/supabase/db";
+import { Team } from "@/types/domain";
+import { getTeamsFromSupabase } from "@/services/supabase/db.service";
 import { Trophy, Users, Zap, Sparkles, Award, ArrowUpRight } from "lucide-react";
 import { PlayerCard } from "@/components/ui/PlayerCard";
 import { Section } from "@/components/ui/Section";
 import { GlowBar } from "@/components/ui/GlowBar";
 import { A1Button } from "@/components/ui/A1Button";
 
-const TABS = [
-  { id: "ALL", label: "ALL DIVISIONS" },
-  { id: "pubgm-pro", label: "PUBG MOBILE PRO" },
-  { id: "management", label: "MANAGEMENT & LEADERSHIP" },
-] as const;
-
 export default function TeamsPage() {
-  const [teamsList, setTeamsList] = useState<Team[]>(fallbackTeams);
+  const [teamsList, setTeamsList] = useState<Team[]>([]);
   const [activeTab, setActiveTab] = useState<string>("ALL");
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     getTeamsFromSupabase().then((data) => {
-      if (data && data.length > 0) {
-        setTeamsList(data);
-      }
+      setTeamsList(data || []);
       setLoading(false);
     });
   }, []);
+
+  const dynamicTabs = useMemo(() => {
+    const list = [{ id: "ALL", label: "ALL DIVISIONS" }];
+    teamsList.forEach((t) => {
+      list.push({ id: t.id, label: t.name.toUpperCase() });
+    });
+    return list;
+  }, [teamsList]);
 
   const filteredTeams = useMemo(() => {
     if (activeTab === "ALL") return teamsList;
@@ -136,7 +136,7 @@ export default function TeamsPage() {
       {/* Division Navigation Tabs */}
       <div className="sticky top-20 z-40 bg-black/80 backdrop-blur-xl border-y border-white/10 py-4 mb-16">
         <div className="mx-auto max-w-7xl px-4 flex flex-wrap justify-center gap-3">
-          {TABS.map((tab) => (
+          {dynamicTabs.map((tab) => (
             <A1Button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}

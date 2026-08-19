@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Plus, Edit, Trash2, Trophy, RefreshCw, Layers, Globe, Database, CheckCircle2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { toast } from "sonner";
 
 type AchievementEntry = {
   id?: string;
@@ -78,10 +79,11 @@ export default function AdminAchievements() {
 
       if (res.ok) {
         setSourceSaved(true);
+        toast.success(`Achievement priority updated to ${mode.toUpperCase()}`);
         setTimeout(() => setSourceSaved(false), 3000);
       }
     } catch (err) {
-      console.error("Failed to save achievement priority mode", err);
+      toast.error("Failed to save achievement priority mode");
     } finally {
       setSavingSource(false);
     }
@@ -114,8 +116,9 @@ export default function AdminAchievements() {
     setAchievements((prev) => prev.filter((a) => String(a.id) !== String(targetId)));
     try {
       await fetch(`/api/achievements?id=${targetId}`, { method: "DELETE" });
+      toast.success("Achievement deleted successfully.");
     } catch (err) {
-      console.error("Failed to delete achievement", err);
+      toast.error("Failed to delete achievement.");
     }
   };
 

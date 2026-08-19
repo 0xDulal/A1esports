@@ -51,8 +51,8 @@ export function Header() {
     return list[idx % list.length];
   }, [liveData.latest, idx]);
 
-  // Hide Header completely on Admin Dashboard routes
-  if (pathname?.startsWith("/dashboard")) {
+  // Hide Header completely on Admin Dashboard & Login routes
+  if (pathname?.startsWith("/dashboard") || pathname === "/login") {
     return null;
   }
 
@@ -289,9 +289,9 @@ export function Header() {
               <button className="text-foreground hover:text-primary transition-colors p-1">
                 <Search className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
-              <button className="text-foreground hover:text-primary transition-colors hidden sm:block p-1">
+              <Link href="/dashboard" className="text-foreground hover:text-primary transition-colors hidden sm:block p-1" title="Admin Dashboard">
                 <User className="h-5 w-5" />
-              </button>
+              </Link>
               <button 
                 onClick={() => setIsOpen(true)}
                 className="relative text-foreground hover:text-primary transition-colors p-1"

@@ -10,6 +10,7 @@ import {
   deleteSponsorFromSupabase,
 } from "@/lib/sponsors";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { toast } from "sonner";
 
 export default function AdminSponsorsPage() {
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
@@ -143,6 +144,7 @@ export default function AdminSponsorsPage() {
     setIsModalOpen(false);
 
     await saveSponsorToSupabase(newSponsor);
+    toast.success(editingId ? "Sponsor updated!" : "New sponsor added!");
   };
 
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -152,6 +154,7 @@ export default function AdminSponsorsPage() {
     const targetId = deleteId;
     setSponsors((prev) => prev.filter((s) => String(s.id) !== String(targetId)));
     await deleteSponsorFromSupabase(targetId);
+    toast.success("Sponsor deleted successfully");
   };
 
   return (

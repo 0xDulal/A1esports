@@ -15,6 +15,7 @@ import {
   TrendingUp,
   Tag,
   Image as ImageIcon,
+  Newspaper,
 } from "lucide-react";
 
 interface DashboardSidebarProps {
@@ -29,6 +30,7 @@ const NAV_ITEMS = [
   { label: "Coupons", href: "/dashboard/coupons", icon: Tag },
   { label: "Products", href: "/dashboard/products", icon: ShoppingBag },
   { label: "Teams", href: "/dashboard/teams", icon: Users },
+  { label: "News CMS", href: "/dashboard/news", icon: Newspaper },
   { label: "Achievements", href: "/dashboard/achievements", icon: Trophy },
   { label: "Media Library", href: "/dashboard/media", icon: ImageIcon },
   { label: "Sponsors", href: "/dashboard/sponsors", icon: Handshake },

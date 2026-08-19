@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Product } from "@/lib/data/shop";
+import { toast } from "sonner";
 
 export interface CartItem extends Product {
   quantity: number;
@@ -76,6 +77,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return [...prev, { ...product, quantity: 1, customName, size, sleeveType }];
     });
     setIsOpen(true);
+    toast.success(`Added "${product.title}" to cart!`);
   };
 
   const removeItem = (id: string, customName?: string, size?: string, sleeveType?: "half" | "full") => {

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Tag, Plus, Trash2, RefreshCw, CheckCircle2, XCircle, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { toast } from "sonner";
 
 export default function AdminCoupons() {
   const [coupons, setCoupons] = useState<any[]>([]);
@@ -45,6 +46,7 @@ export default function AdminCoupons() {
       });
 
       if (res.ok) {
+        toast.success(`Coupon "${formData.code.toUpperCase()}" created!`);
         setIsAddOpen(false);
         setFormData({
           code: "",
@@ -55,9 +57,11 @@ export default function AdminCoupons() {
           is_active: true,
         });
         fetchCoupons();
+      } else {
+        toast.error("Failed to create coupon.");
       }
     } catch (err) {
-      console.error("Error creating coupon", err);
+      toast.error("Error creating coupon.");
     }
   };
 
@@ -71,9 +75,10 @@ export default function AdminCoupons() {
           is_active: !coupon.is_active,
         }),
       });
+      toast.success(`Coupon "${coupon.code}" status updated.`);
       fetchCoupons();
     } catch (err) {
-      console.error("Failed to toggle coupon status", err);
+      toast.error("Failed to update coupon status.");
     }
   };
 
@@ -85,8 +90,9 @@ export default function AdminCoupons() {
     setCoupons((prev) => prev.filter((c) => String(c.id) !== String(targetId)));
     try {
       await fetch(`/api/coupons?id=${targetId}`, { method: "DELETE" });
-    } catch (err) {
-      console.error("Failed to delete coupon", err);
+      toast.success("Coupon deleted successfully.");
+    } catch {
+      toast.error("Failed to delete coupon.");
     }
   };
 

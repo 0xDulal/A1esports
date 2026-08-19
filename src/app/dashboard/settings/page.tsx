@@ -5,6 +5,7 @@ import { CheckCircle2, Truck, CreditCard, Plus, Trash2, Edit2, RefreshCw } from 
 import { PaymentMethod, DeliveryCharges, DEFAULT_DELIVERY_CHARGES, DEFAULT_PAYMENT_METHODS } from "@/lib/supabase/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { toast } from "sonner";
 
 export default function AdminSettings() {
   const [delivery, setDelivery] = useState<DeliveryCharges>(DEFAULT_DELIVERY_CHARGES);
@@ -60,10 +61,11 @@ export default function AdminSettings() {
 
       if (res.ok) {
         setDeliverySaved(true);
+        toast.success("Delivery charges saved!");
         setTimeout(() => setDeliverySaved(false), 3000);
       }
     } catch (err) {
-      console.error("Failed to save delivery charges", err);
+      toast.error("Failed to save delivery charges");
     } finally {
       setSavingDelivery(false);
     }
@@ -80,9 +82,10 @@ export default function AdminSettings() {
           is_active: !pm.is_active,
         }),
       });
+      toast.success(`Payment method "${pm.name}" status updated.`);
       fetchSettings();
     } catch (err) {
-      console.error("Failed to update payment method status", err);
+      toast.error("Failed to update payment method status");
     }
   };
 
@@ -94,9 +97,10 @@ export default function AdminSettings() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, account_number, instructions }),
       });
+      toast.success("Payment method details updated.");
       fetchSettings();
     } catch (err) {
-      console.error("Failed to update payment method details", err);
+      toast.error("Failed to update payment method details");
     }
   };
 
@@ -114,6 +118,7 @@ export default function AdminSettings() {
       });
 
       if (res.ok) {
+        toast.success(`Payment method "${newPm.name}" added!`);
         setIsAddPmOpen(false);
         setNewPm({
           name: "",
@@ -125,7 +130,7 @@ export default function AdminSettings() {
         fetchSettings();
       }
     } catch (err) {
-      console.error("Failed to add payment method", err);
+      toast.error("Failed to add payment method");
     }
   };
 
@@ -138,8 +143,9 @@ export default function AdminSettings() {
     setPaymentMethods((prev) => prev.filter((p) => String(p.id) !== String(targetId)));
     try {
       await fetch(`/api/settings?id=${targetId}`, { method: "DELETE" });
+      toast.success("Payment method deleted.");
     } catch (err) {
-      console.error("Failed to delete payment method", err);
+      toast.error("Failed to delete payment method");
     }
   };
 

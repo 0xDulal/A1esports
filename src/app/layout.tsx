@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 import { CartProvider } from "@/context/CartContext";
 import { CartDrawer } from "@/components/shop/CartDrawer";
 import { CustomizationModal } from "@/components/shop/CustomizationModal";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -48,6 +49,7 @@ export default function RootLayout({
             <Footer />
             <CartDrawer />
             <CustomizationModal />
+            <Toaster theme="dark" position="bottom-right" richColors />
           </CartProvider>
         </ThemeProvider>
       </body>

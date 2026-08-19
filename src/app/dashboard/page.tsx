@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { ShoppingBag, Users, Trophy, DollarSign, ArrowRight, Package, Sparkles } from "lucide-react";
-import { getProductsFromSupabase, getTeamsFromSupabase } from "@/lib/supabase/db";
-import { sbSelect } from "@/lib/supabase/rest";
+import { getProductsFromSupabase, getTeamsFromSupabase } from "@/services/supabase/db.service";
+import { supabase } from "@/lib/supabase/client";
+import { Order } from "@/types/domain";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
@@ -13,7 +14,7 @@ export default function AdminDashboard() {
   const [playersCount, setPlayersCount] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [ordersCount, setOrdersCount] = useState(0);
-  const [recentOrders, setRecentOrders] = useState<any[]>([]);
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,26 +24,37 @@ export default function AdminDashboard() {
   const fetchDashboardStats = async () => {
     setLoading(true);
     try {
-      const [prods, tms, ords] = await Promise.all([
+      const { data: ordsData } = await supabase
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      const [prods, tms] = await Promise.all([
         getProductsFromSupabase(),
         getTeamsFromSupabase(),
-        sbSelect("orders"),
       ]);
+
+      const ords: Order[] = ordsData || [];
 
       setProductsCount(prods?.length || 0);
       setTeamsCount(tms?.length || 0);
 
       const totalP = (tms || []).reduce(
-        (sum: number, t: any) => sum + (t.players ? t.players.length : 0),
+        (sum, t) => sum + (t.players ? t.players.length : 0),
         0
       );
       setPlayersCount(totalP);
 
-      const validOrders = (ords || []).filter((o: any) => o.status !== "Cancelled" && o.order_status !== "Cancelled");
-      const rev = validOrders.reduce((sum: number, o: any) => sum + (Number(o.total_amount) || Number(o.total) || 0), 0);
+      const validOrders = ords.filter(
+        (o) => o.order_status !== "Cancelled" && (o as any).status !== "Cancelled"
+      );
+      const rev = validOrders.reduce(
+        (sum, o) => sum + (Number(o.total_amount) || Number((o as any).total) || 0),
+        0
+      );
       setTotalRevenue(rev);
-      setOrdersCount((ords || []).length);
-      setRecentOrders((ords || []).slice(0, 5));
+      setOrdersCount(ords.length);
+      setRecentOrders(ords.slice(0, 5));
     } catch (err) {
       console.error("Dashboard stats fetch error:", err);
     } finally {
@@ -143,19 +155,19 @@ export default function AdminDashboard() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/dashboard/products"
-              className="px-4 py-2 bg-primary text-black font-bold rounded-lg hover:bg-primary/90 transition-colors inline-block"
+              className="px-4 py-2 bg-primary text-black font-bold rounded-lg hover:bg-primary/90 transition-colors inline-block text-sm"
             >
               Add Product
             </Link>
             <Link
               href="/dashboard/teams"
-              className="px-4 py-2 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-colors inline-block"
+              className="px-4 py-2 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-colors inline-block text-sm"
             >
               Add Team / Player
             </Link>
             <Link
               href="/dashboard/achievements"
-              className="px-4 py-2 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-colors inline-block"
+              className="px-4 py-2 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-colors inline-block text-sm"
             >
               Add Achievement
             </Link>
@@ -174,11 +186,15 @@ export default function AdminDashboard() {
                 <div key={ord.id} className="flex items-center justify-between py-2 border-b border-white/5 text-sm">
                   <div>
                     <span className="font-bold text-white block">#{ord.id} - {ord.customer_name}</span>
-                    <span className="text-xs text-neutral-400">{ord.created_at ? new Date(ord.created_at).toLocaleDateString() : 'Recent'}</span>
+                    <span className="text-xs text-neutral-400">
+                      {ord.created_at ? new Date(ord.created_at).toLocaleDateString() : "Recent"}
+                    </span>
                   </div>
                   <div className="text-right">
-                    <span className="font-bold text-primary block">৳{ord.total}</span>
-                    <span className="text-xs text-neutral-400">{ord.status}</span>
+                    <span className="font-bold text-primary block">
+                      ৳{(Number(ord.total_amount) || Number((ord as any).total) || 0).toLocaleString()}
+                    </span>
+                    <span className="text-xs text-neutral-400">{ord.order_status || (ord as any).status}</span>
                   </div>
                 </div>
               ))}
