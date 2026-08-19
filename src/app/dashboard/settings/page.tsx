@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { CheckCircle2, Truck, CreditCard, Plus, Trash2, Edit2, RefreshCw } from "lucide-react";
 import { PaymentMethod, DeliveryCharges, DEFAULT_DELIVERY_CHARGES, DEFAULT_PAYMENT_METHODS } from "@/lib/supabase/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 export default function AdminSettings() {
   const [delivery, setDelivery] = useState<DeliveryCharges>(DEFAULT_DELIVERY_CHARGES);
@@ -128,12 +129,15 @@ export default function AdminSettings() {
     }
   };
 
+  const [deletePmId, setDeletePmId] = useState<string | null>(null);
+
   // Delete Payment Method
-  const handleDeletePm = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this payment method?")) return;
+  const handleConfirmDeletePm = async () => {
+    if (!deletePmId) return;
+    const targetId = deletePmId;
+    setPaymentMethods((prev) => prev.filter((p) => String(p.id) !== String(targetId)));
     try {
-      await fetch(`/api/settings?id=${id}`, { method: "DELETE" });
-      fetchSettings();
+      await fetch(`/api/settings?id=${targetId}`, { method: "DELETE" });
     } catch (err) {
       console.error("Failed to delete payment method", err);
     }
@@ -253,7 +257,7 @@ export default function AdminSettings() {
                     {pm.is_active ? "ON" : "OFF"}
                   </button>
                   <button
-                    onClick={() => handleDeletePm(pm.id)}
+                    onClick={() => setDeletePmId(pm.id)}
                     className="p-1.5 text-neutral-500 hover:text-red-400 rounded-lg"
                   >
                     <Trash2 size={16} />
@@ -378,6 +382,14 @@ export default function AdminSettings() {
           </form>
         </DialogContent>
       </Dialog>
+      {/* Delete Confirm Modal */}
+      <ConfirmModal
+        isOpen={!!deletePmId}
+        onClose={() => setDeletePmId(null)}
+        onConfirm={handleConfirmDeletePm}
+        title="Delete Payment Method"
+        description="Are you sure you want to delete this payment method from checkout options?"
+      />
     </div>
   );
 }

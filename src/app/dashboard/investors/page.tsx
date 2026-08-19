@@ -9,6 +9,7 @@ import {
   saveAllInvestorsToSupabase,
   deleteInvestorFromSupabase,
 } from "@/lib/investors";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 export default function AdminInvestorsPage() {
   const [investors, setInvestors] = useState<InvestorHighlight[]>([]);
@@ -138,12 +139,13 @@ export default function AdminInvestorsPage() {
     await saveInvestorToSupabase(newInv);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this investor metric?")) return;
-    const updatedList = investors.filter((i) => i.id !== id);
-    setInvestors(updatedList);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
-    await deleteInvestorFromSupabase(id);
+  const handleConfirmDelete = async () => {
+    if (!deleteId) return;
+    const targetId = deleteId;
+    setInvestors((prev) => prev.filter((i) => String(i.id) !== String(targetId)));
+    await deleteInvestorFromSupabase(targetId);
   };
 
   return (
@@ -253,7 +255,7 @@ export default function AdminInvestorsPage() {
                           <Edit size={16} />
                         </button>
                         <button
-                          onClick={() => handleDelete(i.id)}
+                          onClick={() => setDeleteId(i.id)}
                           className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
                         >
                           <Trash2 size={16} />
@@ -406,6 +408,14 @@ export default function AdminInvestorsPage() {
           </div>
         </div>
       )}
+      {/* Delete Confirm Modal */}
+      <ConfirmModal
+        isOpen={!!deleteId}
+        onClose={() => setDeleteId(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Investor Highlight"
+        description="Are you sure you want to delete this investor highlight metric?"
+      />
     </div>
   );
 }

@@ -55,8 +55,9 @@ export async function getTeamsFromSupabase(): Promise<Team[]> {
       logo: t.logo,
       banner: t.banner,
       players: (playersData || [])
-        .filter((p: any) => p.team_id === t.id)
+        .filter((p: any) => String(p.team_id) === String(t.id))
         .map((p: any) => ({
+          id: String(p.id),
           ign: p.ign,
           name: p.name,
           role: p.role,

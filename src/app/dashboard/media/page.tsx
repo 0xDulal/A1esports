@@ -9,7 +9,6 @@ import {
   Check,
   RefreshCw,
   Search,
-  Filter,
   Grid,
   List,
   ExternalLink,
@@ -19,9 +18,12 @@ import {
   ImageIcon,
   HardDrive,
   Eye,
-  X,
+  Zap,
+  Sparkles,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { compressAndOptimizeImage } from "@/lib/utils/image-optimizer";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 type MediaFile = {
   id: string;
@@ -38,10 +40,12 @@ export default function AdminMediaLibrary() {
   const [mediaList, setMediaList] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
+  const [optimizing, setOptimizing] = useState(false);
+  const [optMessage, setOptMessage] = useState<string | null>(null);
 
   // Filters & Search
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "used" | "unused">("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "used" | "unused" | "unoptimized">("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // Selection state
@@ -77,13 +81,18 @@ export default function AdminMediaLibrary() {
   // Filtered list based on search query & status filter
   const filteredMedia = useMemo(() => {
     return mediaList.filter((item) => {
-      const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      const matchesSearch =
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.path.toLowerCase().includes(searchQuery.toLowerCase());
 
       if (!matchesSearch) return false;
 
       if (statusFilter === "used") return item.is_used;
       if (statusFilter === "unused") return !item.is_used;
+      if (statusFilter === "unoptimized") {
+        const isWebp = item.name.toLowerCase().endsWith(".webp");
+        return !isWebp || item.size > 400 * 1024;
+      }
       return true;
     });
   }, [mediaList, searchQuery, statusFilter]);
@@ -94,12 +103,17 @@ export default function AdminMediaLibrary() {
     const totalBytes = mediaList.reduce((sum, item) => sum + (item.size || 0), 0);
     const usedCount = mediaList.filter((m) => m.is_used).length;
     const unusedCount = mediaList.filter((m) => !m.is_used).length;
+    const unoptimizedCount = mediaList.filter((m) => {
+      const isWebp = m.name.toLowerCase().endsWith(".webp");
+      return !isWebp || m.size > 400 * 1024;
+    }).length;
 
-    const formattedSize = totalBytes > 1024 * 1024
-      ? `${(totalBytes / (1024 * 1024)).toFixed(2)} MB`
-      : `${(totalBytes / 1024).toFixed(1)} KB`;
+    const formattedSize =
+      totalBytes > 1024 * 1024
+        ? `${(totalBytes / (1024 * 1024)).toFixed(2)} MB`
+        : `${(totalBytes / 1024).toFixed(1)} KB`;
 
-    return { totalFiles, formattedSize, usedCount, unusedCount };
+    return { totalFiles, formattedSize, usedCount, unusedCount, unoptimizedCount };
   }, [mediaList]);
 
   // Copy URL handler
@@ -129,53 +143,37 @@ export default function AdminMediaLibrary() {
     setSelectedPaths(new Set());
   };
 
-  // Single Delete
-  const handleDeleteSingle = async (item: MediaFile) => {
-    if (item.is_used) {
-      const confirmForce = confirm(
-        `CAUTION: "${item.name}" is currently IN USE by database entities:\n- ${item.used_by.join(
-          "\n- "
-        )}\n\nDeleting this file will result in broken image links on the storefront. Are you sure?`
-      );
-      if (!confirmForce) return;
-    } else {
-      if (!confirm(`Are you sure you want to delete "${item.name}" from Supabase Storage?`)) return;
-    }
+  const [deleteSingleItem, setDeleteSingleItem] = useState<MediaFile | null>(null);
+  const [deleteBulkOpen, setDeleteBulkOpen] = useState(false);
+
+  // Single Delete Exec
+  const handleConfirmSingleDelete = async () => {
+    if (!deleteSingleItem) return;
 
     setDeleting(true);
     try {
       const res = await fetch("/api/media", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paths: [item.path] }),
+        body: JSON.stringify({ paths: [deleteSingleItem.path] }),
       });
       if (res.ok) {
-        setMediaList((prev) => prev.filter((m) => m.path !== item.path));
-        selectedPaths.delete(item.path);
+        setMediaList((prev) => prev.filter((m) => m.path !== deleteSingleItem.path));
+        selectedPaths.delete(deleteSingleItem.path);
         setSelectedPaths(new Set(selectedPaths));
       }
     } catch (err) {
       console.error("Failed to delete media", err);
     } finally {
       setDeleting(false);
+      setDeleteSingleItem(null);
     }
   };
 
-  // Bulk Delete
-  const handleBulkDelete = async () => {
+  // Bulk Delete Exec
+  const handleConfirmBulkDelete = async () => {
     const pathsArray = Array.from(selectedPaths);
     if (pathsArray.length === 0) return;
-
-    const usedSelected = mediaList.filter((m) => selectedPaths.has(m.path) && m.is_used);
-
-    if (usedSelected.length > 0) {
-      const confirmWarning = confirm(
-        `WARNING: ${usedSelected.length} of the ${pathsArray.length} selected items are currently IN USE on your site.\n\nDeleting them will break images on your live site. Continue anyway?`
-      );
-      if (!confirmWarning) return;
-    } else {
-      if (!confirm(`Permanently delete ${pathsArray.length} selected media files from Supabase Storage?`)) return;
-    }
 
     setDeleting(true);
     try {
@@ -192,19 +190,85 @@ export default function AdminMediaLibrary() {
       console.error("Failed bulk deletion", err);
     } finally {
       setDeleting(false);
+      setDeleteBulkOpen(false);
     }
   };
 
-  // Direct File Upload
+  // Single Image Optimization Action
+  const handleOptimizeSingle = async (item: MediaFile) => {
+    setOptimizing(true);
+    setOptMessage(`Downloading & optimizing "${item.name}"...`);
+
+    try {
+      // 1. Fetch current image blob
+      const imgRes = await fetch(item.url);
+      const blob = await imgRes.blob();
+      const rawFile = new File([blob], item.name, { type: blob.type });
+
+      // 2. Compress client side to WebP
+      const optResult = await compressAndOptimizeImage(rawFile, {
+        maxWidth: 1920,
+        maxHeight: 1920,
+        quality: 0.82,
+        format: "image/webp",
+      });
+
+      if (optResult.savedBytes <= 0) {
+        alert(`"${item.name}" is already fully optimized!`);
+        setOptimizing(false);
+        setOptMessage(null);
+        return;
+      }
+
+      setOptMessage(
+        `Uploading WebP version... Saved ${(optResult.savedBytes / 1024).toFixed(1)} KB (${optResult.savedPercent}%)`
+      );
+
+      // 3. Upload new optimized file to Supabase Storage
+      const formData = new FormData();
+      formData.append("file", optResult.file);
+
+      const uploadRes = await fetch("/api/media", {
+        method: "POST",
+        body: formData,
+      });
+
+      const uploadData = await uploadRes.json();
+      if (uploadData.success) {
+        setOptMessage(`Optimization complete! Reloading assets...`);
+        setTimeout(() => {
+          fetchMedia();
+          setOptimizing(false);
+          setOptMessage(null);
+        }, 1000);
+      }
+    } catch (err) {
+      console.error("Optimization failed", err);
+      alert("Failed to optimize image");
+      setOptimizing(false);
+      setOptMessage(null);
+    }
+  };
+
+  // Direct File Upload with Automatic WebP Compression
   const handleUploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
 
     try {
+      // Compress and optimize before upload
+      const { file: optimizedFile, savedPercent } = await compressAndOptimizeImage(file, {
+        maxWidth: 1920,
+        maxHeight: 1920,
+        quality: 0.82,
+        format: "image/webp",
+      });
+
+      const formData = new FormData();
+      formData.append("file", optimizedFile);
+
       const res = await fetch("/api/media", {
         method: "POST",
         body: formData,
@@ -232,7 +296,7 @@ export default function AdminMediaLibrary() {
             <ImageIcon size={28} className="text-primary" /> Media Storage Library
           </h1>
           <p className="text-neutral-400 text-sm">
-            Inspect, filter, copy CDN links, and clear unused assets from Supabase Storage
+            Inspect, filter, compress with WebP, copy CDN links, and clear unused assets
           </p>
         </div>
 
@@ -253,6 +317,38 @@ export default function AdminMediaLibrary() {
           </button>
         </div>
       </div>
+
+      {/* Optimization Banner Notice if unoptimized images exist */}
+      {stats.unoptimizedCount > 0 && (
+        <div className="bg-gradient-to-r from-purple-900/40 via-neutral-900 to-primary/20 border border-purple-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-xl">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shrink-0">
+              <Zap size={20} className="animate-pulse" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <Sparkles size={14} className="text-primary" /> Image Optimization Available
+              </h3>
+              <p className="text-xs text-neutral-400 mt-0.5">
+                {stats.unoptimizedCount} files can be converted to WebP to save up to 80%–90% storage space & speed up site load times.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setStatusFilter("unoptimized")}
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors shrink-0"
+          >
+            View {stats.unoptimizedCount} Large Assets
+          </button>
+        </div>
+      )}
+
+      {optMessage && (
+        <div className="p-4 bg-primary/10 border border-primary/30 rounded-2xl text-xs font-bold text-primary flex items-center gap-3 animate-pulse">
+          <RefreshCw size={16} className="animate-spin" /> {optMessage}
+        </div>
+      )}
 
       {/* Quick Statistics Bar */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -339,6 +435,14 @@ export default function AdminMediaLibrary() {
               >
                 Unused ({stats.unusedCount})
               </button>
+              <button
+                onClick={() => setStatusFilter("unoptimized")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-colors ${
+                  statusFilter === "unoptimized" ? "bg-purple-600 text-white" : "text-neutral-400 hover:text-white"
+                }`}
+              >
+                ⚡ Large ({stats.unoptimizedCount})
+              </button>
             </div>
 
             <div className="flex items-center bg-neutral-800 p-1 rounded-xl border border-white/10">
@@ -382,7 +486,7 @@ export default function AdminMediaLibrary() {
 
           {selectedPaths.size > 0 && (
             <button
-              onClick={handleBulkDelete}
+              onClick={() => setDeleteBulkOpen(true)}
               disabled={deleting}
               className="flex items-center gap-2 px-4 py-1.5 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-colors uppercase text-[11px]"
             >
@@ -412,6 +516,7 @@ export default function AdminMediaLibrary() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
           {filteredMedia.map((item) => {
             const isSelected = selectedPaths.has(item.path);
+            const isWebp = item.name.toLowerCase().endsWith(".webp");
 
             return (
               <div
@@ -435,8 +540,8 @@ export default function AdminMediaLibrary() {
                   )}
                 </button>
 
-                {/* Status Badge Overlay */}
-                <div className="absolute top-2.5 right-2.5 z-20">
+                {/* Status Badges Overlay */}
+                <div className="absolute top-2.5 right-2.5 z-20 flex flex-col items-end gap-1">
                   {item.is_used ? (
                     <span
                       className="px-2 py-0.5 bg-green-500/90 text-black font-black rounded-md text-[9px] uppercase tracking-wider shadow"
@@ -447,6 +552,16 @@ export default function AdminMediaLibrary() {
                   ) : (
                     <span className="px-2 py-0.5 bg-neutral-800/90 text-neutral-400 font-bold rounded-md text-[9px] uppercase tracking-wider border border-white/10">
                       Unused
+                    </span>
+                  )}
+
+                  {isWebp ? (
+                    <span className="px-1.5 py-0.5 bg-purple-500/90 text-white font-black rounded text-[8px] uppercase tracking-wider">
+                      WEBP
+                    </span>
+                  ) : (
+                    <span className="px-1.5 py-0.5 bg-yellow-500/90 text-black font-black rounded text-[8px] uppercase tracking-wider">
+                      ORIGINAL
                     </span>
                   )}
                 </div>
@@ -462,13 +577,22 @@ export default function AdminMediaLibrary() {
                   />
 
                   {/* Hover Quick Action Buttons */}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 z-10">
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5 z-10">
                     <button
                       onClick={() => setPreviewMedia(item)}
                       className="p-2 bg-white/20 hover:bg-white/40 text-white rounded-xl backdrop-blur-md transition-colors"
                       title="Preview Details"
                     >
-                      <Eye size={16} />
+                      <Eye size={15} />
+                    </button>
+
+                    <button
+                      onClick={() => handleOptimizeSingle(item)}
+                      disabled={optimizing}
+                      className="p-2 bg-purple-600/80 hover:bg-purple-600 text-white rounded-xl backdrop-blur-md transition-colors"
+                      title="Compress & Convert to WebP"
+                    >
+                      <Zap size={15} />
                     </button>
 
                     <button
@@ -476,15 +600,15 @@ export default function AdminMediaLibrary() {
                       className="p-2 bg-white/20 hover:bg-white/40 text-white rounded-xl backdrop-blur-md transition-colors"
                       title="Copy Public URL"
                     >
-                      {copiedPath === item.path ? <Check size={16} className="text-green-400" /> : <Copy size={16} />}
+                      {copiedPath === item.path ? <Check size={15} className="text-green-400" /> : <Copy size={15} />}
                     </button>
 
                     <button
-                      onClick={() => handleDeleteSingle(item)}
+                      onClick={() => setDeleteSingleItem(item)}
                       className="p-2 bg-red-600/80 hover:bg-red-600 text-white rounded-xl backdrop-blur-md transition-colors"
                       title="Delete Image"
                     >
-                      <Trash2 size={16} />
+                      <Trash2 size={15} />
                     </button>
                   </div>
                 </div>
@@ -517,7 +641,7 @@ export default function AdminMediaLibrary() {
         /* LIST TABLE VIEW */
         <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[700px]">
+            <table className="w-full min-w-[750px]">
               <thead className="bg-white/5 text-xs text-neutral-400 uppercase">
                 <tr>
                   <th className="p-4 w-10 text-center">
@@ -531,7 +655,7 @@ export default function AdminMediaLibrary() {
                   <th className="p-4 text-left font-bold">Preview</th>
                   <th className="p-4 text-left font-bold">File Path</th>
                   <th className="p-4 text-left font-bold">Usage Status</th>
-                  <th className="p-4 text-left font-bold">Size</th>
+                  <th className="p-4 text-left font-bold">Size & Format</th>
                   <th className="p-4 text-left font-bold">Date Added</th>
                   <th className="p-4 text-left font-bold">Actions</th>
                 </tr>
@@ -539,6 +663,7 @@ export default function AdminMediaLibrary() {
               <tbody className="divide-y divide-white/5 text-xs">
                 {filteredMedia.map((item) => {
                   const isSelected = selectedPaths.has(item.path);
+                  const isWebp = item.name.toLowerCase().endsWith(".webp");
 
                   return (
                     <tr key={item.path} className="hover:bg-white/5 transition-colors">
@@ -580,7 +705,18 @@ export default function AdminMediaLibrary() {
                       </td>
 
                       <td className="p-4 font-mono text-neutral-300">
-                        {item.size ? (item.size / 1024).toFixed(1) + " KB" : "N/A"}
+                        <div className="flex items-center gap-2">
+                          <span>{item.size ? (item.size / 1024).toFixed(1) + " KB" : "N/A"}</span>
+                          {isWebp ? (
+                            <span className="px-1.5 py-0.5 bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded font-black text-[9px]">
+                              WEBP
+                            </span>
+                          ) : (
+                            <span className="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 rounded font-black text-[9px]">
+                              RAW
+                            </span>
+                          )}
+                        </div>
                       </td>
 
                       <td className="p-4 text-neutral-400">
@@ -589,6 +725,15 @@ export default function AdminMediaLibrary() {
 
                       <td className="p-4">
                         <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleOptimizeSingle(item)}
+                            disabled={optimizing}
+                            className="p-2 hover:bg-purple-500/20 text-purple-400 rounded-lg transition-colors"
+                            title="Compress & Convert to WebP"
+                          >
+                            <Zap size={14} />
+                          </button>
+
                           <button
                             onClick={() => handleCopyUrl(item.url, item.path)}
                             className="p-2 hover:bg-white/10 text-white rounded-lg transition-colors"
@@ -608,7 +753,7 @@ export default function AdminMediaLibrary() {
                           </a>
 
                           <button
-                            onClick={() => handleDeleteSingle(item)}
+                            onClick={() => setDeleteSingleItem(item)}
                             className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
                             title="Delete File"
                           >
@@ -677,19 +822,29 @@ export default function AdminMediaLibrary() {
                 </div>
               )}
 
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  readOnly
-                  value={previewMedia.url}
-                  className="flex-1 bg-neutral-950 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none"
-                />
+              <div className="flex items-center justify-between gap-3 pt-2">
                 <button
-                  onClick={() => handleCopyUrl(previewMedia.url, previewMedia.path)}
-                  className="px-4 py-2 bg-primary text-black font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-primary/90 transition-colors shrink-0"
+                  onClick={() => handleOptimizeSingle(previewMedia)}
+                  disabled={optimizing}
+                  className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors"
                 >
-                  Copy URL
+                  <Zap size={14} /> Optimize to WebP
                 </button>
+
+                <div className="flex items-center gap-2 flex-1 max-w-sm">
+                  <input
+                    type="text"
+                    readOnly
+                    value={previewMedia.url}
+                    className="flex-1 bg-neutral-950 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none"
+                  />
+                  <button
+                    onClick={() => handleCopyUrl(previewMedia.url, previewMedia.path)}
+                    className="px-4 py-2 bg-primary text-black font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-primary/90 transition-colors shrink-0"
+                  >
+                    Copy URL
+                  </button>
+                </div>
               </div>
             </div>
           </DialogContent>
@@ -709,7 +864,9 @@ export default function AdminMediaLibrary() {
                 <Upload size={40} className="text-neutral-500" />
                 <div className="space-y-1">
                   <p className="text-sm font-bold text-white">Select image from your device</p>
-                  <p className="text-xs text-neutral-400">Supports PNG, JPG, WEBP, SVG</p>
+                  <p className="text-xs text-neutral-400">
+                    Automatic client-side WebP compression (80%–90% size reduction)
+                  </p>
                 </div>
 
                 <input
@@ -722,7 +879,7 @@ export default function AdminMediaLibrary() {
 
                 {uploading && (
                   <p className="text-xs text-primary font-bold animate-pulse pt-2">
-                    Uploading image to Supabase Storage...
+                    Compressing & uploading WebP image to Supabase...
                   </p>
                 )}
               </div>
@@ -730,6 +887,29 @@ export default function AdminMediaLibrary() {
           </DialogContent>
         </Dialog>
       )}
+      {/* Confirm Single Delete Modal */}
+      <ConfirmModal
+        isOpen={!!deleteSingleItem}
+        onClose={() => setDeleteSingleItem(null)}
+        onConfirm={handleConfirmSingleDelete}
+        title="Delete Storage Media"
+        variant={deleteSingleItem?.is_used ? "danger" : "warning"}
+        description={
+          deleteSingleItem?.is_used
+            ? `CAUTION: "${deleteSingleItem?.name}" is currently IN USE by: ${deleteSingleItem?.used_by?.join(", ")}. Deleting this will break image links on your live site.`
+            : `Are you sure you want to delete "${deleteSingleItem?.name}" from Supabase Storage?`
+        }
+      />
+
+      {/* Confirm Bulk Delete Modal */}
+      <ConfirmModal
+        isOpen={deleteBulkOpen}
+        onClose={() => setDeleteBulkOpen(false)}
+        onConfirm={handleConfirmBulkDelete}
+        title="Bulk Delete Media Files"
+        variant="danger"
+        description={`Are you sure you want to permanently delete ${selectedPaths.size} selected media files from Supabase Storage?`}
+      />
     </div>
   );
 }

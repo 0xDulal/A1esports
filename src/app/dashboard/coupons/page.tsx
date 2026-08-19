@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Tag, Plus, Trash2, RefreshCw, CheckCircle2, XCircle, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 export default function AdminCoupons() {
   const [coupons, setCoupons] = useState<any[]>([]);
@@ -76,11 +77,14 @@ export default function AdminCoupons() {
     }
   };
 
-  const handleDeleteCoupon = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this coupon?")) return;
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  const handleConfirmDeleteCoupon = async () => {
+    if (!deleteId) return;
+    const targetId = deleteId;
+    setCoupons((prev) => prev.filter((c) => String(c.id) !== String(targetId)));
     try {
-      await fetch(`/api/coupons?id=${id}`, { method: "DELETE" });
-      fetchCoupons();
+      await fetch(`/api/coupons?id=${targetId}`, { method: "DELETE" });
     } catch (err) {
       console.error("Failed to delete coupon", err);
     }
@@ -201,7 +205,7 @@ export default function AdminCoupons() {
                       </td>
                       <td className="p-4">
                         <button
-                          onClick={() => handleDeleteCoupon(coupon.id)}
+                          onClick={() => setDeleteId(coupon.id)}
                           className="p-2 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors"
                           title="Delete Coupon"
                         >
@@ -333,6 +337,14 @@ export default function AdminCoupons() {
           </form>
         </DialogContent>
       </Dialog>
+      {/* Delete Confirm Popup */}
+      <ConfirmModal
+        isOpen={!!deleteId}
+        onClose={() => setDeleteId(null)}
+        onConfirm={handleConfirmDeleteCoupon}
+        title="Delete Promo Coupon"
+        description="Are you sure you want to delete this coupon code? Customers will no longer be able to use it during checkout."
+      />
     </div>
   );
 }

@@ -16,6 +16,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -51,24 +52,28 @@ export default function AdminOrders() {
     return (o.order_status || "Processing").toUpperCase() === statusFilter;
   });
 
+  const [confirmSingleDeleteId, setConfirmSingleDeleteId] = useState<string | null>(null);
+  const [confirmBulkDeleteOpen, setConfirmBulkDeleteOpen] = useState(false);
+
   // Handle Single Delete
-  const handleDeleteOrder = async (id: string) => {
-    if (!confirm(`Are you sure you want to delete order #${id}?`)) return;
+  const handleConfirmSingleDelete = async () => {
+    if (!confirmSingleDeleteId) return;
     try {
-      const res = await fetch(`/api/orders?id=${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/orders?id=${confirmSingleDeleteId}`, { method: "DELETE" });
       if (res.ok) {
         setSelectedOrder(null);
         fetchOrders();
       }
     } catch (e) {
       console.error("Failed to delete order", e);
+    } finally {
+      setConfirmSingleDeleteId(null);
     }
   };
 
   // Handle Bulk Delete
-  const handleBulkDelete = async () => {
+  const handleConfirmBulkDelete = async () => {
     if (selectedIds.length === 0) return;
-    if (!confirm(`Are you sure you want to delete ${selectedIds.length} selected orders?`)) return;
 
     try {
       const res = await fetch("/api/orders", {
@@ -82,7 +87,9 @@ export default function AdminOrders() {
         fetchOrders();
       }
     } catch (e) {
-      console.error("Failed bulk deletion", e);
+      console.error("Failed bulk delete", e);
+    } finally {
+      setConfirmBulkDeleteOpen(false);
     }
   };
 
@@ -225,7 +232,7 @@ export default function AdminOrders() {
 
           {selectedIds.length > 0 && (
             <button
-              onClick={handleBulkDelete}
+              onClick={() => setConfirmBulkDeleteOpen(true)}
               className="flex items-center gap-2 px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 font-bold rounded-xl hover:bg-red-500/30 transition-colors text-xs uppercase"
             >
               <Trash2 size={16} /> Delete ({selectedIds.length})
@@ -361,7 +368,7 @@ export default function AdminOrders() {
                             <Edit2 size={16} />
                           </button>
                           <button
-                            onClick={() => handleDeleteOrder(order.id)}
+                            onClick={() => setConfirmSingleDeleteId(order.id)}
                             className="p-2 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors"
                             title="Delete Order"
                           >
@@ -642,6 +649,23 @@ export default function AdminOrders() {
           </DialogContent>
         </Dialog>
       )}
+      {/* Confirm Single Delete Popup */}
+      <ConfirmModal
+        isOpen={!!confirmSingleDeleteId}
+        onClose={() => setConfirmSingleDeleteId(null)}
+        onConfirm={handleConfirmSingleDelete}
+        title="Delete Order"
+        description={`Are you sure you want to delete order #${confirmSingleDeleteId}?`}
+      />
+
+      {/* Confirm Bulk Delete Popup */}
+      <ConfirmModal
+        isOpen={confirmBulkDeleteOpen}
+        onClose={() => setConfirmBulkDeleteOpen(false)}
+        onConfirm={handleConfirmBulkDelete}
+        title="Bulk Delete Orders"
+        description={`Are you sure you want to permanently delete ${selectedIds.length} selected orders from your database?`}
+      />
     </div>
   );
 }

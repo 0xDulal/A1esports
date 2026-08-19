@@ -7,6 +7,7 @@ import { sbInsert, sbUpdate, sbDelete } from "@/lib/supabase/rest";
 import Image from "next/image";
 import { Plus, Edit, Trash2, X, Upload, Image as ImageIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -69,11 +70,13 @@ export default function AdminProducts() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this product?")) {
-      await sbDelete("products", id);
-      setProducts((prev) => prev.filter((p) => p.id !== id));
-    }
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  const handleConfirmDelete = async () => {
+    if (!deleteId) return;
+    const targetId = deleteId;
+    setProducts((prev) => prev.filter((p) => String(p.id) !== String(targetId)));
+    await sbDelete("products", targetId);
   };
 
   const addGalleryImage = (url: string) => {
@@ -251,7 +254,7 @@ export default function AdminProducts() {
                           <Edit size={16} />
                         </button>
                         <button
-                          onClick={() => handleDelete(product.id)}
+                          onClick={() => setDeleteId(product.id)}
                           className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
                           title="Delete Product"
                         >
@@ -509,6 +512,14 @@ export default function AdminProducts() {
           </DialogContent>
         </Dialog>
       )}
+      {/* Confirm Delete Modal */}
+      <ConfirmModal
+        isOpen={!!deleteId}
+        onClose={() => setDeleteId(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Product"
+        description="Are you sure you want to delete this merchandise product from your shop inventory?"
+      />
     </div>
   );
 }

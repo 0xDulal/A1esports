@@ -9,6 +9,7 @@ import {
   saveAllSponsorsToSupabase,
   deleteSponsorFromSupabase,
 } from "@/lib/sponsors";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 export default function AdminSponsorsPage() {
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
@@ -144,12 +145,13 @@ export default function AdminSponsorsPage() {
     await saveSponsorToSupabase(newSponsor);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this sponsor?")) return;
-    const updatedList = sponsors.filter((s) => s.id !== id);
-    setSponsors(updatedList);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
-    await deleteSponsorFromSupabase(id);
+  const handleConfirmDelete = async () => {
+    if (!deleteId) return;
+    const targetId = deleteId;
+    setSponsors((prev) => prev.filter((s) => String(s.id) !== String(targetId)));
+    await deleteSponsorFromSupabase(targetId);
   };
 
   return (
@@ -279,7 +281,7 @@ export default function AdminSponsorsPage() {
                           <Edit size={16} />
                         </button>
                         <button
-                          onClick={() => handleDelete(s.id)}
+                          onClick={() => setDeleteId(s.id)}
                           className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
                         >
                           <Trash2 size={16} />
@@ -445,6 +447,14 @@ export default function AdminSponsorsPage() {
           </div>
         </div>
       )}
+      {/* Delete Confirm Modal */}
+      <ConfirmModal
+        isOpen={!!deleteId}
+        onClose={() => setDeleteId(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Sponsor"
+        description="Are you sure you want to delete this sponsor/partner profile?"
+      />
     </div>
   );
 }

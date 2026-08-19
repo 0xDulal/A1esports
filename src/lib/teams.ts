@@ -1,4 +1,5 @@
 export interface Player {
+  id?: string;
   ign: string;
   name: string;
   role: string;

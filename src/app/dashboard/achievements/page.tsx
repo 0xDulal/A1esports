@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Plus, Edit, Trash2, Trophy, RefreshCw, Layers, Globe, Database, CheckCircle2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 type AchievementEntry = {
   id?: string;
@@ -99,21 +100,20 @@ export default function AdminAchievements() {
     setIsModalOpen(true);
   };
 
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
   const handleOpenEdit = (item: AchievementEntry) => {
     setEditingAch(item);
     setForm(item);
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (id?: string) => {
-    if (!id) return;
-    if (!confirm("Are you sure you want to delete this achievement?")) return;
-
+  const handleConfirmDelete = async () => {
+    if (!deleteId) return;
+    const targetId = deleteId;
+    setAchievements((prev) => prev.filter((a) => String(a.id) !== String(targetId)));
     try {
-      const res = await fetch(`/api/achievements?id=${id}`, { method: "DELETE" });
-      if (res.ok) {
-        fetchData();
-      }
+      await fetch(`/api/achievements?id=${targetId}`, { method: "DELETE" });
     } catch (err) {
       console.error("Failed to delete achievement", err);
     }
@@ -301,7 +301,7 @@ export default function AdminAchievements() {
                           <Edit size={16} />
                         </button>
                         <button
-                          onClick={() => handleDelete(achievement.id)}
+                          onClick={() => setDeleteId(achievement.id || null)}
                           className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
                           title="Delete Achievement"
                         >
@@ -411,6 +411,14 @@ export default function AdminAchievements() {
           </DialogContent>
         </Dialog>
       )}
+      {/* Confirm Delete Popup */}
+      <ConfirmModal
+        isOpen={!!deleteId}
+        onClose={() => setDeleteId(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Achievement"
+        description="Are you sure you want to delete this tournament achievement record from Supabase?"
+      />
     </div>
   );
 }

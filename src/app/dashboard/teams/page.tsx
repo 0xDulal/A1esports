@@ -7,6 +7,7 @@ import { sbInsert, sbUpdate, sbDelete } from "@/lib/supabase/rest";
 import Image from "next/image";
 import { Plus, Edit, Trash2, UserPlus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
 const PRESET_ROLES = [
   "IGL",
@@ -85,10 +86,43 @@ export default function AdminTeams() {
     setIsTeamModalOpen(true);
   };
 
-  const handleDeleteTeam = async (id: string) => {
-    if (confirm("Are you sure you want to delete this team and its entire roster?")) {
-      await sbDelete("teams", id);
-      setTeamsList((prev) => prev.filter((t) => t.id !== id));
+  const [deleteTeamId, setDeleteTeamId] = useState<string | null>(null);
+  const [deletePlayerTarget, setDeletePlayerTarget] = useState<{ teamId: string; player: Player & { id?: string } } | null>(null);
+
+  const handleConfirmDeleteTeam = async () => {
+    if (!deleteTeamId) return;
+    const targetId = deleteTeamId;
+    setTeamsList((prev) => prev.filter((t) => String(t.id) !== String(targetId)));
+    await sbDelete("teams", targetId);
+  };
+
+  const handleConfirmDeletePlayer = async () => {
+    if (!deletePlayerTarget) return;
+    const { teamId, player } = deletePlayerTarget;
+
+    // Optimistically update UI immediately
+    setTeamsList((prev) =>
+      prev.map((team) =>
+        String(team.id) === String(teamId)
+          ? {
+              ...team,
+              players: team.players.filter(
+                (p) => p.ign !== player.ign && String(p.id) !== String(player.id)
+              ),
+            }
+          : team
+      )
+    );
+
+    try {
+      if (player.id) {
+        await sbDelete("players", player.id);
+      }
+      // Fallback delete by team_id & ign to guarantee deletion from Supabase
+      const { supabase } = await import("@/lib/supabase/client");
+      await supabase.from("players").delete().match({ team_id: teamId, ign: player.ign });
+    } catch (err) {
+      console.error("Failed deleting player from Supabase:", err);
     }
   };
 
@@ -154,20 +188,7 @@ export default function AdminTeams() {
     setIsPlayerModalOpen(true);
   };
 
-  const handleDeletePlayer = async (teamId: string, player: Player & { id?: string }) => {
-    if (confirm(`Remove player ${player.ign} from team?`)) {
-      if (player.id) {
-        await sbDelete("players", player.id);
-      }
-      setTeamsList((prev) =>
-        prev.map((team) =>
-          team.id === teamId
-            ? { ...team, players: team.players.filter((p) => p.ign !== player.ign) }
-            : team
-        )
-      );
-    }
-  };
+
 
   const handleSavePlayer = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -281,7 +302,7 @@ export default function AdminTeams() {
                     <Edit size={16} />
                   </button>
                   <button
-                    onClick={() => handleDeleteTeam(team.id)}
+                    onClick={() => setDeleteTeamId(team.id)}
                     className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
                     title="Delete Team"
                   >
@@ -316,7 +337,7 @@ export default function AdminTeams() {
                             <Edit size={12} />
                           </button>
                           <button
-                            onClick={() => handleDeletePlayer(team.id, player)}
+                            onClick={() => setDeletePlayerTarget({ teamId: team.id, player })}
                             className="p-1 bg-red-500/30 text-red-400 rounded hover:bg-red-500/50"
                             title="Remove Player"
                           >
@@ -575,6 +596,23 @@ export default function AdminTeams() {
           </DialogContent>
         </Dialog>
       )}
+      {/* Confirm Team Delete Modal */}
+      <ConfirmModal
+        isOpen={!!deleteTeamId}
+        onClose={() => setDeleteTeamId(null)}
+        onConfirm={handleConfirmDeleteTeam}
+        title="Delete Team"
+        description="Are you sure you want to delete this team division and its entire roster from your database?"
+      />
+
+      {/* Confirm Player Delete Modal */}
+      <ConfirmModal
+        isOpen={!!deletePlayerTarget}
+        onClose={() => setDeletePlayerTarget(null)}
+        onConfirm={handleConfirmDeletePlayer}
+        title="Remove Player"
+        description={`Are you sure you want to remove player "${deletePlayerTarget?.player?.ign}" from the team roster?`}
+      />
     </div>
   );
 }
