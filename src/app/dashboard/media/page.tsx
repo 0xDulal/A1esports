@@ -24,6 +24,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { compressAndOptimizeImage } from "@/lib/utils/image-optimizer";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { toast } from "sonner";
 
 type MediaFile = {
   id: string;
@@ -137,10 +138,92 @@ export default function AdminMediaLibrary() {
   const handleSelectAllUnused = () => {
     const unusedPaths = mediaList.filter((m) => !m.is_used).map((m) => m.path);
     setSelectedPaths(new Set(unusedPaths));
+    toast.info(`Selected all ${unusedPaths.length} unused assets.`);
+  };
+
+  const handleSelectAllUsed = () => {
+    const usedPaths = mediaList.filter((m) => m.is_used).map((m) => m.path);
+    setSelectedPaths(new Set(usedPaths));
+    toast.info(`Selected all ${usedPaths.length} used assets.`);
+  };
+
+  const handleSelectAllUncompressed = () => {
+    const rawPaths = mediaList
+      .filter((m) => !m.name.toLowerCase().endsWith(".webp") || m.size > 400 * 1024)
+      .map((m) => m.path);
+    setSelectedPaths(new Set(rawPaths));
+    toast.info(`Selected all ${rawPaths.length} uncompressed / large assets.`);
+  };
+
+  const handleSelectAllVisible = () => {
+    const visiblePaths = filteredMedia.map((m) => m.path);
+    setSelectedPaths(new Set(visiblePaths));
+    toast.info(`Selected all ${visiblePaths.length} visible assets.`);
   };
 
   const handleClearSelection = () => {
     setSelectedPaths(new Set());
+  };
+
+  // Bulk Image Compression Action
+  const handleBulkCompress = async () => {
+    const selectedItems = mediaList.filter((m) => selectedPaths.has(m.path));
+    if (selectedItems.length === 0) {
+      toast.error("No images selected for compression.");
+      return;
+    }
+
+    setOptimizing(true);
+    let successCount = 0;
+    let totalSavedBytes = 0;
+
+    for (let i = 0; i < selectedItems.length; i++) {
+      const item = selectedItems[i];
+      setOptMessage(`Compressing (${i + 1}/${selectedItems.length}): "${item.name}"...`);
+
+      try {
+        const imgRes = await fetch(item.url);
+        const blob = await imgRes.blob();
+        const rawFile = new File([blob], item.name, { type: blob.type });
+
+        const optResult = await compressAndOptimizeImage(rawFile, {
+          maxWidth: 1920,
+          maxHeight: 1920,
+          quality: 0.82,
+          format: "image/webp",
+        });
+
+        if (optResult.savedBytes > 0) {
+          const formData = new FormData();
+          formData.append("file", optResult.file);
+
+          const uploadRes = await fetch("/api/media", {
+            method: "POST",
+            body: formData,
+          });
+
+          const uploadData = await uploadRes.json();
+          if (uploadData.success) {
+            successCount++;
+            totalSavedBytes += optResult.savedBytes;
+          }
+        }
+      } catch (err) {
+        console.error(`Failed compressing ${item.name}:`, err);
+      }
+    }
+
+    const savedMb = (totalSavedBytes / (1024 * 1024)).toFixed(2);
+    setOptimizing(false);
+    setOptMessage(null);
+    setSelectedPaths(new Set());
+    fetchMedia();
+
+    if (successCount > 0) {
+      toast.success(`Bulk compression complete! Optimized ${successCount} assets and saved ${savedMb} MB storage space.`);
+    } else {
+      toast.info("Selected images were already fully WebP optimized.");
+    }
   };
 
   const [deleteSingleItem, setDeleteSingleItem] = useState<MediaFile | null>(null);
@@ -290,28 +373,33 @@ export default function AdminMediaLibrary() {
   return (
     <div className="space-y-8">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
-            <ImageIcon size={28} className="text-primary" /> Media Storage Library
-          </h1>
-          <p className="text-neutral-400 text-sm">
-            Inspect, filter, compress with WebP, copy CDN links, and clear unused assets
-          </p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-neutral-900 via-neutral-900/90 to-primary/10 border border-white/10 rounded-3xl p-6 backdrop-blur-xl shadow-2xl">
+        <div className="flex items-center gap-4">
+          <div className="h-14 w-14 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-[0_0_30px_rgba(255,0,102,0.25)]">
+            <ImageIcon size={30} />
+          </div>
+          <div>
+            <h1 className="text-3xl font-black text-white uppercase tracking-tight flex items-center gap-3">
+              Media Storage Library
+            </h1>
+            <p className="text-neutral-400 text-xs mt-1">
+              Inspect, filter, compress with WebP, copy CDN links, and optimize Supabase storage
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
           <button
             onClick={fetchMedia}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition-colors text-xs uppercase"
+            className="flex items-center gap-2 px-4 py-2.5 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition-all text-xs uppercase tracking-wider border border-white/10"
           >
-            <RefreshCw size={16} className={loading ? "animate-spin" : ""} /> Refresh
+            <RefreshCw size={16} className={loading ? "animate-spin" : ""} /> Refresh Assets
           </button>
 
           <button
             onClick={() => setIsUploadOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition-colors text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(255,0,102,0.3)]"
+            className="flex items-center gap-2 px-5 py-2.5 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition-all text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(255,0,102,0.35)]"
           >
             <Upload size={16} /> Upload Media
           </button>
@@ -327,20 +415,22 @@ export default function AdminMediaLibrary() {
             </div>
             <div>
               <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Sparkles size={14} className="text-primary" /> Image Optimization Available
+                <Sparkles size={14} className="text-primary" /> Storage Optimization Ready
               </h3>
               <p className="text-xs text-neutral-400 mt-0.5">
-                {stats.unoptimizedCount} files can be converted to WebP to save up to 80%–90% storage space & speed up site load times.
+                {stats.unoptimizedCount} files can be compressed to WebP to save up to 80%–90% storage space & speed up site load times.
               </p>
             </div>
           </div>
 
-          <button
-            onClick={() => setStatusFilter("unoptimized")}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors shrink-0"
-          >
-            View {stats.unoptimizedCount} Large Assets
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleSelectAllUncompressed}
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors shrink-0 shadow-[0_0_15px_rgba(147,51,234,0.3)]"
+            >
+              ⚡ Select {stats.unoptimizedCount} Large Assets
+            </button>
+          </div>
         </div>
       )}
 
@@ -352,9 +442,9 @@ export default function AdminMediaLibrary() {
 
       {/* Quick Statistics Bar */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-neutral-900 border border-white/10 rounded-2xl p-5 flex items-center justify-between">
+        <div className="bg-neutral-900/80 border border-white/10 hover:border-primary/40 transition-all rounded-2xl p-5 flex items-center justify-between backdrop-blur-xl shadow-xl">
           <div>
-            <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest block">Total Assets</span>
+            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Total Assets</span>
             <span className="text-2xl font-black text-white mt-1 block">{stats.totalFiles}</span>
           </div>
           <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-primary">
@@ -362,19 +452,19 @@ export default function AdminMediaLibrary() {
           </div>
         </div>
 
-        <div className="bg-neutral-900 border border-white/10 rounded-2xl p-5 flex items-center justify-between">
+        <div className="bg-neutral-900/80 border border-white/10 hover:border-purple-500/40 transition-all rounded-2xl p-5 flex items-center justify-between backdrop-blur-xl shadow-xl">
           <div>
-            <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest block">Storage Space</span>
+            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Storage Used</span>
             <span className="text-2xl font-black text-white mt-1 block font-mono">{stats.formattedSize}</span>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-purple-400">
+          <div className="h-10 w-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
             <HardDrive size={20} />
           </div>
         </div>
 
-        <div className="bg-neutral-900 border border-white/10 rounded-2xl p-5 flex items-center justify-between">
+        <div className="bg-neutral-900/80 border border-white/10 hover:border-green-500/40 transition-all rounded-2xl p-5 flex items-center justify-between backdrop-blur-xl shadow-xl">
           <div>
-            <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest block">In Use</span>
+            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">In Use Assets</span>
             <span className="text-2xl font-black text-green-400 mt-1 block">{stats.usedCount}</span>
           </div>
           <div className="h-10 w-10 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400">
@@ -382,9 +472,9 @@ export default function AdminMediaLibrary() {
           </div>
         </div>
 
-        <div className="bg-neutral-900 border border-white/10 rounded-2xl p-5 flex items-center justify-between">
+        <div className="bg-neutral-900/80 border border-white/10 hover:border-yellow-500/40 transition-all rounded-2xl p-5 flex items-center justify-between backdrop-blur-xl shadow-xl">
           <div>
-            <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest block">Unused Assets</span>
+            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Unused Assets</span>
             <span className="text-2xl font-black text-yellow-400 mt-1 block">{stats.unusedCount}</span>
           </div>
           <div className="h-10 w-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-400">
@@ -394,58 +484,58 @@ export default function AdminMediaLibrary() {
       </div>
 
       {/* Toolbar: Search, Status Filters, View Mode, Selection Controls */}
-      <div className="bg-neutral-900 border border-white/10 rounded-2xl p-4 space-y-4">
+      <div className="bg-neutral-900/90 border border-white/10 rounded-3xl p-5 space-y-4 backdrop-blur-xl shadow-2xl">
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
           {/* Search Box */}
           <div className="relative flex-1 max-w-md">
             <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
             <input
               type="text"
-              placeholder="Search file name or path..."
+              placeholder="Search by file name or path..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-neutral-800 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-xs text-white focus:outline-none focus:border-primary"
+              className="w-full bg-neutral-800/80 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-primary transition-colors"
             />
           </div>
 
           {/* Status Tabs & View Modes */}
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center bg-neutral-800 p-1 rounded-xl border border-white/10">
+            <div className="flex items-center bg-neutral-800/90 p-1 rounded-xl border border-white/10">
               <button
                 onClick={() => setStatusFilter("all")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-colors ${
-                  statusFilter === "all" ? "bg-primary text-black" : "text-neutral-400 hover:text-white"
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all ${
+                  statusFilter === "all" ? "bg-primary text-black shadow" : "text-neutral-400 hover:text-white"
                 }`}
               >
                 All ({mediaList.length})
               </button>
               <button
                 onClick={() => setStatusFilter("used")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-colors ${
-                  statusFilter === "used" ? "bg-green-500 text-black" : "text-neutral-400 hover:text-white"
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all ${
+                  statusFilter === "used" ? "bg-green-500 text-black shadow" : "text-neutral-400 hover:text-white"
                 }`}
               >
                 In Use ({stats.usedCount})
               </button>
               <button
                 onClick={() => setStatusFilter("unused")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-colors ${
-                  statusFilter === "unused" ? "bg-yellow-500 text-black" : "text-neutral-400 hover:text-white"
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all ${
+                  statusFilter === "unused" ? "bg-yellow-500 text-black shadow" : "text-neutral-400 hover:text-white"
                 }`}
               >
                 Unused ({stats.unusedCount})
               </button>
               <button
                 onClick={() => setStatusFilter("unoptimized")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-colors ${
-                  statusFilter === "unoptimized" ? "bg-purple-600 text-white" : "text-neutral-400 hover:text-white"
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all ${
+                  statusFilter === "unoptimized" ? "bg-purple-600 text-white shadow" : "text-neutral-400 hover:text-white"
                 }`}
               >
                 ⚡ Large ({stats.unoptimizedCount})
               </button>
             </div>
 
-            <div className="flex items-center bg-neutral-800 p-1 rounded-xl border border-white/10">
+            <div className="flex items-center bg-neutral-800/90 p-1 rounded-xl border border-white/10">
               <button
                 onClick={() => setViewMode("grid")}
                 className={`p-1.5 rounded-lg transition-colors ${
@@ -468,33 +558,80 @@ export default function AdminMediaLibrary() {
           </div>
         </div>
 
-        {/* Selection Bar */}
+        {/* Quick Selection Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/5 text-xs font-medium">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-neutral-400 font-bold uppercase text-[10px] tracking-widest mr-1">Quick Select:</span>
+            <button
+              onClick={handleSelectAllUsed}
+              className="flex items-center gap-1.5 px-3 py-1 bg-green-500/10 text-green-400 border border-green-500/20 hover:bg-green-500/20 rounded-full font-bold transition-all text-[11px]"
+            >
+              <CheckSquare size={13} /> Used ({stats.usedCount})
+            </button>
             <button
               onClick={handleSelectAllUnused}
-              className="flex items-center gap-1.5 text-yellow-400 font-bold hover:underline"
+              className="flex items-center gap-1.5 px-3 py-1 bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 hover:bg-yellow-500/20 rounded-full font-bold transition-all text-[11px]"
             >
-              <CheckSquare size={14} /> Select All Unused ({stats.unusedCount})
+              <CheckSquare size={13} /> Unused ({stats.unusedCount})
+            </button>
+            <button
+              onClick={handleSelectAllUncompressed}
+              className="flex items-center gap-1.5 px-3 py-1 bg-purple-500/10 text-purple-400 border border-purple-500/20 hover:bg-purple-500/20 rounded-full font-bold transition-all text-[11px]"
+            >
+              <Zap size={13} /> Uncompressed ({stats.unoptimizedCount})
+            </button>
+            <button
+              onClick={handleSelectAllVisible}
+              className="flex items-center gap-1.5 px-3 py-1 bg-white/5 text-neutral-300 border border-white/10 hover:bg-white/10 rounded-full font-bold transition-all text-[11px]"
+            >
+              <Square size={13} /> Visible ({filteredMedia.length})
             </button>
             {selectedPaths.size > 0 && (
-              <button onClick={handleClearSelection} className="text-neutral-400 hover:text-white">
-                Clear Selection ({selectedPaths.size})
+              <button onClick={handleClearSelection} className="text-neutral-400 hover:text-white underline ml-2">
+                Clear ({selectedPaths.size})
               </button>
             )}
           </div>
+        </div>
+      </div>
 
-          {selectedPaths.size > 0 && (
+      {/* Floating Action Bar when items are selected */}
+      {selectedPaths.size > 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-neutral-900/95 border border-white/20 p-4 rounded-2xl shadow-2xl backdrop-blur-2xl flex items-center justify-between gap-6 animate-in slide-in-from-bottom-4">
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-8 rounded-xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-black text-xs">
+              {selectedPaths.size}
+            </div>
+            <div>
+              <p className="text-xs font-bold text-white">{selectedPaths.size} Assets Selected</p>
+              <p className="text-[10px] text-neutral-400">Apply batch actions to selected items</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleBulkCompress}
+              disabled={optimizing}
+              className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-xl transition-all uppercase text-xs tracking-wider shadow-[0_0_20px_rgba(147,51,234,0.4)] disabled:opacity-50"
+            >
+              <Zap size={15} className={optimizing ? "animate-spin" : ""} />
+              Bulk Compress ({selectedPaths.size})
+            </button>
+
             <button
               onClick={() => setDeleteBulkOpen(true)}
               disabled={deleting}
-              className="flex items-center gap-2 px-4 py-1.5 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-colors uppercase text-[11px]"
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl transition-all uppercase text-xs tracking-wider shadow-[0_0_20px_rgba(239,68,68,0.3)] disabled:opacity-50"
             >
-              <Trash2 size={14} /> Delete Selected ({selectedPaths.size} Files)
+              <Trash2 size={15} /> Delete ({selectedPaths.size})
             </button>
-          )}
+
+            <button onClick={handleClearSelection} className="text-neutral-400 hover:text-white text-xs px-2">
+              Cancel
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Main Content Area: Grid View vs List View */}
       {loading ? (
