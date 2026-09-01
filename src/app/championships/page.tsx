@@ -94,7 +94,7 @@ export default function ChampionshipsPage() {
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight font-sans italic">
-            HALL OF <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-primary">CHAMPIONSHIPS</span>
+            HALL OF <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">CHAMPIONSHIPS</span>
           </h1>
 
           <p className="text-neutral-400 max-w-2xl mx-auto font-medium text-base">

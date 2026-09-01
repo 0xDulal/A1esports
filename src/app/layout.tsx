@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { supabase } from "@/lib/supabase/client";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,17 +27,35 @@ import { CartDrawer } from "@/components/shop/CartDrawer";
 import { CustomizationModal } from "@/components/shop/CustomizationModal";
 import { Toaster } from "sonner";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch site appearance settings for dynamic primary color
+  const { data: appearanceSettings } = await supabase
+    .from("site_settings")
+    .select("value")
+    .eq("key", "site_appearance")
+    .single();
+
+  const primaryColor = appearanceSettings?.value?.primary_color;
+  const secondaryColor = appearanceSettings?.value?.secondary_color;
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
+        {(primaryColor || secondaryColor) && (
+          <style dangerouslySetInnerHTML={{ __html: `
+            :root, .dark {
+              ${primaryColor ? `--primary: ${primaryColor} !important;` : ''}
+              ${secondaryColor ? `--secondary: ${secondaryColor} !important;` : ''}
+            }
+          `}} />
+        )}
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

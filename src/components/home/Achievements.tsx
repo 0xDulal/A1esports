@@ -104,7 +104,7 @@ export function Achievements({ achievements }: { achievements: any[] }) {
         <SectionHeader
           title={
             <>
-              Recent <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">Achievements</span>
+              Recent <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Achievements</span>
             </>
           }
           subtitle="Hall of Fame"

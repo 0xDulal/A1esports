@@ -63,7 +63,7 @@ export function AboutUs() {
             title={
               <>
                 Redefining{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
                   South Asian
                 </span>{" "}
                 Esports
@@ -110,7 +110,7 @@ export function AboutUs() {
           transition={{ duration: 0.8 }}
           className="relative aspect-square"
         >
-          <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-purple-600/20 rounded-[3rem] blur-3xl opacity-50" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-[3rem] blur-3xl opacity-50" />
           <div className="relative h-full w-full rounded-[3rem] overflow-hidden border border-white/10">
             <Image
               src="/images/regular/a1team.jpg"

@@ -6,20 +6,23 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const [pmRes, settingsRes, achSourceRes] = await Promise.all([
+    const [pmRes, settingsRes, achSourceRes, appearanceRes] = await Promise.all([
       supabase.from("payment_methods").select("*").order("created_at", { ascending: true }),
       supabase.from("site_settings").select("value").eq("key", "delivery_charges").single(),
       supabase.from("site_settings").select("value").eq("key", "achievement_source").single(),
+      supabase.from("site_settings").select("value").eq("key", "site_appearance").single(),
     ]);
 
     const paymentMethods = pmRes.data && pmRes.data.length > 0 ? pmRes.data : DEFAULT_PAYMENT_METHODS;
     const deliveryCharges = settingsRes.data?.value || DEFAULT_DELIVERY_CHARGES;
     const achievementSource = achSourceRes.data?.value?.mode || "merged";
+    const siteAppearance = appearanceRes.data?.value || {};
 
     return NextResponse.json({
       paymentMethods,
       deliveryCharges,
       achievementSource,
+      siteAppearance,
     });
   } catch (err) {
     return NextResponse.json({
@@ -68,6 +71,22 @@ export async function POST(req: Request) {
       } catch {}
 
       return NextResponse.json({ success: true, deliveryCharges: payload.value });
+    }
+
+    // Action: Update site appearance
+    if (action === "update_appearance") {
+      const { primary_color, secondary_color } = body;
+      const payload = {
+        key: "site_appearance",
+        value: { primary_color, secondary_color },
+        updated_at: new Date().toISOString(),
+      };
+
+      try {
+        await supabase.from("site_settings").upsert(payload);
+      } catch {}
+
+      return NextResponse.json({ success: true, siteAppearance: payload.value });
     }
 
     // Action: Add new payment method

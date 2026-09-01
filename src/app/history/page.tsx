@@ -116,7 +116,7 @@ export default function HistoryPage() {
             transition={{ delay: 0.1 }}
             className="text-4xl sm:text-7xl font-black uppercase tracking-tight font-sans italic"
           >
-            THE CHRONICLES OF <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-primary">A1 ESPORTS</span>
+            THE CHRONICLES OF <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">A1 ESPORTS</span>
           </motion.h1>
 
           <motion.p
@@ -222,7 +222,7 @@ export default function HistoryPage() {
         </div>
 
         {/* Liquipedia Archive Footer Callout */}
-        <div className="mt-24 p-10 rounded-[2.5rem] bg-gradient-to-r from-primary/10 via-purple-900/20 to-primary/10 border border-primary/30 text-center space-y-4">
+        <div className="mt-24 p-10 rounded-[2.5rem] bg-gradient-to-r from-primary/10 via-secondary/20 to-primary/10 border border-primary/30 text-center space-y-4">
           <Sparkles className="w-10 h-10 text-primary mx-auto" />
           <h3 className="text-2xl font-black uppercase">Verified Liquipedia Tournament Archives</h3>
           <p className="text-neutral-400 text-sm max-w-xl mx-auto font-medium">

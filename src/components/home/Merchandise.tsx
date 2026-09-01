@@ -29,7 +29,7 @@ export function Merchandise() {
         <SectionHeader
           title={
             <>
-              Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">Merchandise</span>
+              Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Merchandise</span>
             </>
           }
           subtitle="Official Shop"

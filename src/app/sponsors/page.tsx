@@ -35,7 +35,7 @@ export default function SponsorsPage() {
           </div>
 
           <h1 className="text-3xl sm:text-6xl font-black uppercase tracking-tight font-sans italic">
-            OUR <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-primary">SPONSORS & PARTNERS</span>
+            OUR <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">SPONSORS & PARTNERS</span>
           </h1>
 
           <p className="text-neutral-400 max-w-2xl mx-auto font-medium text-sm sm:text-base">

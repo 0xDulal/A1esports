@@ -96,7 +96,7 @@ export default function DashboardLayout({
           </div>
 
           <div className="w-full bg-neutral-900 border border-white/10 rounded-full h-1.5 overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-primary via-purple-500 to-primary w-full animate-[pulse_1.5s_infinite]" />
+            <div className="h-full bg-gradient-to-r from-primary via-secondary to-primary w-full animate-[pulse_1.5s_infinite]" />
           </div>
         </div>
       </div>

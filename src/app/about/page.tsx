@@ -25,7 +25,7 @@ export default function AboutPage() {
             </div>
             
             <h1 className="text-3xl sm:text-6xl font-black uppercase tracking-tight font-sans italic">
-              WE ARE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-primary">A1 ESPORTS</span>
+              WE ARE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">A1 ESPORTS</span>
             </h1>
 
             <p className="text-base sm:text-lg text-neutral-400 font-medium leading-relaxed">
@@ -88,7 +88,7 @@ export default function AboutPage() {
             { label: "Years Dominating", val: "6+" },
           ].map((st) => (
             <div key={st.label} className="space-y-1">
-              <div className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-500 font-sans italic">
+              <div className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-sans italic">
                 {st.val}
               </div>
               <div className="text-xs font-bold text-neutral-400 uppercase tracking-widest">{st.label}</div>

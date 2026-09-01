@@ -13,6 +13,10 @@ export default function AdminSettings() {
   const [loading, setLoading] = useState(true);
   const [savingDelivery, setSavingDelivery] = useState(false);
   const [deliverySaved, setDeliverySaved] = useState(false);
+  const [primaryColor, setPrimaryColor] = useState("#90299e"); // Default fallback
+  const [secondaryColor, setSecondaryColor] = useState("#a855f7"); // Default fallback purple-500
+  const [savingAppearance, setSavingAppearance] = useState(false);
+  const [appearanceSaved, setAppearanceSaved] = useState(false);
 
   // Add PM modal
   const [isAddPmOpen, setIsAddPmOpen] = useState(false);
@@ -31,6 +35,8 @@ export default function AdminSettings() {
       const data = await res.json();
       if (data.deliveryCharges) setDelivery(data.deliveryCharges);
       if (data.paymentMethods) setPaymentMethods(data.paymentMethods);
+      if (data.siteAppearance?.primary_color) setPrimaryColor(data.siteAppearance.primary_color);
+      if (data.siteAppearance?.secondary_color) setSecondaryColor(data.siteAppearance.secondary_color);
     } catch (err) {
       console.error("Failed to load settings", err);
     } finally {
@@ -68,6 +74,35 @@ export default function AdminSettings() {
       toast.error("Failed to save delivery charges");
     } finally {
       setSavingDelivery(false);
+    }
+  };
+
+  // Save Appearance
+  const handleSaveAppearance = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingAppearance(true);
+    setAppearanceSaved(false);
+
+    try {
+      const res = await fetch("/api/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "update_appearance",
+          primary_color: primaryColor,
+          secondary_color: secondaryColor,
+        }),
+      });
+
+      if (res.ok) {
+        setAppearanceSaved(true);
+        toast.success("Appearance settings saved! Refresh to see changes.");
+        setTimeout(() => setAppearanceSaved(false), 3000);
+      }
+    } catch (err) {
+      toast.error("Failed to save appearance settings");
+    } finally {
+      setSavingAppearance(false);
     }
   };
 
@@ -164,6 +199,73 @@ export default function AdminSettings() {
           Refresh
         </button>
       </div>
+
+      {/* Appearance Settings Box */}
+      <form onSubmit={handleSaveAppearance} className="bg-neutral-900 border border-white/10 rounded-2xl p-6 space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold flex items-center gap-2">
+            <Edit2 size={20} className="text-primary" /> Appearance Settings
+          </h2>
+          {appearanceSaved && (
+            <span className="flex items-center gap-1.5 text-xs text-green-400 font-bold bg-green-500/10 border border-green-500/20 px-3 py-1 rounded-full">
+              <CheckCircle2 size={14} /> Saved!
+            </span>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
+              Primary Color (Hex)
+            </label>
+            <div className="flex items-center gap-4">
+              <input
+                type="color"
+                value={primaryColor}
+                onChange={(e) => setPrimaryColor(e.target.value)}
+                className="w-16 h-12 rounded cursor-pointer bg-transparent border-0"
+              />
+              <input
+                type="text"
+                value={primaryColor}
+                onChange={(e) => setPrimaryColor(e.target.value)}
+                placeholder="#000000"
+                className="flex-1 px-4 py-2.5 bg-neutral-800 border border-white/10 rounded-xl focus:outline-none focus:border-primary text-white font-bold"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
+              Secondary / Gradient Color (Hex)
+            </label>
+            <div className="flex items-center gap-4">
+              <input
+                type="color"
+                value={secondaryColor}
+                onChange={(e) => setSecondaryColor(e.target.value)}
+                className="w-16 h-12 rounded cursor-pointer bg-transparent border-0"
+              />
+              <input
+                type="text"
+                value={secondaryColor}
+                onChange={(e) => setSecondaryColor(e.target.value)}
+                placeholder="#000000"
+                className="flex-1 px-4 py-2.5 bg-neutral-800 border border-white/10 rounded-xl focus:outline-none focus:border-primary text-white font-bold"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            disabled={savingAppearance}
+            className="px-6 py-2.5 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition-colors uppercase text-xs tracking-wider disabled:opacity-50"
+          >
+            {savingAppearance ? "Saving..." : "Save Appearance"}
+          </button>
+        </div>
+      </form>
 
       {/* Delivery Charges Settings Box */}
       <form onSubmit={handleSaveDelivery} className="bg-neutral-900 border border-white/10 rounded-2xl p-6 space-y-6">
