@@ -6,8 +6,10 @@ import { PaymentMethod, DeliveryCharges, DEFAULT_DELIVERY_CHARGES, DEFAULT_PAYME
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function AdminSettings() {
+  const router = useRouter();
   const [delivery, setDelivery] = useState<DeliveryCharges>(DEFAULT_DELIVERY_CHARGES);
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(DEFAULT_PAYMENT_METHODS);
   const [loading, setLoading] = useState(true);
@@ -96,7 +98,8 @@ export default function AdminSettings() {
 
       if (res.ok) {
         setAppearanceSaved(true);
-        toast.success("Appearance settings saved! Refresh to see changes.");
+        toast.success("Appearance settings saved!");
+        router.refresh();
         setTimeout(() => setAppearanceSaved(false), 3000);
       }
     } catch (err) {
