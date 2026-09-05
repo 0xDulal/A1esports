@@ -334,40 +334,52 @@ export default function AdminMediaLibrary() {
     }
   };
 
-  // Direct File Upload with Automatic WebP Compression
+  // Direct File Upload with Automatic WebP Compression (Batch Supported)
   const handleUploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const fileList = e.target.files;
+    if (!fileList || fileList.length === 0) return;
+    const files = Array.from(fileList);
 
     setUploading(true);
+    const toastId = toast.loading(`Optimizing & uploading ${files.length} asset(s)...`);
 
     try {
-      // Compress and optimize before upload
-      const { file: optimizedFile, savedPercent } = await compressAndOptimizeImage(file, {
-        maxWidth: 1920,
-        maxHeight: 1920,
-        quality: 0.82,
-        format: "image/webp",
-      });
+      let successCount = 0;
+      for (const file of files) {
+        // Compress and optimize before upload
+        const { file: optimizedFile } = await compressAndOptimizeImage(file, {
+          maxWidth: 1920,
+          maxHeight: 1920,
+          quality: 0.82,
+          format: "image/webp",
+        });
 
-      const formData = new FormData();
-      formData.append("file", optimizedFile);
+        const formData = new FormData();
+        formData.append("file", optimizedFile);
 
-      const res = await fetch("/api/media", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      if (data.success) {
+        const res = await fetch("/api/media", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        if (data.success) {
+          successCount++;
+        }
+      }
+
+      if (successCount > 0) {
         setIsUploadOpen(false);
         fetchMedia();
+        toast.success(`Successfully uploaded ${successCount} asset(s)`, { id: toastId });
       } else {
-        alert(`Upload error: ${data.error}`);
+        toast.error("Failed to upload assets", { id: toastId });
       }
     } catch (err) {
-      console.error("Failed to upload image", err);
+      console.error("Failed to upload images", err);
+      toast.error("Failed to upload assets", { id: toastId });
     } finally {
       setUploading(false);
+      e.target.value = "";
     }
   };
 
@@ -1009,15 +1021,16 @@ export default function AdminMediaLibrary() {
               <div className="border-2 border-dashed border-white/20 hover:border-primary/50 rounded-sm p-8 transition-colors flex flex-col items-center justify-center gap-3 bg-[#0a0a0a]">
                 <Upload size={40} className="text-neutral-500" />
                 <div className="space-y-1">
-                  <p className="text-sm font-bold text-white">Select image from your device</p>
+                  <p className="text-sm font-bold text-white">Select image(s) from your device</p>
                   <p className="text-xs text-neutral-400">
-                    Automatic client-side WebP compression (80%–90% size reduction)
+                    Automatic client-side WebP compression (80%–90% size reduction, batch upload supported)
                   </p>
                 </div>
 
                 <input
                   type="file"
                   accept="image/*"
+                  multiple
                   onChange={handleUploadFile}
                   disabled={uploading}
                   className="w-full text-xs text-neutral-400 file:mr-3 file:py-2.5 file:px-5 file:rounded-sm file:border-0 file:text-xs file:font-black file:bg-primary file:text-black hover:file:bg-primary/90 cursor-pointer mt-2"

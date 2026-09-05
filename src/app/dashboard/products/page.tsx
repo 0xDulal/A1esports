@@ -169,33 +169,47 @@ export default function AdminProducts() {
     }
   };
 
-  const handleUploadGalleryFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleUploadGalleryFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files;
+    if (!fileList || fileList.length === 0) return;
+    const files = Array.from(fileList);
     setUploadingGallery(true);
+    const toastId = toast.loading(`Uploading ${files.length} gallery image${files.length > 1 ? "s" : ""}...`);
     try {
-      const url = await uploadImageToSupabase(file, "images");
-      addGalleryImage(url);
-      toast.success("Gallery image uploaded");
+      const uploadedUrls: string[] = [];
+      for (const file of files) {
+        const url = await uploadImageToSupabase(file, "images");
+        if (url) uploadedUrls.push(url);
+      }
+      if (uploadedUrls.length > 0) {
+        addGalleryImages(uploadedUrls);
+        toast.success(`Uploaded ${uploadedUrls.length} image${uploadedUrls.length > 1 ? "s" : ""}`, { id: toastId });
+      } else {
+        toast.error("No images were uploaded", { id: toastId });
+      }
     } catch (err) {
       console.error(err);
-      toast.error("Failed to upload gallery image");
+      toast.error("Failed to upload gallery images", { id: toastId });
     } finally {
       setUploadingGallery(false);
       e.target.value = "";
     }
   };
 
-  const addGalleryImage = (url: string) => {
-    if (!url.trim()) return;
-    const current = formData.images || [];
-    if (!current.includes(url.trim())) {
-      setFormData((prev) => ({
+  const addGalleryImages = (urls: string[]) => {
+    const valid = urls.map((u) => u.trim()).filter(Boolean);
+    if (valid.length === 0) return;
+    setFormData((prev) => {
+      const current = prev.images || [];
+      const newImages = Array.from(new Set([...current, ...valid]));
+      return {
         ...prev,
-        images: [...(prev.images || []), url.trim()],
-      }));
-    }
+        images: newImages,
+      };
+    });
   };
+
+  const addGalleryImage = (url: string) => addGalleryImages([url]);
 
   const removeGalleryImage = (indexToRemove: number) => {
     setFormData((prev) => ({
@@ -777,27 +791,45 @@ export default function AdminProducts() {
                       {/* Add Gallery Tile */}
                       <label className="border border-dashed border-neutral-700 hover:border-primary aspect-square flex flex-col items-center justify-center cursor-pointer transition-colors bg-neutral-950/60 p-2 text-center group">
                         {uploadingGallery ? (
-                          <Loader2 size={16} className="animate-spin text-primary" />
+                          <div className="flex flex-col items-center justify-center">
+                            <Loader2 size={16} className="animate-spin text-primary mb-1" />
+                            <span className="text-[8px] font-mono uppercase text-neutral-400">Uploading</span>
+                          </div>
                         ) : (
                           <>
                             <Plus size={16} className="text-neutral-500 group-hover:text-primary transition-colors mb-1" />
                             <span className="text-[9px] font-mono uppercase tracking-wider text-neutral-400 group-hover:text-white">
                               Upload
                             </span>
+                            <span className="text-[8px] font-mono text-neutral-600">Multi</span>
                           </>
                         )}
                         <input
                           type="file"
                           accept="image/*"
+                          multiple
                           disabled={uploadingGallery}
-                          onChange={handleUploadGalleryFile}
+                          onChange={handleUploadGalleryFiles}
                           className="hidden"
                         />
                       </label>
                     </div>
 
-                    {/* Gallery Toolbar: Media Library */}
-                    <div className="pt-2 border-t border-neutral-800/80">
+                    {/* Gallery Actions Toolbar */}
+                    <div className="pt-2 border-t border-neutral-800/80 grid grid-cols-2 gap-2">
+                      <label className="flex items-center justify-center gap-2 py-1.5 px-3 border border-neutral-700 bg-neutral-900 hover:border-primary text-white text-xs font-mono font-bold uppercase cursor-pointer transition-colors text-center">
+                        <Upload size={12} />
+                        <span>{uploadingGallery ? "Uploading..." : "Upload Multi"}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          disabled={uploadingGallery}
+                          onChange={handleUploadGalleryFiles}
+                          className="hidden"
+                        />
+                      </label>
+
                       <Button
                         type="button"
                         variant="outline"
@@ -805,7 +837,7 @@ export default function AdminProducts() {
                         onClick={() => setIsGalleryPickerOpen(true)}
                         className="w-full"
                       >
-                        <ImageIcon size={12} /> Select From Media Library
+                        <ImageIcon size={12} /> Import Library
                       </Button>
                     </div>
                   </div>
@@ -864,7 +896,8 @@ export default function AdminProducts() {
       <MediaPicker
         open={isGalleryPickerOpen}
         onOpenChange={setIsGalleryPickerOpen}
-        onSelect={(url) => addGalleryImage(url)}
+        multiple={true}
+        onSelectMultiple={(urls) => addGalleryImages(urls)}
       />
 
       {/* Confirm Delete Modal */}
