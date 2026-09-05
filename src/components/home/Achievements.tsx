@@ -12,17 +12,42 @@ export function Achievements({ achievements }: { achievements: any[] }) {
   const [selectedTier, setSelectedTier] = useState<string>("ALL");
 
   const filteredAchievements = useMemo(() => {
+    if (!Array.isArray(achievements)) return [];
+
     return [...achievements]
       .filter((item) => {
-        const tierStr = (item.tier || "").toUpperCase();
+        if (!item) return false;
         if (selectedTier === "ALL") return true;
-        const cleanSelectedTier = selectedTier.replace(/[^A-Z]/g, "");
-        const cleanItemTier = tierStr.replace(/[^A-Z]/g, "");
-        return cleanItemTier.includes(cleanSelectedTier);
+
+        const tierStr = (item.tier || "").trim().toUpperCase();
+        const targetTier = selectedTier.trim().toUpperCase();
+
+        if (tierStr === targetTier) return true;
+
+        const cleanTarget = targetTier.replace(/[^A-Z0-9]/g, "");
+        const cleanItem = tierStr.replace(/[^A-Z0-9]/g, "");
+
+        if (cleanTarget === "STIER") {
+          return cleanItem === "STIER" || cleanItem === "S" || tierStr.startsWith("S-TIER") || tierStr.startsWith("S TIER");
+        }
+        if (cleanTarget === "ATIER") {
+          return cleanItem === "ATIER" || cleanItem === "A" || tierStr.startsWith("A-TIER") || tierStr.startsWith("A TIER");
+        }
+        if (cleanTarget === "BTIER") {
+          return cleanItem === "BTIER" || cleanItem === "B" || tierStr.startsWith("B-TIER") || tierStr.startsWith("B TIER");
+        }
+        if (cleanTarget === "CTIER") {
+          return cleanItem === "CTIER" || cleanItem === "C" || tierStr.startsWith("C-TIER") || tierStr.startsWith("C TIER");
+        }
+
+        return cleanItem.includes(cleanTarget);
       })
       .sort((a, b) => {
-        return parseInt(b.year || "0", 10) - parseInt(a.year || "0", 10);
-      });
+        const timeA = a.date ? new Date(a.date).getTime() : 0;
+        const timeB = b.date ? new Date(b.date).getTime() : 0;
+        return timeB - timeA;
+      })
+      .slice(0, 6);
   }, [achievements, selectedTier]);
 
   return (
@@ -68,20 +93,32 @@ export function Achievements({ achievements }: { achievements: any[] }) {
         </div>
 
         {/* Grid Display */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <AnimatePresence mode="popLayout">
-            {filteredAchievements.map((item, i) => (
-              <AchievementCard key={item.tournament || i} item={item} index={i} />
-            ))}
-          </AnimatePresence>
-        </div>
+        {filteredAchievements.length > 0 ? (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <AnimatePresence mode="popLayout">
+              {filteredAchievements.map((item, i) => (
+                <AchievementCard key={`${item.tournament}-${item.date}-${i}`} item={item} index={i} />
+              ))}
+            </AnimatePresence>
+          </div>
+        ) : (
+          <div className="border border-neutral-800 bg-neutral-900/20 p-12 text-center">
+            <p className="text-sm font-bold uppercase tracking-widest text-neutral-500 mb-4">
+              No tournament records found for {selectedTier}
+            </p>
+            <Button variant="outline" size="sm" onClick={() => setSelectedTier("ALL")}>
+              Reset Filter
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
 function AchievementCard({ item, index }: { item: any; index: number }) {
-  const isFirst = item.place.includes("1st");
+  const placeStr = String(item?.place || "");
+  const isFirst = placeStr.includes("1st") || placeStr === "1";
   
   return (
     <motion.div
