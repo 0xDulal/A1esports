@@ -384,7 +384,6 @@ export default function AdminInvestorsPage() {
                   )}
                 </div>
               </div>
-              </div>
 
               <div>
                 <label className="block text-xs font-bold uppercase text-neutral-400 mb-1">
