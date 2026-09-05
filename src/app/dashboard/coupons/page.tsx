@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Tag, Plus, Trash2, RefreshCw, CheckCircle2, XCircle, Sparkles } from "lucide-react";
@@ -168,7 +168,7 @@ export default function AdminCoupons() {
                         {coupon.code}
                         {is100Percent && (
                           <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] uppercase font-sans">
-                            FREE (৳0)
+                            FREE (0)
                           </span>
                         )}
                       </td>
@@ -177,7 +177,7 @@ export default function AdminCoupons() {
                           ? "100% OFF (FULL PRICE FREE)"
                           : coupon.discount_type === "percentage"
                           ? `${coupon.discount_value}% OFF`
-                          : `৳${coupon.discount_value} OFF`}
+                          : `${coupon.discount_value} OFF`}
                       </td>
                       <td className="p-4 text-sm font-medium">
                         {maxUses > 0 ? (
@@ -197,7 +197,7 @@ export default function AdminCoupons() {
                         )}
                       </td>
                       <td className="p-4 text-sm text-neutral-300 font-medium">
-                        {coupon.min_order_amount > 0 ? `৳${coupon.min_order_amount}` : "No Limit"}
+                        {coupon.min_order_amount > 0 ? `${coupon.min_order_amount}` : "No Limit"}
                       </td>
                       <td className="p-4">
                         <button
@@ -244,7 +244,7 @@ export default function AdminCoupons() {
                 <span className="font-bold flex items-center gap-1">
                   <Sparkles size={14} className="text-primary" /> 100% Free Product Coupon
                 </span>
-                <span className="text-[10px] text-purple-300 block">Makes price ৳0 for full product purchase</span>
+                <span className="text-[10px] text-purple-300 block">Makes price 0 for full product purchase</span>
               </div>
               <button
                 type="button"
@@ -279,7 +279,7 @@ export default function AdminCoupons() {
                   onChange={(e) => setFormData({ ...formData, discount_type: e.target.value as any })}
                   className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
                 >
-                  <option value="fixed">Fixed Amount (৳)</option>
+                  <option value="fixed">Fixed Amount ()</option>
                   <option value="percentage">Percentage (%)</option>
                 </select>
               </div>

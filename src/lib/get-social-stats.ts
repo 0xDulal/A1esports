@@ -1,4 +1,4 @@
-export async function getSocialStats() {
+﻿export async function getSocialStats() {
   const stats = {
     youtube: "15.1K",
     facebook: "1.2M",

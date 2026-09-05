@@ -48,71 +48,52 @@ export function CartDrawer() {
           ) : (
             <div className="space-y-6">
               {items.map((item) => (
-                <div key={`${item.id}-${item.customName || 'standard'}`} className="flex gap-4 group">
-                  <div className="relative h-24 w-24 rounded-xl overflow-hidden bg-white/5 shrink-0 border border-white/10">
+                <div key={`${item.id}-${item.customName || 'standard'}-${item.size || 'nosize'}-${item.sleeveType || 'nosleeve'}`} className="flex gap-4 group bg-neutral-950 p-2 border border-neutral-900">
+                  <div className="relative h-24 w-24 shrink-0 border border-neutral-800 bg-neutral-900">
                     <Image
                       src={item.image}
                       alt={item.title}
                       fill
-                      className="object-cover"
+                      className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
                     />
                   </div>
-                  <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
-                    <div>
-                      <div className="flex justify-between gap-2">
-                        <div className="min-w-0">
-                          <h4 className="text-sm font-bold text-white uppercase tracking-tight truncate">
-                            {item.title}
-                          </h4>
+                  <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="min-w-0 space-y-1">
+                        <h4 className="text-sm font-black text-white uppercase tracking-tight truncate">
+                          {item.title}
+                        </h4>
+                        <div className="flex flex-col gap-0.5 mt-2">
                           {item.customName && (
-                            <div className="mt-1 flex flex-wrap gap-1.5">
-                              <span className="px-2 py-0.5 bg-primary/10 border border-primary/20 rounded text-[9px] font-black uppercase tracking-widest text-primary italic">
-                                NAME: {item.customName}
-                              </span>
-                              {item.size && (
-                                <span className="px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[9px] font-black uppercase tracking-widest text-neutral-400">
-                                  SIZE: {item.size}
-                                </span>
-                              )}
-                              {item.sleeveType && (
-                                <span className="px-2 py-0.5 bg-white/5 border border-white/10 rounded text-[9px] font-black uppercase tracking-widest text-neutral-400">
-                                  {item.sleeveType === 'full' ? 'FULL SLEEVE' : 'HALF SLEEVE'}
-                                </span>
-                              )}
-                            </div>
+                            <span className="text-xs font-mono text-neutral-500 tracking-wide">
+                              IGN: <span className="text-white font-black">{item.customName}</span>
+                            </span>
+                          )}
+                          {item.size && (
+                            <span className="text-xs font-mono text-neutral-500 uppercase tracking-wide">
+                              SIZE: <span className="text-white font-black">{item.size}</span>
+                            </span>
+                          )}
+                          {item.sleeveType && (
+                            <span className="text-xs font-mono text-neutral-500 uppercase tracking-wide">
+                              SLEEVE: <span className="text-white font-black">{item.sleeveType === 'full' ? 'FULL' : 'HALF'}</span>
+                            </span>
                           )}
                         </div>
-                        <button 
-                          onClick={() => removeItem(item.id, item.customName, item.size, item.sleeveType)}
-                          className="text-neutral-600 hover:text-red-500 transition-colors shrink-0"
-                        >
-                          <Trash2 size={16} />
-                        </button>
                       </div>
-                      <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest mt-1">
-                        {item.category}
-                      </p>
+                      <button 
+                        onClick={() => removeItem(item.id, item.customName, item.size, item.sleeveType)}
+                        className="text-neutral-600 hover:text-primary transition-colors shrink-0 mt-0.5"
+                      >
+                        <Trash2 size={14} />
+                      </button>
                     </div>
 
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center gap-3 bg-white/5 rounded-lg p-1 border border-white/10">
-                        <button 
-                          onClick={() => updateQuantity(item.id, -1, item.customName, item.size, item.sleeveType)}
-                          className="h-6 w-6 flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
-                        >
-                          <Minus size={12} />
-                        </button>
-                        <span className="text-sm font-bold text-white w-4 text-center">
-                          {item.quantity}
-                        </span>
-                        <button 
-                          onClick={() => updateQuantity(item.id, 1, item.customName, item.size, item.sleeveType)}
-                          className="h-6 w-6 flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
-                        >
-                          <Plus size={12} />
-                        </button>
-                      </div>
-                      <span className="text-sm font-bold text-white">
+                    <div className="flex items-end justify-between mt-3">
+                      <span className="text-xs font-mono text-neutral-500 uppercase tracking-wide">
+                        QTY: <span className="text-white font-black">{item.quantity}</span>
+                      </span>
+                      <span className="text-sm font-mono font-bold text-white tracking-tight">
                         {((item.sleeveType === 'full' && item.fullSleevePrice) 
                           ? item.fullSleevePrice 
                           : (item.sleeveType === 'half' && item.halfSleevePrice) 
@@ -146,16 +127,16 @@ export function CartDrawer() {
             </div>
 
             <div className="grid grid-cols-1 gap-3 pt-2">
-              <Button asChild variant="primary" size="lg" className="w-full">
+              <Button asChild variant="primary" size="lg" className="w-full text-xs font-mono font-black tracking-widest uppercase py-6">
                 <Link href="/checkout" onClick={() => setIsOpen(false)}>
                   Proceed to Checkout
                 </Link>
               </Button>
               <Button 
-                variant="ghost"
-                size="sm"
+                variant="outline"
+                size="lg"
                 onClick={() => setIsOpen(false)}
-                className="w-full"
+                className="w-full text-xs font-mono font-bold tracking-widest uppercase py-6"
               >
                 Continue Shopping
               </Button>

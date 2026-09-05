@@ -364,21 +364,26 @@ export default function AdminInvestorsPage() {
                     {uploadingLogo && <span className="text-xs text-primary animate-pulse">Uploading...</span>}
                   </div>
 
-                  <input
-                    type="url"
-                    value={logo}
-                    onChange={(e) => setLogo(e.target.value)}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-3 text-white focus:border-primary outline-none text-sm"
-                    placeholder="https://..."
-                  />
+                  {logo ? (
+                    <div className="mt-2 relative w-32 h-20 rounded-sm border border-white/10 overflow-hidden bg-neutral-800 p-2 group">
+                      <Image src={logo} alt="Preview" fill className="object-contain" />
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button
+                          type="button"
+                          onClick={() => setLogo("")}
+                          className="text-[10px] font-mono font-bold uppercase bg-red-600 text-white px-2 py-1 hover:bg-red-500"
+                        >
+                          Clear
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-xs text-neutral-500 font-mono italic mt-2">
+                      No logo selected. Use the upload button above to add one.
+                    </div>
+                  )}
                 </div>
-
-                {isImageUrl(logo) && (
-                  <div className="mt-2 p-2 bg-[#0a0a0a] border border-white/10 rounded-sm flex items-center gap-3">
-                    <span className="text-[10px] text-neutral-400 font-bold uppercase">Preview:</span>
-                    <img src={logo} alt="Preview" className="h-8 object-contain" />
-                  </div>
-                )}
+              </div>
               </div>
 
               <div>

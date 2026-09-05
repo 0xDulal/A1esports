@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+﻿import { createClient } from "@supabase/supabase-js";
 import { compressAndOptimizeImage } from "@/lib/utils/image-optimizer";
 
 const supabaseUrl =

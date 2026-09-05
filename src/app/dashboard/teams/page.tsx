@@ -417,18 +417,24 @@ export default function AdminTeams() {
                   <button type="button" onClick={() => setIsTeamMediaPickerOpen(true)} className="text-[10px] text-primary font-bold uppercase hover:underline">Select Media</button>
                 </div>
                 <div className="space-y-2">
-                  {teamForm.logo && (
-                    <div className="relative w-20 h-20 rounded-sm border border-white/10 overflow-hidden bg-neutral-800 p-2">
+                  {teamForm.logo ? (
+                    <div className="relative w-20 h-20 rounded-sm border border-white/10 overflow-hidden bg-neutral-800 p-2 group">
                       <Image src={teamForm.logo} alt="Preview" fill className="object-contain" />
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button
+                          type="button"
+                          onClick={() => setTeamForm({ ...teamForm, logo: "" })}
+                          className="text-[10px] font-mono font-bold uppercase bg-red-600 text-white px-2 py-1 hover:bg-red-500"
+                        >
+                          Clear
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-xs text-neutral-500 font-mono italic">
+                      No logo selected. Use "Select Media" to add one.
                     </div>
                   )}
-                  <input
-                    type="url"
-                    required
-                    value={teamForm.logo || ""}
-                    onChange={(e) => setTeamForm({ ...teamForm, logo: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2.5 text-sm focus:outline-none focus:border-primary"
-                  />
                 </div>
               </div>
 
@@ -534,19 +540,24 @@ export default function AdminTeams() {
                   <button type="button" onClick={() => setIsPlayerMediaPickerOpen(true)} className="text-[10px] text-primary font-bold uppercase hover:underline">Select Media</button>
                 </div>
                 <div className="space-y-2">
-                  {playerForm.image && (
-                    <div className="relative w-32 h-32 rounded-sm border border-white/10 overflow-hidden bg-neutral-800">
+                  {playerForm.image ? (
+                    <div className="relative w-32 h-32 rounded-sm border border-white/10 overflow-hidden bg-neutral-800 group">
                       <Image src={playerForm.image} alt="Preview" fill className="object-cover object-top" />
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button
+                          type="button"
+                          onClick={() => setPlayerForm({ ...playerForm, image: "" })}
+                          className="text-[10px] font-mono font-bold uppercase bg-red-600 text-white px-2 py-1 hover:bg-red-500"
+                        >
+                          Clear
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-xs text-neutral-500 font-mono italic">
+                      No headshot selected. Use "Select Media" to add one.
                     </div>
                   )}
-                  <input
-                    type="url"
-                    required
-                    placeholder="https://..."
-                    value={playerForm.image}
-                    onChange={(e) => setPlayerForm({ ...playerForm, image: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2.5 text-sm focus:outline-none focus:border-primary"
-                  />
                 </div>
               </div>
 

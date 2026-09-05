@@ -1,4 +1,4 @@
-export const revalidate = 0;
+﻿export const revalidate = 0;
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Michroma } from "next/font/google";
 import "./globals.css";

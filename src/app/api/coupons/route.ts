@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase/client";
 import { DEFAULT_COUPONS } from "@/lib/supabase/db";
 
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
 
       if (coupon.min_order_amount && orderTotal < coupon.min_order_amount) {
         return NextResponse.json(
-          { error: `Minimum order total of ৳${coupon.min_order_amount} required for coupon ${cleanCode}.` },
+          { error: `Minimum order total of ${coupon.min_order_amount} required for coupon ${cleanCode}.` },
           { status: 400 }
         );
       }

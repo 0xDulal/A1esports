@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Plus, Edit, Trash2, Trophy, RefreshCw, Layers, Globe, Database, CheckCircle2 } from "lucide-react";
@@ -379,7 +379,7 @@ export default function AdminAchievements() {
                   <label className="block text-xs font-bold text-neutral-400 uppercase mb-2">Prize Money</label>
                   <input
                     type="text"
-                    placeholder="$2,500 or ৳2,00,000"
+                    placeholder="$2,500 or 2,00,000"
                     value={form.prize || ""}
                     onChange={(e) => setForm({ ...form, prize: e.target.value })}
                     className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"

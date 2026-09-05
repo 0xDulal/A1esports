@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import { Shield, Target, Trophy, Flame, Users, Sparkles, Award } from "lucide-react";

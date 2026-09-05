@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/client";
+﻿import { supabase } from "@/lib/supabase/client";
 import {
   Product,
   Team,
@@ -46,6 +46,7 @@ export async function getProductsFromSupabase(): Promise<Product[]> {
       isSoldOut: Boolean(item.is_sold_out),
       description: item.description || "",
       canCustomise: Boolean(item.can_customise),
+      specs: Array.isArray(item.specs) ? item.specs : undefined,
     }));
   } catch (err) {
     console.error("Failed to fetch products from Supabase:", err);

@@ -63,7 +63,7 @@ export default function CheckoutPage() {
   const [orderResult, setOrderResult] = useState<{ orderId: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch Settings & Payment Methods on Mount
+  // Fetch Settings & PAYMENT METHODs on Mount
   useEffect(() => {
     fetch("/api/settings")
       .then((res) => res.json())
@@ -79,7 +79,7 @@ export default function CheckoutPage() {
           setDeliveryCharges(data.deliveryCharges);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const selectedMethod = paymentMethods.find((m) => m.id === selectedMethodId) || paymentMethods[0];
@@ -202,32 +202,32 @@ export default function CheckoutPage() {
 
   if (orderResult) {
     return (
-      <main className="min-h-screen bg-black text-white pt-28 pb-24 flex items-center justify-center">
+      <main className="min-h-screen bg-black text-white pt-4 pb-4 flex items-center justify-center">
         <Section containerClassName="max-w-2xl text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-neutral-900/80 border border-white/10 rounded-3xl p-10 md:p-14 space-y-6 backdrop-blur-xl relative overflow-hidden"
+            className="bg-[#0a0a0a] border border-neutral-800 rounded-none p-10 md:p-14 space-y-6  relative overflow-hidden"
           >
             <div className="h-20 w-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto text-primary animate-pulse">
               <CheckCircle2 size={48} />
             </div>
 
             <div className="space-y-2">
-              <span className="text-primary font-bold text-xs uppercase tracking-[0.3em] italic">Order Confirmed</span>
-              <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">Thank You!</h1>
+              <span className="text-primary font-bold text-xs uppercase tracking-[0.3em] italic">ORDER COMPLETE</span>
+              <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">Thank You</h1>
               <p className="text-neutral-400 text-sm max-w-md mx-auto">
                 Your order has been received and is being processed by our team.
               </p>
             </div>
 
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 text-left space-y-3 my-6">
+            <div className="bg-neutral-950 border border-neutral-800 rounded-none p-6 text-left space-y-3 my-6">
               <div className="flex justify-between items-center text-xs text-neutral-400 uppercase font-bold tracking-wider">
                 <span>Order Reference:</span>
                 <span className="text-primary text-base font-black tracking-tight">{orderResult.orderId}</span>
               </div>
               <div className="flex justify-between items-center text-xs text-neutral-400 uppercase font-bold tracking-wider">
-                <span>Payment Method:</span>
+                <span>PAYMENT METHOD:</span>
                 <span className="text-white font-bold">{selectedMethod.name}</span>
               </div>
               {isDigitalPayment && transactionId && (
@@ -236,7 +236,7 @@ export default function CheckoutPage() {
                   <span className="text-white font-mono">{transactionId}</span>
                 </div>
               )}
-              <div className="flex justify-between items-center text-xs text-neutral-400 uppercase font-bold tracking-wider pt-2 border-t border-white/10">
+              <div className="flex justify-between items-center text-xs text-neutral-400 uppercase font-bold tracking-wider pt-2 border-t border-neutral-800">
                 <span>Estimated Delivery:</span>
                 <span className="text-white">2 - 4 Business Days</span>
               </div>
@@ -245,12 +245,12 @@ export default function CheckoutPage() {
             <div className="flex flex-wrap justify-center gap-4 pt-4">
               <Link href="/shop">
                 <A1Button variant="primary" size="lg">
-                  Continue Shopping
+                  CONTINUE SHOPPING
                 </A1Button>
               </Link>
               <Link href="/">
                 <A1Button variant="outline" size="lg">
-                  Back to Home
+                  BACK TO HOME
                 </A1Button>
               </Link>
             </div>
@@ -261,32 +261,31 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white pt-24 pb-24">
+    <main className="min-h-screen bg-black text-white pt-12 pb-16 font-mono">
       <Section>
         <Link
           href="/shop"
           className="inline-flex items-center gap-2 text-neutral-500 hover:text-white transition-colors mb-8 group"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-[10px] font-black uppercase tracking-[0.2em]">Return to Shop</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.2em]">RETURN TO SHOP</span>
         </Link>
 
         <div className="mb-10">
-          <span className="text-primary font-bold text-xs uppercase tracking-[0.3em] italic">Official Store</span>
           <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">Checkout</h1>
         </div>
 
         {items.length === 0 ? (
-          <div className="py-20 text-center space-y-6 bg-neutral-900/40 border border-white/5 rounded-3xl">
-            <div className="h-20 w-20 rounded-full bg-white/5 flex items-center justify-center mx-auto text-neutral-600">
+          <div className="py-20 text-center space-y-6 bg-[#0a0a0a] border border-white/5 rounded-none">
+            <div className="h-20 w-20 rounded-full bg-neutral-950 flex items-center justify-center mx-auto text-neutral-600">
               <ShoppingBag size={40} />
             </div>
-            <h2 className="text-2xl font-black uppercase tracking-tight">Your Cart is Empty</h2>
+            <h2 className="text-2xl font-black uppercase tracking-tight">Cart Empty</h2>
             <p className="text-neutral-500 text-sm max-w-sm mx-auto">
-              Please add items to your cart before proceeding to checkout.
+              Your cart is currently empty. Please add items to proceed.
             </p>
             <Link href="/shop">
-              <A1Button variant="primary">Explore Store</A1Button>
+              <A1Button variant="primary">RETURN TO SHOP</A1Button>
             </Link>
           </div>
         ) : (
@@ -295,9 +294,9 @@ export default function CheckoutPage() {
             <div className="lg:col-span-7 space-y-8">
               <form id="checkout-form" onSubmit={handleSubmitOrder} className="space-y-8">
                 {/* Delivery Info Box */}
-                <div className="bg-neutral-900/60 border border-white/10 rounded-3xl p-8 space-y-6">
+                <div className="bg-[#0a0a0a] border border-neutral-800 rounded-none p-8 space-y-6 relative">
                   <h2 className="text-xl font-black uppercase tracking-wider flex items-center gap-3">
-                    <Truck size={20} className="text-primary" /> Delivery Information
+                    <Truck size={20} className="text-primary" /> DELIVERY INFORMATION
                   </h2>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -311,7 +310,7 @@ export default function CheckoutPage() {
                         placeholder="John Doe"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                        className="w-full bg-neutral-950 border border-neutral-800 rounded-none px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
                       />
                     </div>
 
@@ -325,7 +324,7 @@ export default function CheckoutPage() {
                         placeholder="01700000000"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                        className="w-full bg-neutral-950 border border-neutral-800 rounded-none px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
                       />
                     </div>
                   </div>
@@ -340,7 +339,7 @@ export default function CheckoutPage() {
                         type="text"
                         readOnly
                         value={formData.country}
-                        className="w-full bg-neutral-800/40 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold text-neutral-300 cursor-not-allowed select-none"
+                        className="w-full bg-neutral-950 border border-neutral-800 rounded-none px-4 py-3 text-sm font-bold text-neutral-300 cursor-not-allowed select-none"
                       />
                     </div>
 
@@ -354,7 +353,7 @@ export default function CheckoutPage() {
                         placeholder="Dhaka, Chittagong, Sylhet..."
                         value={formData.city}
                         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                        className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                        className="w-full bg-neutral-950 border border-neutral-800 rounded-none px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
                       />
                     </div>
 
@@ -367,7 +366,7 @@ export default function CheckoutPage() {
                         placeholder="Gulshan, Uttara, Mirpur..."
                         value={formData.district}
                         onChange={(e) => setFormData({ ...formData, district: e.target.value })}
-                        className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                        className="w-full bg-neutral-950 border border-neutral-800 rounded-none px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
                       />
                     </div>
                   </div>
@@ -382,7 +381,7 @@ export default function CheckoutPage() {
                       placeholder="House No, Road No, Area details..."
                       value={formData.address}
                       onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                      className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors resize-none text-white"
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-none px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors resize-none text-white"
                     />
                   </div>
 
@@ -395,15 +394,15 @@ export default function CheckoutPage() {
                       placeholder="e.g. Call before delivery, drop at reception..."
                       value={formData.notes}
                       onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                      className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                      className="w-full bg-neutral-950 border border-neutral-800 rounded-none px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
                     />
                   </div>
                 </div>
 
                 {/* Payment Selection Box */}
-                <div className="bg-neutral-900/60 border border-white/10 rounded-3xl p-8 space-y-6">
+                <div className="bg-[#0a0a0a] border border-neutral-800 rounded-none p-8 space-y-6 relative">
                   <h2 className="text-xl font-black uppercase tracking-wider flex items-center gap-3">
-                    <CreditCard size={20} className="text-primary" /> Payment Method
+                    <CreditCard size={20} className="text-primary" /> PAYMENT METHOD
                   </h2>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -417,11 +416,10 @@ export default function CheckoutPage() {
                             setSelectedMethodId(method.id);
                             setError(null);
                           }}
-                          className={`p-5 rounded-2xl border text-left flex flex-col justify-between transition-all ${
-                            isSelected
+                          className={`p-5 rounded-none border text-left flex flex-col justify-between transition-all ${isSelected
                               ? "bg-primary/15 border-primary text-white shadow-[0_0_20px_rgba(255,0,102,0.15)]"
-                              : "bg-white/5 border-white/10 text-neutral-400 hover:border-white/20"
-                          }`}
+                              : "bg-neutral-950 border-neutral-800 text-neutral-400 hover:border-white/20"
+                            }`}
                         >
                           {method.type === "cod" ? (
                             <Banknote size={22} className={isSelected ? "text-primary" : "text-neutral-500"} />
@@ -444,9 +442,9 @@ export default function CheckoutPage() {
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
-                      className="bg-neutral-800/60 border border-primary/20 rounded-2xl p-6 space-y-5"
+                      className="bg-neutral-950 border border-neutral-800 rounded-none p-6 space-y-5"
                     >
-                      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 flex items-start gap-3">
+                      <div className="bg-primary/10 border border-neutral-800 rounded-none p-4 flex items-start gap-3">
                         <Info size={20} className="text-primary shrink-0 mt-0.5" />
                         <div className="text-xs space-y-1">
                           <p className="font-bold text-white uppercase tracking-wider">
@@ -474,7 +472,7 @@ export default function CheckoutPage() {
                             placeholder="01700000000"
                             value={paymentNumber}
                             onChange={(e) => setPaymentNumber(e.target.value)}
-                            className="w-full bg-neutral-900 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                            className="w-full bg-neutral-900 border border-neutral-800 rounded-none px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
                           />
                         </div>
 
@@ -488,7 +486,7 @@ export default function CheckoutPage() {
                             placeholder="e.g. 9J4K8L2M"
                             value={transactionId}
                             onChange={(e) => setTransactionId(e.target.value)}
-                            className="w-full bg-neutral-900 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors font-mono uppercase text-white"
+                            className="w-full bg-neutral-900 border border-neutral-800 rounded-none px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors font-mono uppercase text-white"
                           />
                         </div>
                       </div>
@@ -498,7 +496,7 @@ export default function CheckoutPage() {
                           Payment Proof / Screenshot (Optional)
                         </label>
                         <div className="flex items-center gap-4">
-                          <label className="flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors text-white">
+                          <label className="flex items-center gap-2 px-4 py-2.5 bg-neutral-950 hover:bg-neutral-900 border border-neutral-800 rounded-none text-xs font-bold uppercase tracking-wider cursor-pointer transition-colors text-white">
                             <Upload size={16} className="text-primary" />
                             {isUploadingProof ? "Uploading..." : paymentProofUrl ? "Change Screenshot" : "Upload Screenshot"}
                             <input
@@ -518,10 +516,15 @@ export default function CheckoutPage() {
                       </div>
                     </motion.div>
                   )}
+
+                  <div className="absolute -top-[1px] -left-[1px] w-2 h-2 border-t border-l border-neutral-600 !m-0"></div>
+                  <div className="absolute -top-[1px] -right-[1px] w-2 h-2 border-t border-r border-neutral-600 !m-0"></div>
+                  <div className="absolute -bottom-[1px] -left-[1px] w-2 h-2 border-b border-l border-neutral-600 !m-0"></div>
+                  <div className="absolute -bottom-[1px] -right-[1px] w-2 h-2 border-b border-r border-neutral-600 !m-0"></div>
                 </div>
 
                 {error && (
-                  <div className="bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl p-4 text-sm font-bold">
+                  <div className="bg-red-500/10 border border-red-500/20 text-red-500 rounded-none p-4 text-sm font-bold">
                     {error}
                   </div>
                 )}
@@ -530,15 +533,15 @@ export default function CheckoutPage() {
 
             {/* Right: Order Summary & Coupons */}
             <div className="lg:col-span-5">
-              <div className="bg-neutral-900/60 border border-white/10 rounded-3xl p-8 sticky top-28 space-y-6">
+              <div className="bg-[#0a0a0a] border border-neutral-800 rounded-none p-8 sticky top-28 space-y-6 relative">
                 <h2 className="text-xl font-black uppercase tracking-wider flex items-center gap-3">
-                  <ShoppingBag size={20} className="text-primary" /> Summary ({items.length} items)
+                  <ShoppingBag size={20} className="text-primary" /> ORDER SUMMARY ({items.length})
                 </h2>
 
                 <div className="divide-y divide-white/5 max-h-[260px] overflow-y-auto pr-2">
                   {items.map((item, idx) => (
                     <div key={idx} className="py-3 flex items-center gap-4">
-                      <div className="relative h-16 w-16 rounded-xl overflow-hidden bg-white/5 border border-white/10 shrink-0">
+                      <div className="relative h-16 w-16 rounded-none overflow-hidden bg-neutral-950 border border-neutral-800 shrink-0">
                         <Image src={item.image} alt={item.title} fill className="object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -554,8 +557,8 @@ export default function CheckoutPage() {
                         {((item.sleeveType === "full" && item.fullSleevePrice)
                           ? item.fullSleevePrice
                           : (item.sleeveType === "half" && item.halfSleevePrice)
-                          ? item.halfSleevePrice
-                          : item.price) * item.quantity}{" "}
+                            ? item.halfSleevePrice
+                            : item.price) * item.quantity}{" "}
                         BDT
                       </span>
                     </div>
@@ -563,13 +566,13 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* Coupon Code Section */}
-                <div className="pt-4 border-t border-white/10 space-y-3">
+                <div className="pt-4 border-t border-neutral-800 space-y-3">
                   <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
                     <Tag size={14} className="text-primary" /> Have a Coupon?
                   </span>
 
                   {appliedCoupon ? (
-                    <div className="bg-primary/10 border border-primary/20 rounded-2xl p-3.5 flex items-center justify-between">
+                    <div className="bg-primary/10 border border-neutral-800 rounded-none p-3.5 flex items-center justify-between">
                       <div>
                         <span className="text-xs font-black text-primary uppercase tracking-widest block">
                           Coupon: {appliedCoupon.code}
@@ -594,12 +597,12 @@ export default function CheckoutPage() {
                         placeholder="ENTER COUPON CODE"
                         value={couponInput}
                         onChange={(e) => setCouponInput(e.target.value)}
-                        className="flex-1 bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-xs font-bold tracking-widest uppercase focus:outline-none focus:border-primary text-white"
+                        className="flex-1 bg-neutral-950 border border-neutral-800 rounded-none px-4 h-9 text-xs font-bold tracking-widest uppercase focus:outline-none focus:border-primary text-white"
                       />
                       <Button
                         type="button"
                         variant="primary"
-                        size="sm"
+                        size="md"
                         onClick={handleApplyCoupon}
                         disabled={couponLoading || !couponInput.trim()}
                       >
@@ -613,7 +616,7 @@ export default function CheckoutPage() {
                   )}
                 </div>
 
-                <div className="pt-4 border-t border-white/10 space-y-3">
+                <div className="pt-4 border-t border-neutral-800 space-y-3">
                   <div className="flex justify-between text-xs text-neutral-400 uppercase font-bold tracking-wider">
                     <span>Subtotal</span>
                     <span className="text-white">{total} BDT</span>
@@ -631,7 +634,7 @@ export default function CheckoutPage() {
                     <span className="text-white">{is100PercentCoupon ? "0 BDT (Waived)" : `${shippingCost} BDT`}</span>
                   </div>
 
-                  <div className="flex justify-between items-end pt-3 border-t border-white/10">
+                  <div className="flex justify-between items-end pt-3 border-t border-neutral-800">
                     <span className="text-sm font-black uppercase text-white tracking-wider">Total Payable</span>
                     <span className="text-2xl font-black text-primary tracking-tighter">
                       {grandTotal === 0 ? "0 BDT (FREE)" : `${grandTotal} BDT`}
@@ -649,8 +652,8 @@ export default function CheckoutPage() {
                   {isSubmitting
                     ? "Processing Order..."
                     : grandTotal === 0
-                    ? "Claim Free Product Order • 0 BDT"
-                    : `Confirm Order • ${grandTotal} BDT`}
+                      ? "Claim Free Product Order • 0 BDT"
+                      : `Confirm Order • ${grandTotal} BDT`}
                 </A1Button>
 
                 <div className="flex items-center justify-center gap-2 text-[10px] text-neutral-500 font-bold uppercase tracking-widest pt-2">

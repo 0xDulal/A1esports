@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { ShoppingBag, Users, Trophy, DollarSign, ArrowRight, Package, Sparkles } from "lucide-react";
@@ -141,7 +141,7 @@ export default function AdminDashboard() {
             </Link>
           </div>
           <h3 className="text-3xl font-michroma uppercase">
-            {loading ? "..." : `৳${totalRevenue.toLocaleString()}`}
+            {loading ? "..." : `${totalRevenue.toLocaleString()}`}
           </h3>
           <p className="text-neutral-400 text-sm">Total Revenue ({ordersCount} orders)</p>
         </motion.div>
@@ -184,7 +184,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="text-right">
                     <span className="font-bold text-primary block">
-                      ৳{(Number(ord.total_amount) || Number((ord as any).total) || 0).toLocaleString()}
+                      {(Number(ord.total_amount) || Number((ord as any).total) || 0).toLocaleString()}
                     </span>
                     <span className="text-xs text-neutral-400">{ord.order_status || (ord as any).status}</span>
                   </div>

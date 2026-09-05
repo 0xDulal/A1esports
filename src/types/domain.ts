@@ -1,4 +1,4 @@
-export interface Product {
+﻿export interface Product {
   id: string;
   slug: string;
   title: string;
@@ -11,6 +11,7 @@ export interface Product {
   isSoldOut: boolean;
   description: string;
   canCustomise: boolean;
+  specs?: { name: string; value: string }[];
 }
 
 export interface PlayerSocials {

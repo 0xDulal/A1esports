@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import {
@@ -319,10 +319,10 @@ export default function AdminOrders() {
                         <p className="text-[10px] text-neutral-400 font-mono">{order.customer_phone}</p>
                       </td>
                       <td className="p-4 font-bold text-white text-xs whitespace-nowrap">
-                        ৳{order.total_amount}
+                        {order.total_amount}
                         {order.coupon_code && (
                           <span className="block text-[9px] text-primary font-bold uppercase">
-                            {order.coupon_code} (-৳{order.discount_amount})
+                            {order.coupon_code} (-{order.discount_amount})
                           </span>
                         )}
                       </td>
@@ -451,7 +451,7 @@ export default function AdminOrders() {
                   <span className="font-bold text-primary uppercase flex items-center gap-1.5">
                     <Tag size={14} /> Coupon Applied: {selectedOrder.coupon_code}
                   </span>
-                  <span className="font-black text-white">-৳{selectedOrder.discount_amount}</span>
+                  <span className="font-black text-white">-{selectedOrder.discount_amount}</span>
                 </div>
               )}
 
@@ -468,7 +468,7 @@ export default function AdminOrders() {
                           Qty: {item.quantity} {item.size && `• Size: ${item.size}`} {item.sleeveType && `• ${item.sleeveType}`}
                         </p>
                       </div>
-                      <span className="font-bold">৳{item.price * item.quantity}</span>
+                      <span className="font-bold">{item.price * item.quantity}</span>
                     </div>
                   ))}
                 </div>
@@ -476,7 +476,7 @@ export default function AdminOrders() {
 
               <div className="flex justify-between items-center pt-3 border-t border-white/10 font-bold">
                 <span>Total Amount</span>
-                <span className="text-xl text-primary font-black">৳{selectedOrder.total_amount}</span>
+                <span className="text-xl text-primary font-black">{selectedOrder.total_amount}</span>
               </div>
             </div>
           </DialogContent>

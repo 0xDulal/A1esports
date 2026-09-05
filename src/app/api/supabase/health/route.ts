@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { getSupabaseConfig } from "@/lib/supabase/rest";
 
 export const dynamic = "force-dynamic";

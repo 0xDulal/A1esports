@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo } from "react";
 import { Trophy, Calendar, Medal, ExternalLink, Filter, Terminal } from "lucide-react";

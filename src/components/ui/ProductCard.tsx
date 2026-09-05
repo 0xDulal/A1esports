@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { motion } from "framer-motion";
 import Image from "next/image";

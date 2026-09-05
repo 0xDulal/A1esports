@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Product } from "@/lib/data/shop";
@@ -51,6 +51,7 @@ export default function AdminProducts() {
     images: [],
     isSoldOut: false,
     canCustomise: true,
+    specs: [],
   });
 
   useEffect(() => {
@@ -78,6 +79,7 @@ export default function AdminProducts() {
       images: [],
       isSoldOut: false,
       canCustomise: true,
+      specs: [],
     });
     setIsModalOpen(true);
   };
@@ -260,6 +262,7 @@ export default function AdminProducts() {
         images: finalImages,
         is_sold_out: formData.isSoldOut || false,
         can_customise: formData.canCustomise || false,
+        specs: formData.specs || [],
       };
 
       if (editingProduct) {
@@ -295,6 +298,7 @@ export default function AdminProducts() {
           isSoldOut: dbPayload.is_sold_out,
           description: dbPayload.description,
           canCustomise: dbPayload.can_customise,
+          specs: dbPayload.specs,
         };
 
         await sbInsert("products", { id, ...dbPayload });
@@ -376,7 +380,7 @@ export default function AdminProducts() {
                       </div>
                     </td>
                     <td className="p-4 font-bold text-white">
-                      ৳{product.halfSleevePrice || product.price}
+                      {product.halfSleevePrice || product.price}
                     </td>
                     <td className="p-4">
                       <span className="px-2.5 py-1 bg-primary/20 text-primary rounded-full text-xs font-bold uppercase">
@@ -535,17 +539,17 @@ export default function AdminProducts() {
                   <div className="bg-neutral-900/40 border border-neutral-800 p-4 space-y-4">
                     <div className="flex items-center justify-between border-b border-neutral-800/80 pb-2">
                       <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-                        <DollarSign size={13} /> Pricing & Variants (BDT ৳)
+                        <DollarSign size={13} /> Pricing & Variants (BDT)
                       </span>
                     </div>
 
                     <div>
                       <label className="block text-xs font-mono font-bold text-neutral-300 uppercase mb-1.5">
-                        Base Price (৳ BDT) <span className="text-primary">*</span>
+                        Base Price (BDT) <span className="text-primary">*</span>
                       </label>
                       <div className="relative">
                         <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-mono text-neutral-500 font-bold">
-                          ৳
+                          BDT
                         </span>
                         <input
                           type="number"
@@ -578,7 +582,7 @@ export default function AdminProducts() {
                         <div className="grid grid-cols-2 gap-3">
                           <div>
                             <label className="block text-[10px] font-mono font-bold text-neutral-400 uppercase mb-1">
-                              Half Sleeve (৳)
+                              Half Sleeve (BDT)
                             </label>
                             <input
                               type="number"
@@ -591,7 +595,7 @@ export default function AdminProducts() {
                           </div>
                           <div>
                             <label className="block text-[10px] font-mono font-bold text-neutral-400 uppercase mb-1">
-                              Full Sleeve (৳)
+                              Full Sleeve (BDT)
                             </label>
                             <input
                               type="number"
@@ -606,6 +610,76 @@ export default function AdminProducts() {
                       </div>
                     )}
                   </div>
+
+                  {/* Section: Specifications */}
+                  <div className="bg-neutral-900/40 border border-neutral-800 p-4 space-y-4">
+                    <div className="flex items-center justify-between border-b border-neutral-800/80 pb-2">
+                      <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+                        <Layers size={13} /> Product Specifications
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            specs: [...(prev.specs || []), { name: "", value: "" }],
+                          }));
+                        }}
+                        className="text-[10px] font-mono text-primary hover:underline uppercase font-bold flex items-center gap-1"
+                      >
+                        <Plus size={12} /> Add Spec
+                      </button>
+                    </div>
+
+                    {(!formData.specs || formData.specs.length === 0) ? (
+                      <div className="text-center p-4 border border-dashed border-neutral-800 text-neutral-500 text-xs font-mono">
+                        No specifications added yet.
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {formData.specs.map((spec, idx) => (
+                          <div key={idx} className="flex items-start gap-3">
+                            <div className="flex-1 space-y-2">
+                              <input
+                                type="text"
+                                value={spec.name}
+                                onChange={(e) => {
+                                  const newSpecs = [...(formData.specs || [])];
+                                  newSpecs[idx].name = e.target.value;
+                                  setFormData({ ...formData, specs: newSpecs });
+                                }}
+                                placeholder="Spec Name (e.g. Fit Architecture)"
+                                className="w-full bg-neutral-950 border border-neutral-800 focus:border-primary px-3 py-2 text-xs font-mono text-white outline-none"
+                              />
+                              <input
+                                type="text"
+                                value={spec.value}
+                                onChange={(e) => {
+                                  const newSpecs = [...(formData.specs || [])];
+                                  newSpecs[idx].value = e.target.value;
+                                  setFormData({ ...formData, specs: newSpecs });
+                                }}
+                                placeholder="Spec Value (e.g. Pro Esports Performance)"
+                                className="w-full bg-neutral-950 border border-neutral-800 focus:border-primary px-3 py-2 text-xs font-mono text-white outline-none"
+                              />
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newSpecs = [...(formData.specs || [])];
+                                newSpecs.splice(idx, 1);
+                                setFormData({ ...formData, specs: newSpecs });
+                              }}
+                              className="p-2 text-neutral-500 hover:text-red-500 hover:bg-red-500/10 transition-colors border border-transparent"
+                            >
+                              <X size={16} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
 
                   {/* Section: Options & Toggles */}
                   <div className="bg-neutral-900/40 border border-neutral-800 p-4 space-y-3">

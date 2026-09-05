@@ -1,4 +1,4 @@
-export interface ImageOptimizerOptions {
+﻿export interface ImageOptimizerOptions {
   maxWidth?: number;
   maxHeight?: number;
   quality?: number;

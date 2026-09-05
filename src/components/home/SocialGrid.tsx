@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Share2, ArrowUpRight } from "lucide-react";
 import { FaDiscord, FaYoutube, FaFacebookF, FaInstagram } from "react-icons/fa";

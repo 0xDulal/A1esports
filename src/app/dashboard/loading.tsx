@@ -1,4 +1,4 @@
-export default function DashboardLoading() {
+﻿export default function DashboardLoading() {
   return (
     <div className="space-y-8 animate-pulse p-4">
       {/* Title skeleton */}

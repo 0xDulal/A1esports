@@ -1,4 +1,4 @@
-import { Hero } from "@/components/home/Hero";
+﻿import { Hero } from "@/components/home/Hero";
 import { SocialGrid } from "@/components/home/SocialGrid";
 import { Achievements } from "@/components/home/Achievements";
 import { PlayerSection } from "@/components/home/PlayerSection";
