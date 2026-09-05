@@ -1,94 +1,23 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
-import { Trophy, Calendar, Medal, ExternalLink, Filter } from "lucide-react";
-import { motion, useSpring, useTransform, useInView, AnimatePresence } from "framer-motion";
-import { Section } from "@/components/ui/Section";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { A1Button } from "@/components/ui/A1Button";
+import { useState, useMemo } from "react";
+import { Trophy, Calendar, Medal, ExternalLink, Filter, Terminal } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 const LIQUIPEDIA_URL = "https://liquipedia.net/pubgmobile/A1_RG_Esports/Results";
 
-function AnimatedPrize({ value }: { value: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
-  const numericValue = parseFloat(value.replace(/[^0-9.]/g, ""));
-
-  const spring = useSpring(0, { mass: 1, stiffness: 75, damping: 15 });
-  const display = useTransform(spring, (current) => {
-    return Math.floor(current).toLocaleString();
-  });
-
-  useEffect(() => {
-    if (isInView) {
-      spring.set(numericValue);
-    }
-  }, [isInView, numericValue, spring]);
-
-  return <motion.span ref={ref}>{display}</motion.span>;
-}
-
 export function Achievements({ achievements }: { achievements: any[] }) {
-  const [selectedPlace, setSelectedPlace] = useState<string>("ALL");
   const [selectedTier, setSelectedTier] = useState<string>("ALL");
 
   const filteredAchievements = useMemo(() => {
-    const isDefault = selectedPlace === "ALL" && selectedTier === "ALL";
-
     return [...achievements]
       .filter((item) => {
-        const placeStr = (item.place || "").toLowerCase();
         const tierStr = (item.tier || "").toUpperCase();
-
-        if (isDefault) {
-          const isTopTier =
-            tierStr.includes("S-TIER") ||
-            tierStr.includes("A-TIER") ||
-            tierStr.includes("B-TIER") ||
-            tierStr.includes("S TIER") ||
-            tierStr.includes("A TIER") ||
-            tierStr.includes("B TIER");
-
-          const isTopPlacement =
-            placeStr.startsWith("1st") ||
-            placeStr.startsWith("2nd") ||
-            placeStr.startsWith("3rd") ||
-            placeStr.startsWith("4th") ||
-            placeStr.startsWith("5th") ||
-            placeStr.includes("top 1") ||
-            placeStr.includes("top 8") ||
-            placeStr.includes("top 16");
-
-          return isTopTier && isTopPlacement;
-        }
-
-        const matchPlace =
-          selectedPlace === "ALL"
-            ? true
-            : selectedPlace === "1st"
-            ? placeStr.includes("1st")
-            : selectedPlace === "2nd"
-            ? placeStr.includes("2nd")
-            : selectedPlace === "3rd"
-            ? placeStr.includes("3rd")
-            : selectedPlace === "4th"
-            ? placeStr.includes("4th") ||
-              placeStr.includes("5th") ||
-              placeStr.includes("th") ||
-              placeStr.includes("top")
-            : true;
-
+        if (selectedTier === "ALL") return true;
         const cleanSelectedTier = selectedTier.replace(/[^A-Z]/g, "");
         const cleanItemTier = tierStr.replace(/[^A-Z]/g, "");
-
-        const matchTier =
-          selectedTier === "ALL"
-            ? true
-            : cleanItemTier.includes(cleanSelectedTier);
-
-        return matchPlace && matchTier;
+        return cleanItemTier.includes(cleanSelectedTier);
       })
       .sort((a, b) => {
         const timeA = a.date ? new Date(a.date).getTime() : Number(a.year || 0) * 10000;
@@ -96,84 +25,44 @@ export function Achievements({ achievements }: { achievements: any[] }) {
         return timeB - timeA;
       })
       .slice(0, 6);
-  }, [achievements, selectedPlace, selectedTier]);
+  }, [achievements, selectedTier]);
 
   return (
-    <Section withGlow className="py-12 sm:py-24">
-      <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-8 sm:mb-16 gap-6">
-        <SectionHeader
-          title={
-            <>
-              Recent <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Achievements</span>
-            </>
-          }
-          subtitle="Hall of Fame"
-          icon={Trophy}
-          align="left"
-          className="mb-0"
-        />
-
-        {/* Liquipedia Direct Results Link Button */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        >
+    <section className="bg-black text-neutral-400 py-24 px-4 md:px-8 font-mono border-t border-neutral-800">
+      <div className="max-w-[1600px] mx-auto">
+        
+        {/* Hardware Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <Trophy className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl font-bold tracking-widest text-white uppercase">Recent Achievements</h2>
+            <div className="hidden md:block w-32 h-px bg-neutral-800 ml-4" />
+          </div>
+          
           <Link
             href={LIQUIPEDIA_URL}
             target="_blank"
             rel="noopener noreferrer"
+            className="flex items-center gap-2 text-xs border border-neutral-700 hover:border-primary text-white px-4 py-2 bg-neutral-900/50 transition-colors"
           >
-            <A1Button size="lg" className="group">
-              View Liquipedia Results
-              <ExternalLink className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-            </A1Button>
+            Liquipedia Results <ExternalLink className="w-3 h-3" />
           </Link>
-        </motion.div>
-      </div>
+        </div>
 
-      {/* Filter Controls Bar */}
-      <div className="bg-neutral-900/80 border border-white/10 rounded-2xl p-3 sm:p-4 mb-8 sm:mb-10 space-y-4 backdrop-blur-xl">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          {/* Place Filter */}
+        {/* Filter Controls Bar */}
+        <div className="border border-neutral-800 bg-neutral-900/30 p-4 mb-8 flex flex-wrap items-center gap-6">
+          <span className="text-[10px] font-bold text-neutral-600 uppercase tracking-widest flex items-center gap-2">
+            <Filter size={12} className="text-primary" /> Filter Tier:
+          </span>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mr-2 flex items-center gap-1">
-              <Filter size={12} className="text-primary" /> Filter Place:
-            </span>
-            {[
-              { id: "ALL", label: "ALL PLACES" },
-              { id: "1st", label: "1ST (CHAMPIONS)" },
-              { id: "2nd", label: "2ND PLACE" },
-              { id: "3rd", label: "3RD PLACE" },
-              { id: "4th", label: "FINALS / TOP 4" },
-            ].map((p) => (
-              <button
-                key={p.id}
-                onClick={() => setSelectedPlace(p.id)}
-                className={`px-3 py-1.5 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${
-                  selectedPlace === p.id
-                    ? "bg-primary text-black"
-                    : "bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10"
-                }`}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Tier Filter */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mr-2">
-              Filter Tier:
-            </span>
             {["ALL", "S-Tier", "A-Tier", "B-Tier"].map((t) => (
               <button
                 key={t}
                 onClick={() => setSelectedTier(t)}
-                className={`px-3 py-1.5 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${
+                className={`px-3 py-1 text-xs font-bold tracking-widest uppercase transition-all border ${
                   selectedTier === t
-                    ? "bg-primary text-black"
-                    : "bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10"
+                    ? "border-primary text-white bg-primary/10"
+                    : "border-neutral-800 text-neutral-500 hover:text-white hover:border-neutral-600"
                 }`}
               >
                 {t}
@@ -181,106 +70,65 @@ export function Achievements({ achievements }: { achievements: any[] }) {
             ))}
           </div>
         </div>
-      </div>
 
-      {/* Grid Display */}
-      <motion.div layout className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <AnimatePresence mode="popLayout">
-          {filteredAchievements.map((item, i) => (
-            <AchievementCard key={item.tournament || i} item={item} index={i} />
-          ))}
-        </AnimatePresence>
-      </motion.div>
-
-      {filteredAchievements.length === 0 && (
-        <div className="py-16 text-center space-y-3 bg-white/5 border border-white/10 rounded-2xl">
-          <p className="text-xl font-bold uppercase text-neutral-400">No achievements found for this filter</p>
-          <button
-            onClick={() => {
-              setSelectedPlace("ALL");
-              setSelectedTier("ALL");
-            }}
-            className="text-primary text-xs font-black uppercase tracking-widest hover:underline"
-          >
-            Reset Filters
-          </button>
+        {/* Grid Display */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {filteredAchievements.map((item, i) => (
+              <AchievementCard key={item.tournament || i} item={item} index={i} />
+            ))}
+          </AnimatePresence>
         </div>
-      )}
-
-      {/* Bottom Footer CTA Link */}
-      <div className="mt-12 text-center pt-8 border-t border-white/5">
-        <Link
-          href={LIQUIPEDIA_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-neutral-400 hover:text-primary transition-colors group"
-        >
-          <span>Full Competitive Match History Available on Liquipedia</span>
-          <ExternalLink size={14} className="text-primary group-hover:translate-x-0.5 transition-transform" />
-        </Link>
       </div>
-    </Section>
+    </section>
   );
 }
 
 function AchievementCard({ item, index }: { item: any; index: number }) {
+  const isFirst = item.place.includes("1st");
+  
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ delay: index * 0.05 }}
-      whileHover={{ y: -8 }}
-      className="group relative flex h-full min-h-[320px] sm:min-h-[360px] flex-col overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-white/5 bg-gradient-to-b from-white/10 to-transparent p-5 sm:p-8 backdrop-blur-md transition-all duration-300 hover:border-primary/40 hover:shadow-[0_20px_50px_-10px_rgba(255,0,102,0.2)]"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ delay: index * 0.1 }}
+      className={`relative flex flex-col justify-between border bg-neutral-900/30 p-6 h-64 group transition-colors ${isFirst ? 'border-primary/50 hover:border-primary' : 'border-neutral-800 hover:border-neutral-600'}`}
     >
-      {/* Top Row: Rank & Tier */}
-      <div className="mb-6 flex items-start justify-between">
-        <motion.div
-          whileHover={{ scale: 1.1, rotate: -5 }}
-          transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          className={`flex h-14 w-14 items-center justify-center rounded-2xl border font-black text-xl shadow-lg ${
-            item.place.includes("1st")
-              ? "border-yellow-500 bg-yellow-500/10 text-yellow-500 shadow-yellow-500/20"
-              : item.place.includes("2nd")
-              ? "border-gray-400 bg-gray-400/10 text-gray-300 shadow-gray-400/20"
-              : item.place.includes("3rd")
-              ? "border-amber-700 bg-amber-700/10 text-amber-600 shadow-amber-700/20"
-              : "border-primary/50 bg-primary/10 text-primary"
-          }`}
-        >
+      <div className="flex justify-between items-start mb-4">
+        <div className={`px-2 py-1 text-xs font-bold tracking-widest uppercase border ${isFirst ? 'bg-primary/10 text-primary border-primary/30' : 'bg-neutral-800 text-white border-neutral-700'}`}>
           {item.place}
-        </motion.div>
-
-        <div className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-          <Medal className="h-3 w-3 text-primary" />
+        </div>
+        <div className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-neutral-500">
+          <Medal className="h-3 w-3 text-neutral-600" />
           {item.tier}
         </div>
       </div>
 
-      {/* Middle: Tournament Name */}
-      <div className="mb-8 flex-1">
-        <h3 className="text-xl font-black uppercase leading-tight text-white group-hover:text-primary transition-colors line-clamp-3">
+      <div className="flex-1">
+        <h3 className="text-lg font-bold uppercase leading-tight text-white line-clamp-3 group-hover:text-primary transition-colors">
           {item.tournament}
         </h3>
-        <div className="mt-3 flex items-center gap-2 text-xs font-medium text-muted-foreground">
+        <div className="mt-2 flex items-center gap-2 text-xs text-neutral-500">
           <Calendar className="h-3 w-3" />
           {item.date}
         </div>
       </div>
 
-      {/* Bottom: Prize */}
-      <div className="flex items-center justify-between pt-6 border-t border-white/5 mt-auto">
-        <div className="flex flex-col">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">Prize Money</span>
-          <div className="text-xl font-black text-white">
-            <AnimatedPrize value={item.prize} />
-          </div>
+      <div className="pt-4 border-t border-neutral-800 flex justify-between items-center mt-4">
+        <div className="text-[10px] font-bold uppercase tracking-widest text-neutral-600">
+          Prize Money
         </div>
-        <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-          <Trophy size={14} />
+        <div className="text-white font-mono font-bold">
+          {item.prize}
         </div>
       </div>
+      
+      {/* Schematic corner accent */}
+      {isFirst && (
+        <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-primary m-2 opacity-50" />
+      )}
     </motion.div>
   );
 }

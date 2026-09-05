@@ -1,0 +1,129 @@
+DIRECTION CONCEPT SEED (key: a92bdceb; mode: persuade; source: api; approved pool: c3b204a1eed6; 306/564 human-approved; rerun with --scope direction --mode persuade --from a92bdceb --candidate-count 7 to reproduce this roll against this catalog revision)
+ASSIGNED INDEX: 7
+  After ordering the grounded directions by resonance, build candidate
+  7 of your own grounded list; the assignment never points at a
+  challenger. The assignment is the roll, not a suggestion: your top-ranked
+  direction is what every run would ship, so the script decides which grounded
+  direction gets built. Each direction joins a durable visual system to a
+  concrete expression for the requested first surface, decided as one. It must
+  survive the current task plus navigation, quiet and dense content,
+  interaction and state, and a substantially different future surface. In an
+  attended run, present the assigned direction fully committed and offer
+  re-roll. You may add ONE card for your top-ranked grounded candidate when
+  it is not the assigned direction, kicker IMPECCABLE’S PICK, with an honest risk line
+  naming its familiarity; one pick card, never a ranked lineup, and the pick
+  never takes the lead position. When the assignment IS your top candidate,
+  there is no pick card. Re-roll yourself only
+  on named factual grounds, when the assignment cannot carry the product's
+  truth or task; taste is never grounds.
+  The assignment exists to refuse the model's ranking rut, never to outrank
+  the user or the brief. Never expose assignment metadata in user-facing labels.
+CHALLENGERS:
+  1. an alphabet storm, where letters condense into words, break into weather, and reshape the landscape according to grammar
+     SOURCE ID: dream-surreal-impossible-worlds-alphabet-storm
+     CREATIVE SPARK: Black letters gather into CLOUD, burst into rain, and carve the word RIVER across white ground; changing one vowel turns the current into a field of silver ravens.
+     SYSTEM GRAMMAR:
+       - Palette/material: paper white ground, storm-letter black as both body ink and weather mass, one silver flash for words mid-transformation, rain gray for spent grammar
+       - Type/composition: a single monumental grotesk behaving as matter, kerning loosening into wind, words breaking across lines as literal weather fronts on an open field
+       - Topology/navigation: Travel between letter fronts, word formations, grammatical forces, and the landscapes they produce.
+       - Controls/state: Type, split, conjugate, and recombine language while physical consequences remain reversible.
+       - Responsive/motion: Use one word-weather event per phone viewport and preserve readable text throughout transformation.
+     WEB LEVERAGE: Text parsing, procedural particles, and semantic rules turn typed language into deterministic weather with accessible narrative descriptions.
+     QUALITY BAR: board https://impeccable.style/worlds/cards/dream-surreal-impossible-worlds-alphabet-storm.webp · hero https://impeccable.style/worlds/cards/dream-surreal-impossible-worlds-alphabet-storm-hero.webp
+  2. a newly formed cloud edge diffracting sunlight through similarly sized droplets, with pastel bands shifting as droplet distribution and angular distance from the sun change
+     SOURCE ID: clouds-storms-auroras-iridescent-cloud-edge
+     CREATIVE SPARK: A plain white cloud grows a narrow crown of mint, rose, and violet; minutes later the droplets broaden in size and the entire spectral edge dissolves.
+     SYSTEM GRAMMAR:
+       - Palette/material: plain cloud white ground with slate gray body ink, a narrow fringe of mint, rose, and violet at the edge, violet marking the active band
+       - Type/composition: quiet thin humanist sans, wide white margins, color confined to hairline band edges while the text field stays achromatic
+       - Topology/navigation: Move between cloud body, droplet-size sample, angular color band, observation moment, and competing explanation.
+       - Controls/state: Adjust droplet distribution, compare images, mark uncertainty, and inspect absent, forming, vivid, and dispersed states.
+       - Responsive/motion: Stack image, spectrum, and droplet evidence on phones; never require device motion or direct viewing near the sun.
+     WEB LEVERAGE: Local image analysis, a droplet-diffraction model, and shareable comparison states let users test observed bands against particle-size hypotheses while retaining safe-viewing guidance and semantic spectra.
+     QUALITY BAR: board https://impeccable.style/worlds/cards/clouds-storms-auroras-iridescent-cloud-edge.webp · hero https://impeccable.style/worlds/cards/clouds-storms-auroras-iridescent-cloud-edge-hero.webp
+  3. a zoo and gardens guide map, where every area is a swelling lobe of flat colour and the coastline between lobes does all the dividing, and where a lobe can open in its middle so the page ground shows through it as water
+     SOURCE ID: aww2-zoo-gardens-guide-map
+     CREATIVE SPARK: A summer opening-morning guide map creased into eight panels: an apple-green headland swelling across the fold, a coral flamingo standing right on its edge with one foot out over the cream, and a yellow capsule pinned to the coastline reading GATE.
+     SYSTEM GRAMMAR:
+       - Palette/material: Flat unmodulated colour, no grain: green #8ED462 land on cream #F5F1E4 water, ink #2C2E2A. Photographs keep their own colour, cropped to a lobe, never tinted.
+       - Type/composition: One grotesk at one weight; display at 0.95 leading, -0.06em. Prose is ink on cream, white, green or yellow; coral and blue carry labels only.
+       - Topology/navigation: One lobe dominates each screen, swelling until its coast leaves the frame on two sides; a lobe may open in its middle and let the ground through as water.
+       - Controls/state: Controls are capsules in yellow #F5E211, coral #FF705D, blue #2BA0FF, lilac #EBC1FF; a round chip rides its trailing edge and crosses to the leading edge when live.
+       - Responsive/motion: Everything that moves takes 0.4s and overshoots before settling. Scroll redraws the coastline continuously; at narrow widths the coast runs down the frame.
+     WEB LEVERAGE: Every area is one SVG path; scroll advances a single timeline that morphs the coastline, and the same path clips the illustration and the type, so one geometry drives layout, art and state together.
+     QUALITY BAR: board https://impeccable.style/worlds/cards/aww2-zoo-gardens-guide-map.webp · hero https://impeccable.style/worlds/cards/aww2-zoo-gardens-guide-map-hero.webp
+  4. a berlin cabaret bill printed in two harsh inks, an angular figure in stark lighting cut against a black field, the programme ranked in expressionist lettering that leans hard against the vertical
+     SOURCE ID: posters-covers-sleeves-weimar-cabaret-bill
+     CREATIVE SPARK: acid yellow on black, no gray anywhere, a figure with its cheekbones cut out of the darkness, and the programme leaning off the vertical as if the room is already unsteady.
+     SYSTEM GRAMMAR:
+       - Palette/material: acid yellow and black on cheap stock, no midtone permitted, everything resolved to lit or unlit with a hard edge
+       - Type/composition: expressionist lettering leaning off the vertical, an angular figure cut from the black, and the programme ranked in a stepped column
+       - Topology/navigation: the programme is an ordered evening, so navigation advances an act rather than browsing a menu
+       - Controls/state: controls are programme lines, the active one reverses to acid yellow, and finished acts are struck through
+       - Responsive/motion: the stepped column restacks without straightening, and motion is a hard lighting cut from black to yellow
+     WEB LEVERAGE: a hard two-state lighting cut on interaction, responsive stepped column restacking, and struck-through act state
+     QUALITY BAR: board https://impeccable.style/worlds/cards/posters-covers-sleeves-weimar-cabaret-bill.webp · hero https://impeccable.style/worlds/cards/posters-covers-sleeves-weimar-cabaret-bill-hero.webp
+  5. the seven-segment display family, bedside clocks, gas-station price totems, scoreboards, and microwave panels all speaking one eight-cell mask where unlit segments are designed too
+     SOURCE ID: signals-instruments-seven-segment-alarm-clock
+     CREATIVE SPARK: At 3am the bedroom hour hangs as four red digits; by noon the same alphabet quotes gasoline at two meters tall, and at the stadium the score slams from 98 to 100 with nothing sliding, segments simply dying and igniting.
+     SYSTEM GRAMMAR:
+       - Palette/material: lit segments in LED red, amber, or scoreboard green on matte near-black ground, unlit segments held as faint ghost cells; red glow owns the night register
+       - Type/composition: one eight-cell mask makes every glyph, digits ranked in fixed slots with the colon or decimal as its own cell; absence is drawn as deliberately as light
+       - Topology/navigation: the layout is a rigid mask of cells, from four bedside digits to a price totem's stack; place never moves, only which segments light
+       - Controls/state: modes cycle by held buttons, set digits blink while everything else holds; the flashing 12:00 of an unset clock is the canonical error state
+       - Responsive/motion: cells scale as whole units and never reflow mid-glyph; every change is an instant segment swap
+     WEB LEVERAGE: CSS grid and clip-path build a true segment mask with ghost cells, and a shared worker keeps blink phase synchronized across every open tab
+     QUALITY BAR: board https://impeccable.style/worlds/cards/signals-instruments-seven-segment-alarm-clock.webp · hero https://impeccable.style/worlds/cards/signals-instruments-seven-segment-alarm-clock-hero.webp
+  6. A working field built as a darkroom printer's exposure record: overlapping translucent sheets over a backlit eleven-step zone ramp, where any region carries a hatch density and a stop-delta, and two hatches crossing at ninety degrees mark a conflict.
+     SOURCE ID: operate-b-exposure-record-zone-sheets
+     CREATIVE SPARK: A taped record card under the enlarger's glow: ruled boxes of seconds and M-filtration numbers, and a tracing-paper overlay askew on top where one region is hatched +1 1/3 and a corner is outlined to be held back.
+     SYSTEM GRAMMAR:
+       - Palette/material: Backlit neutrals snapped to an eleven-step zone ramp; one glowing dichroic magenta marks filtration only; hosted images sit in a two-step mask, never hatched.
+       - Type/composition: Legends in tracked condensed caps, quantities in tabular mono with 1/3 and 2/3 fractions; prose sits only on cleared light zones, hatching halting a line short.
+       - Topology/navigation: Stacked translucent sheets overlap at slight angles, each squared internally; navigating slides a sheet aside instead of replacing the field beneath.
+       - Controls/state: dotted outline is held back, deepest zone is selected, a struck rule is disabled, hatch density is load; two hatches crossing at ninety degrees is a conflict.
+       - Responsive/motion: Sheets carry mass, sliding with slight overshoot before settling; narrow widths stack them one per column with the zone wedge repeating at each band head.
+     WEB LEVERAGE: An eleven-step zone ramp as the only tonal tokens, plus a hatch layer where any region takes a numeric weight and a stop-delta, and overlapping regions cross-hatch so conflict renders without colour.
+     QUALITY BAR: board https://impeccable.style/worlds/cards/operate-b-exposure-record-zone-sheets.webp · hero https://impeccable.style/worlds/cards/operate-b-exposure-record-zone-sheets-hero.webp
+Fuse each challenger before judging it: the challenger supplies the form
+  and its system grammar, the product supplies every fact, and clarity wins
+  conflicts. Weigh the fused result against the assigned direction on exactly
+  two axes, audience identification and product clarity. Losing to strong
+  grounded material is a valid outcome; beating a thin or tool-monoculture
+  list is the point. A fused challenger that wins both axes becomes the build.
+  Close the weighing with a verdict per challenger, decided before any
+  borrowing is considered: wins (beats the assigned direction on both axes),
+  competitive (holds one axis), or declined (loses both). A declined
+  challenger is not spent: name the one discipline of its system the assigned
+  direction lacks, and raise the assigned direction to match before
+  presenting it. A donation transfers ambition and system discipline, never
+  the challenger's clothes; one world owns the page. Write each raise as its
+  own named line on the presented direction, and carry every verdict, kept
+  line, and raise into the decision page payload.
+When you can view images, open the QUALITY BAR board and hero for any
+challenger you weigh seriously and for the world you build. They exist as a
+craft bar, the finish level and commitment the build is expected to reach,
+never as a mockup to copy; your surface serves this product, not that render.
+PRODUCT.md and explicit incumbent brand commitments constrain every direction.
+The seed never chooses exact colors, fonts, tokens, or a user preference, and
+it never permits the world and first surface to be selected independently.
+The CREATIVE SPARK is a complete visual system, not a theme or decorative
+reference. Translate every supplied system rule into the product: palette and
+material, type and composition, topology, controls and states, and adaptation.
+Keep the source's visible character, scale, rhythm, and interaction instead of
+reducing vivid grammar to generic nouns. When the source is already a credible
+interface language, commit to it across navigation, content, controls, and
+states. Otherwise keep a literal carrier only when it becomes functional.
+Ambitious motion, spatial media, or interaction is welcome when it strengthens
+the product without weakening semantics, performance, or fallback behavior.
+TELEMETRY: after the user's choice resolves, rerun this script once with
+  --kind <assigned|pick|challenger|canon> --from a92bdceb --scope direction --mode persuade,
+  adding --chosen <challenger-id> when a dealt challenger won and keeping
+  --register <safer|bolder> when the resolved round came from a steered hand.
+  One ping per resolved attended round. The ping is anonymous, the card kind
+  plus the catalog id when one won; your grounded candidates' names never
+  leave the machine, and the ping is skipped automatically when DO_NOT_TRACK
+  or IMPECCABLE_NO_TELEMETRY is set.
+A user- or brief-pinned decision beats the roll, always.
+ASSIGNED INDEX (restated for truncated readers): 7. Build candidate
+7 of your own grounded list; seed key a92bdceb.

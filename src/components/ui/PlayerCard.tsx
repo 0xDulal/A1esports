@@ -17,12 +17,11 @@ export function PlayerCard({ player, index }: PlayerCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
+      initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
-      whileHover={{ y: -10 }}
-      className="group relative h-[480px] w-full max-w-[320px] overflow-hidden rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] transition-all duration-500 hover:border-primary/40 shadow-2xl"
+      className="group relative h-[480px] w-full max-w-[320px] overflow-hidden rounded-sm border border-neutral-800 bg-black transition-all duration-300 hover:border-primary shadow-2xl font-mono"
     >
       {/* Background Logo Watermark */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[300px] opacity-5 pointer-events-none">
@@ -34,6 +33,9 @@ export function PlayerCard({ player, index }: PlayerCardProps) {
           sizes="300px"
         />
       </div>
+
+      {/* Hover Purple Glow (Behind Player) */}
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,rgba(168,0,255,0.4)_0%,transparent_60%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none mix-blend-screen" />
 
       {/* Player Image */}
       <div className="absolute inset-0 z-10 flex items-end justify-center">
@@ -49,47 +51,47 @@ export function PlayerCard({ player, index }: PlayerCardProps) {
         </div>
       </div>
 
-
       {/* Info Overlay */}
       <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 bg-gradient-to-t from-black via-black/40 to-transparent">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          className="space-y-1"
-        >
-          <span className="text-primary text-[10px] font-black uppercase tracking-[0.2em] italic">
-            {player.role}
-          </span>
-          <h3 className="text-3xl font-black uppercase tracking-tighter text-white group-hover:text-primary transition-colors italic">
-            {player.ign}
-          </h3>
-          <p className="text-neutral-500 text-xs font-medium uppercase tracking-wider">
-            {player.name}
-          </p>
-        </motion.div>
+        
+        <div className="relative translate-y-9 transition-transform duration-500 ease-out group-hover:translate-y-0">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            className="space-y-1"
+          >
+            <span className="text-neutral-200 text-xs font-black uppercase tracking-[0.2em] italic drop-shadow-md">
+              {player.role}
+            </span>
+            <h3 className={`font-michroma uppercase tracking-tighter text-white leading-none ${player.ign.length > 9 ? 'text-2xl' : player.ign.length > 6 ? 'text-3xl' : 'text-4xl'}`}>
+              {player.ign}
+            </h3>
+            <p className="text-neutral-300 text-sm font-bold uppercase tracking-wider mt-1">
+              {player.name}
+            </p>
+          </motion.div>
 
-        {/* Socials on Hover */}
-        <div className="mt-4 flex gap-4 opacity-0 translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
-          {player.socials?.facebook && (
-            <Link href={player.socials.facebook} target="_blank" className="text-white/40 hover:text-white transition-colors">
-              <FaFacebook size={20} />
-            </Link>
-          )}
-          {player.socials?.instagram && (
-            <Link href={player.socials.instagram} target="_blank" className="text-white/40 hover:text-white transition-colors">
-              <FaInstagram size={20} />
-            </Link>
-          )}
-          {player.socials?.youtube && (
-            <Link href={player.socials.youtube} target="_blank" className="text-white/40 hover:text-white transition-colors">
-              <FaYoutube size={20} />
-            </Link>
-          )}
+          {/* Socials on Hover */}
+          <div className="mt-4 flex gap-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            {player.socials?.facebook && (
+              <Link href={player.socials.facebook} target="_blank" className="text-white/40 hover:text-white transition-colors">
+                <FaFacebook size={20} />
+              </Link>
+            )}
+            {player.socials?.instagram && (
+              <Link href={player.socials.instagram} target="_blank" className="text-white/40 hover:text-white transition-colors">
+                <FaInstagram size={20} />
+              </Link>
+            )}
+            {player.socials?.youtube && (
+              <Link href={player.socials.youtube} target="_blank" className="text-white/40 hover:text-white transition-colors">
+                <FaYoutube size={20} />
+              </Link>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Hover Glow */}
-      <div className="absolute inset-0 z-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-gradient-to-t from-primary/10 to-transparent pointer-events-none" />
+      </div>
     </motion.div>
   );
 }

@@ -12,7 +12,7 @@ export default async function Home() {
   const achievements = await getCombinedAchievements();
   
   return (
-    <main className="flex min-h-screen flex-col">
+    <main className="flex min-h-screen flex-col bg-[#0a0a0a]">
       <Hero />
       <AboutUs />
       <SocialGrid stats={stats} />

@@ -1,6 +1,6 @@
 export const revalidate = 0;
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Michroma } from "next/font/google";
 import "./globals.css";
 import { supabase } from "@/lib/supabase/client";
 
@@ -11,6 +11,12 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const michroma = Michroma({
+  weight: "400",
+  variable: "--font-michroma",
   subsets: ["latin"],
 });
 
@@ -46,9 +52,17 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${michroma.variable} antialiased`}
         suppressHydrationWarning
       >
+        <div dangerouslySetInnerHTML={{ __html: `<!--
+THESIS: A premium, precision-engineered esports experience treating the team as high-end hardware, avoiding generic templates entirely.
+OWN-WORLD: Matte dark charcoal ground, rigid grids, technical schematics, and precise UV spot gloss (Purple) for interactive states and highlights.
+STORY: Fans explore the organization's roster, achievements, and merchandise with the reverence of unboxing top-tier technical equipment.
+FIRST VIEWPORT: The existing hero section is preserved, while all subsequent sections use a strict, high-end hardware spec-sheet grid.
+FORM: The High-End Hardware Box (Option 1)
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->` }} />
         {(primaryColor || secondaryColor) && (
           <style dangerouslySetInnerHTML={{ __html: `
             :root, .dark {

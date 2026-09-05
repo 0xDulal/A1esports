@@ -220,14 +220,14 @@ export default function AdminOrders() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Orders Management</h1>
+          <h1 className="text-3xl font-michroma uppercase mb-2">Orders Management</h1>
           <p className="text-neutral-400">View, edit, delete, and export customer merchandise orders</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={fetchOrders}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition-colors text-xs uppercase"
+            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-colors text-xs uppercase"
           >
             <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
             Refresh
@@ -236,7 +236,7 @@ export default function AdminOrders() {
           {selectedIds.length > 0 && (
             <button
               onClick={() => setConfirmBulkDeleteOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 font-bold rounded-xl hover:bg-red-500/30 transition-colors text-xs uppercase"
+              className="flex items-center gap-2 px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 font-bold rounded-sm hover:bg-red-500/30 transition-colors text-xs uppercase"
             >
               <Trash2 size={16} /> Delete ({selectedIds.length})
             </button>
@@ -244,7 +244,7 @@ export default function AdminOrders() {
 
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition-colors text-xs uppercase tracking-wider"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-colors text-xs uppercase tracking-wider"
           >
             <Download size={16} /> Export to CSV
           </button>
@@ -257,7 +257,7 @@ export default function AdminOrders() {
           <button
             key={st}
             onClick={() => setStatusFilter(st)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors ${
+            className={`px-4 py-2 rounded-sm text-xs font-bold uppercase tracking-wider transition-colors ${
               statusFilter === st
                 ? "bg-primary text-black"
                 : "bg-white/5 text-neutral-400 hover:text-white"
@@ -268,7 +268,7 @@ export default function AdminOrders() {
         ))}
       </div>
 
-      <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden">
+      <div className="bg-[#0a0a0a] border border-white/10 rounded-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-neutral-400">Loading orders...</div>
         ) : filteredOrders.length === 0 ? (
@@ -358,21 +358,21 @@ export default function AdminOrders() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => setSelectedOrder(order)}
-                            className="p-2 hover:bg-white/10 text-white rounded-lg transition-colors"
+                            className="p-2 hover:bg-white/10 text-white rounded-sm transition-colors"
                             title="View Order Details"
                           >
                             <Eye size={16} />
                           </button>
                           <button
                             onClick={() => setEditingOrder(order)}
-                            className="p-2 hover:bg-white/10 text-neutral-300 rounded-lg transition-colors"
+                            className="p-2 hover:bg-white/10 text-neutral-300 rounded-sm transition-colors"
                             title="Edit Order Status"
                           >
                             <Edit2 size={16} />
                           </button>
                           <button
                             onClick={() => setConfirmSingleDeleteId(order.id)}
-                            className="p-2 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors"
+                            className="p-2 hover:bg-red-500/20 text-red-400 rounded-sm transition-colors"
                             title="Delete Order"
                           >
                             <Trash2 size={16} />
@@ -391,15 +391,15 @@ export default function AdminOrders() {
       {/* Order Detail Modal */}
       {selectedOrder && (
         <Dialog open={!!selectedOrder} onOpenChange={() => setSelectedOrder(null)}>
-          <DialogContent className="bg-neutral-900 border-white/10 text-white max-w-xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="bg-[#0a0a0a] border-white/10 text-white max-w-xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-xl font-bold uppercase flex justify-between items-center pr-6">
+              <DialogTitle className="text-xl font-michroma uppercase uppercase flex justify-between items-center pr-6">
                 <span>Order #{selectedOrder.id}</span>
               </DialogTitle>
             </DialogHeader>
 
             <div className="space-y-4 pt-2">
-              <div className="bg-neutral-800/80 p-4 rounded-xl space-y-2 text-sm">
+              <div className="bg-neutral-800/80 p-4 rounded-sm space-y-2 text-sm">
                 <p><span className="text-neutral-400 font-bold uppercase text-xs">Customer Name:</span> {selectedOrder.customer_name}</p>
                 <p><span className="text-neutral-400 font-bold uppercase text-xs">Phone Number:</span> {selectedOrder.customer_phone}</p>
                 <p><span className="text-neutral-400 font-bold uppercase text-xs">Country:</span> {selectedOrder.country || "Bangladesh"}</p>
@@ -407,7 +407,7 @@ export default function AdminOrders() {
               </div>
 
               {/* Payment Details Box */}
-              <div className="bg-neutral-800/80 p-4 rounded-xl space-y-2 text-sm">
+              <div className="bg-neutral-800/80 p-4 rounded-sm space-y-2 text-sm">
                 <h4 className="text-xs font-bold text-primary uppercase tracking-wider flex items-center gap-2">
                   <CreditCard size={16} /> Payment & Billing Information
                 </h4>
@@ -431,12 +431,12 @@ export default function AdminOrders() {
                         <ExternalLink size={12} /> Open Full High-Res Image
                       </a>
                     </div>
-                    <div className="relative rounded-xl overflow-hidden border border-white/15 bg-black/50 p-2 group">
+                    <div className="relative rounded-sm overflow-hidden border border-white/15 bg-black/50 p-2 group">
                       <a href={selectedOrder.payment_proof_url} target="_blank" rel="noopener noreferrer" className="block">
                         <img
                           src={selectedOrder.payment_proof_url}
                           alt="Payment Proof Screenshot"
-                          className="w-full max-h-96 object-contain rounded-lg transition-transform duration-300 group-hover:scale-[1.01]"
+                          className="w-full max-h-96 object-contain rounded-sm transition-transform duration-300 group-hover:scale-[1.01]"
                         />
                       </a>
                     </div>
@@ -446,7 +446,7 @@ export default function AdminOrders() {
 
               {/* Coupon Details */}
               {selectedOrder.coupon_code && (
-                <div className="bg-primary/10 border border-primary/20 p-3 rounded-xl flex items-center justify-between text-xs">
+                <div className="bg-primary/10 border border-primary/20 p-3 rounded-sm flex items-center justify-between text-xs">
                   <span className="font-bold text-primary uppercase flex items-center gap-1.5">
                     <Tag size={14} /> Coupon Applied: {selectedOrder.coupon_code}
                   </span>
@@ -459,7 +459,7 @@ export default function AdminOrders() {
                 <h4 className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Ordered Items</h4>
                 <div className="space-y-2 max-h-48 overflow-y-auto">
                   {selectedOrder.items?.map((item: any, i: number) => (
-                    <div key={i} className="flex justify-between items-center bg-white/5 p-3 rounded-lg text-sm">
+                    <div key={i} className="flex justify-between items-center bg-white/5 p-3 rounded-sm text-sm">
                       <div>
                         <p className="font-bold text-white">{item.title}</p>
                         {item.customName && <p className="text-xs text-primary font-bold">Custom Name: {item.customName}</p>}
@@ -485,9 +485,9 @@ export default function AdminOrders() {
       {/* Edit Order Modal */}
       {editingOrder && (
         <Dialog open={!!editingOrder} onOpenChange={() => setEditingOrder(null)}>
-          <DialogContent className="bg-neutral-900 border-white/10 text-white max-w-xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="bg-[#0a0a0a] border-white/10 text-white max-w-xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-xl font-bold uppercase">Edit Order Details #{editingOrder.id}</DialogTitle>
+              <DialogTitle className="text-xl font-michroma uppercase uppercase">Edit Order Details #{editingOrder.id}</DialogTitle>
             </DialogHeader>
 
             <form onSubmit={handleUpdateOrderStatus} className="space-y-4 pt-2">
@@ -499,7 +499,7 @@ export default function AdminOrders() {
                   <select
                     value={editingOrder.order_status || "Processing"}
                     onChange={(e) => setEditingOrder({ ...editingOrder, order_status: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary"
                   >
                     <option value="Processing">Processing</option>
                     <option value="Shipped">Shipped</option>
@@ -515,7 +515,7 @@ export default function AdminOrders() {
                   <select
                     value={editingOrder.payment_status || "Pending"}
                     onChange={(e) => setEditingOrder({ ...editingOrder, payment_status: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary"
                   >
                     <option value="Pending">Pending</option>
                     <option value="Awaiting Verification">Awaiting Verification</option>
@@ -535,7 +535,7 @@ export default function AdminOrders() {
                     required
                     value={editingOrder.customer_name || ""}
                     onChange={(e) => setEditingOrder({ ...editingOrder, customer_name: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary"
                   />
                 </div>
 
@@ -548,7 +548,7 @@ export default function AdminOrders() {
                     required
                     value={editingOrder.customer_phone || ""}
                     onChange={(e) => setEditingOrder({ ...editingOrder, customer_phone: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary"
                   />
                 </div>
               </div>
@@ -562,7 +562,7 @@ export default function AdminOrders() {
                     type="email"
                     value={editingOrder.customer_email || ""}
                     onChange={(e) => setEditingOrder({ ...editingOrder, customer_email: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary"
                   />
                 </div>
 
@@ -575,7 +575,7 @@ export default function AdminOrders() {
                     required
                     value={editingOrder.total_amount ?? 0}
                     onChange={(e) => setEditingOrder({ ...editingOrder, total_amount: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary font-bold"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary font-bold"
                   />
                 </div>
               </div>
@@ -589,7 +589,7 @@ export default function AdminOrders() {
                   placeholder="COD, bKash, Nagad, Rocket, Free Coupon (100% OFF)"
                   value={editingOrder.payment_method || ""}
                   onChange={(e) => setEditingOrder({ ...editingOrder, payment_method: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary"
                 />
               </div>
 
@@ -603,7 +603,7 @@ export default function AdminOrders() {
                     placeholder="01700000000"
                     value={editingOrder.payment_number || ""}
                     onChange={(e) => setEditingOrder({ ...editingOrder, payment_number: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-primary"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm font-mono text-white focus:outline-none focus:border-primary"
                   />
                 </div>
 
@@ -616,7 +616,7 @@ export default function AdminOrders() {
                     placeholder="e.g. 9J47A821"
                     value={editingOrder.transaction_id || ""}
                     onChange={(e) => setEditingOrder({ ...editingOrder, transaction_id: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm font-mono text-primary font-bold focus:outline-none focus:border-primary"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm font-mono text-primary font-bold focus:outline-none focus:border-primary"
                   />
                 </div>
               </div>
@@ -629,7 +629,7 @@ export default function AdminOrders() {
                   rows={3}
                   value={editingOrder.shipping_address || ""}
                   onChange={(e) => setEditingOrder({ ...editingOrder, shipping_address: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary resize-none"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm text-white focus:outline-none focus:border-primary resize-none"
                 />
               </div>
 
@@ -637,13 +637,13 @@ export default function AdminOrders() {
                 <button
                   type="button"
                   onClick={() => setEditingOrder(null)}
-                  className="px-4 py-2 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 text-xs uppercase"
+                  className="px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 text-xs uppercase"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-primary text-black font-black rounded-xl hover:bg-primary/90 text-xs uppercase tracking-wider"
+                  className="px-5 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 text-xs uppercase tracking-wider"
                 >
                   Save All Changes
                 </button>

@@ -5,6 +5,7 @@ import { NewsArticle } from "@/types/domain";
 import { getNewsFromSupabase } from "@/services/supabase/db.service";
 import { supabase, uploadImageToSupabase } from "@/lib/supabase/client";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { MediaPicker } from "@/components/dashboard/MediaPicker";
 import {
   Newspaper,
   Plus,
@@ -38,8 +39,8 @@ export default function DashboardNewsPage() {
   const [summary, setSummary] = useState("");
   const [contentRaw, setContentRaw] = useState("");
   const [tagsRaw, setTagsRaw] = useState("");
-  const [uploadingImage, setUploadingImage] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [isMediaPickerOpen, setIsMediaPickerOpen] = useState(false);
 
   // Confirm delete
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
@@ -195,7 +196,7 @@ export default function DashboardNewsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold mb-1 flex items-center gap-3">
+          <h1 className="text-3xl font-michroma uppercase mb-1 flex items-center gap-3">
             <Newspaper className="text-primary" size={28} /> News & Articles CMS
           </h1>
           <p className="text-neutral-400 text-sm">
@@ -205,7 +206,7 @@ export default function DashboardNewsPage() {
 
         <button
           onClick={handleOpenAddModal}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-black font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-primary/90 transition-colors shadow-[0_0_20px_rgba(255,0,102,0.2)]"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-black font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-primary/90 transition-colors shadow-[0_0_20px_rgba(255,0,102,0.2)]"
         >
           <Plus size={16} /> Create Article
         </button>
@@ -217,15 +218,15 @@ export default function DashboardNewsPage() {
           Loading news articles...
         </div>
       ) : articles.length === 0 ? (
-        <div className="bg-neutral-900/60 border border-white/10 rounded-3xl p-12 text-center max-w-xl mx-auto space-y-4">
+        <div className="bg-[#0a0a0a]/60 border border-white/10 rounded-sm p-12 text-center max-w-xl mx-auto space-y-4">
           <Newspaper size={48} className="mx-auto text-neutral-600" />
-          <h3 className="text-xl font-bold text-white">No Articles Published Yet</h3>
+          <h3 className="text-xl font-michroma uppercase text-white">No Articles Published Yet</h3>
           <p className="text-neutral-400 text-sm">
             Create your first news story to engage fans and improve site SEO.
           </p>
           <button
             onClick={handleOpenAddModal}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-black font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-black font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-primary/90 transition-colors"
           >
             <Plus size={16} /> Publish First Article
           </button>
@@ -235,10 +236,10 @@ export default function DashboardNewsPage() {
           {articles.map((art) => (
             <div
               key={art.id}
-              className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between group hover:border-primary/40 transition-all"
+              className="bg-[#0a0a0a] border border-white/10 rounded-sm overflow-hidden flex flex-col justify-between group hover:border-primary/40 transition-all"
             >
               <div className="space-y-4">
-                <div className="relative h-48 w-full bg-neutral-950 overflow-hidden">
+                <div className="relative h-48 w-full bg-[#0a0a0a] overflow-hidden">
                   {art.image ? (
                     <Image
                       src={art.image}
@@ -288,13 +289,13 @@ export default function DashboardNewsPage() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleOpenEditModal(art)}
-                    className="p-2 text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
+                    className="p-2 text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-sm transition-colors"
                   >
                     <Edit size={16} />
                   </button>
                   <button
                     onClick={() => setDeleteTargetId(art.id)}
-                    className="p-2 text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 rounded-lg transition-colors"
+                    className="p-2 text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 rounded-sm transition-colors"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -308,9 +309,9 @@ export default function DashboardNewsPage() {
       {/* Add / Edit Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-neutral-900 border border-white/10 rounded-3xl p-6 sm:p-8 max-w-2xl w-full space-y-6 my-8">
+          <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6 sm:p-8 max-w-2xl w-full space-y-6 my-8">
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <h2 className="text-xl font-michroma uppercase text-white flex items-center gap-2">
                 <Newspaper className="text-primary" size={22} />
                 {editingArticle ? "Edit News Article" : "Create New Article"}
               </h2>
@@ -332,7 +333,7 @@ export default function DashboardNewsPage() {
                   value={title}
                   onChange={(e) => handleTitleChange(e.target.value)}
                   placeholder="e.g. A1 Esports Crowned PMNC Bangladesh 2026 Champions"
-                  className="w-full px-4 py-3 bg-neutral-950 border border-white/10 rounded-xl text-white focus:outline-none focus:border-primary text-sm font-bold"
+                  className="w-full px-4 py-3 bg-[#0a0a0a] border border-white/10 rounded-sm text-white focus:outline-none focus:border-primary text-sm font-bold"
                   required
                 />
               </div>
@@ -347,7 +348,7 @@ export default function DashboardNewsPage() {
                     value={slug}
                     onChange={(e) => setSlug(e.target.value)}
                     placeholder="a1-esports-crowned-pmnc-2026"
-                    className="w-full px-4 py-2.5 bg-neutral-950 border border-white/10 rounded-xl text-neutral-300 focus:outline-none focus:border-primary"
+                    className="w-full px-4 py-2.5 bg-[#0a0a0a] border border-white/10 rounded-sm text-neutral-300 focus:outline-none focus:border-primary"
                   />
                 </div>
 
@@ -358,7 +359,7 @@ export default function DashboardNewsPage() {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value as any)}
-                    className="w-full px-4 py-2.5 bg-neutral-950 border border-white/10 rounded-xl text-white focus:outline-none focus:border-primary font-bold"
+                    className="w-full px-4 py-2.5 bg-[#0a0a0a] border border-white/10 rounded-sm text-white focus:outline-none focus:border-primary font-bold"
                   >
                     <option value="TOURNAMENT">TOURNAMENT</option>
                     <option value="ANNOUNCEMENT">ANNOUNCEMENT</option>
@@ -377,7 +378,7 @@ export default function DashboardNewsPage() {
                     type="text"
                     value={author}
                     onChange={(e) => setAuthor(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-neutral-950 border border-white/10 rounded-xl text-white focus:outline-none focus:border-primary"
+                    className="w-full px-4 py-2.5 bg-[#0a0a0a] border border-white/10 rounded-sm text-white focus:outline-none focus:border-primary"
                   />
                 </div>
 
@@ -390,35 +391,29 @@ export default function DashboardNewsPage() {
                     value={readTime}
                     onChange={(e) => setReadTime(e.target.value)}
                     placeholder="3 min read"
-                    className="w-full px-4 py-2.5 bg-neutral-950 border border-white/10 rounded-xl text-white focus:outline-none focus:border-primary"
+                    className="w-full px-4 py-2.5 bg-[#0a0a0a] border border-white/10 rounded-sm text-white focus:outline-none focus:border-primary"
                   />
                 </div>
               </div>
 
               {/* Image Upload */}
               <div>
-                <label className="block text-neutral-300 font-bold mb-1.5 uppercase tracking-wider">
-                  Cover Image
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-neutral-300 font-bold uppercase tracking-wider">
+                    Cover Image
+                  </label>
+                  <button type="button" onClick={() => setIsMediaPickerOpen(true)} className="text-[10px] text-primary font-bold uppercase hover:underline">
+                    Select Media
+                  </button>
+                </div>
                 <div className="flex items-center gap-3">
                   <input
                     type="text"
                     value={image}
                     onChange={(e) => setImage(e.target.value)}
-                    placeholder="Image URL or upload below..."
-                    className="flex-1 px-4 py-2.5 bg-neutral-950 border border-white/10 rounded-xl text-white focus:outline-none focus:border-primary text-xs"
+                    placeholder="Image URL..."
+                    className="flex-1 px-4 py-2.5 bg-[#0a0a0a] border border-white/10 rounded-sm text-white focus:outline-none focus:border-primary text-xs"
                   />
-                  <label className="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl cursor-pointer transition-colors shrink-0 flex items-center gap-2">
-                    <Upload size={14} />
-                    {uploadingImage ? "Uploading..." : "Upload File"}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      disabled={uploadingImage}
-                      className="hidden"
-                    />
-                  </label>
                 </div>
               </div>
 
@@ -431,7 +426,7 @@ export default function DashboardNewsPage() {
                   onChange={(e) => setSummary(e.target.value)}
                   rows={2}
                   placeholder="Brief 1-2 sentence teaser summary for news cards..."
-                  className="w-full px-4 py-2.5 bg-neutral-950 border border-white/10 rounded-xl text-white focus:outline-none focus:border-primary resize-none"
+                  className="w-full px-4 py-2.5 bg-[#0a0a0a] border border-white/10 rounded-sm text-white focus:outline-none focus:border-primary resize-none"
                 />
               </div>
 
@@ -444,7 +439,7 @@ export default function DashboardNewsPage() {
                   onChange={(e) => setContentRaw(e.target.value)}
                   rows={6}
                   placeholder="First paragraph...&#10;&#10;Second paragraph...&#10;&#10;Third paragraph..."
-                  className="w-full px-4 py-2.5 bg-neutral-950 border border-white/10 rounded-xl text-white focus:outline-none focus:border-primary font-mono text-xs leading-relaxed"
+                  className="w-full px-4 py-2.5 bg-[#0a0a0a] border border-white/10 rounded-sm text-white focus:outline-none focus:border-primary font-mono text-xs leading-relaxed"
                 />
               </div>
 
@@ -457,7 +452,7 @@ export default function DashboardNewsPage() {
                   value={tagsRaw}
                   onChange={(e) => setTagsRaw(e.target.value)}
                   placeholder="PUBGM, PMNC, Champions, Esports"
-                  className="w-full px-4 py-2.5 bg-neutral-950 border border-white/10 rounded-xl text-white focus:outline-none focus:border-primary"
+                  className="w-full px-4 py-2.5 bg-[#0a0a0a] border border-white/10 rounded-sm text-white focus:outline-none focus:border-primary"
                 />
               </div>
 
@@ -465,14 +460,14 @@ export default function DashboardNewsPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl transition-colors"
+                  className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white font-bold rounded-sm transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  disabled={saving || uploadingImage}
-                  className="px-6 py-2.5 bg-primary text-black font-bold uppercase tracking-widest rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50"
+                  disabled={saving}
+                  className="px-6 py-2.5 bg-primary text-black font-bold uppercase tracking-widest rounded-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
                 >
                   {saving ? "Saving..." : editingArticle ? "Update Article" : "Publish Article"}
                 </button>
@@ -481,6 +476,13 @@ export default function DashboardNewsPage() {
           </div>
         </div>
       )}
+
+      {/* Media Picker */}
+      <MediaPicker
+        open={isMediaPickerOpen}
+        onOpenChange={setIsMediaPickerOpen}
+        onSelect={(url) => setImage(url)}
+      />
 
       {/* Delete Confirmation Modal */}
       <ConfirmModal

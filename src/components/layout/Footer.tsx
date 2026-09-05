@@ -44,12 +44,12 @@ export function Footer() {
   }
 
   return (
-    <footer className="relative w-full bg-black border-t border-white/5 pt-12 sm:pt-24 pb-8 sm:pb-12 overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+    <footer className="relative w-full bg-[#0a0a0a] border-t border-neutral-800 pt-16 sm:pt-24 pb-8 sm:pb-12 overflow-hidden font-mono">
+      {/* Hardware Schematic Background */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,0,102,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,102,0.05)_1px,transparent_1px)] bg-[size:20px_20px] opacity-10 pointer-events-none" />
 
-      <div className="relative mx-auto max-w-7xl px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 lg:gap-8 mb-12 sm:mb-20">
+      <div className="relative mx-auto max-w-[1600px] px-4 md:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
           {/* Brand Column */}
           <div className="flex flex-col gap-8">
             <Link href="/" className="flex items-center gap-3">
@@ -62,24 +62,24 @@ export function Footer() {
                   sizes="48px"
                 />
               </div>
-              <span className="text-2xl font-black tracking-[0.2em] text-white">
+              <span className="text-2xl font-black tracking-widest text-white uppercase">
                 A1ESPORTS
               </span>
             </Link>
-            <p className="text-neutral-500 text-sm leading-relaxed max-w-xs">
-              South Asia's premier esports powerhouse. Redefining competitive gaming with passion, performance, and excellence since 2020.
+            <p className="text-neutral-400 text-xs leading-relaxed max-w-xs uppercase tracking-wider">
+              South Asia's premier esports powerhouse. Redefining competitive gaming with precision, performance, and excellence.
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               {socialLinks.map((social) => (
                 <Link
                   key={social.label}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="h-10 w-10 flex items-center justify-center rounded-full bg-white/5 text-neutral-400 hover:bg-primary hover:text-white transition-all duration-300"
+                  className="h-10 w-10 flex items-center justify-center bg-black border border-neutral-800 text-neutral-500 hover:border-primary/50 hover:text-primary transition-all duration-300 rounded-sm"
                   aria-label={social.label}
                 >
-                  <social.icon size={18} />
+                  <social.icon size={16} />
                 </Link>
               ))}
             </div>
@@ -87,13 +87,16 @@ export function Footer() {
 
           {/* Links Columns */}
           <div className="flex flex-col gap-6">
-            <h4 className="text-white font-bold uppercase tracking-widest text-sm">Company</h4>
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-primary rounded-sm" />
+              <h4 className="text-white font-bold uppercase tracking-widest text-xs">Organization</h4>
+            </div>
             <ul className="flex flex-col gap-4">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-neutral-500 hover:text-primary transition-colors text-sm flex items-center group">
-                    {link.name}
-                    <ArrowUpRight size={14} className="opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all ml-1" />
+                  <Link href={link.href} className="text-neutral-500 hover:text-primary transition-colors text-xs uppercase tracking-widest flex items-center group">
+                    <span className="group-hover:translate-x-1 transition-transform">{link.name}</span>
+                    <ArrowUpRight size={12} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-1 transition-all ml-1" />
                   </Link>
                 </li>
               ))}
@@ -101,13 +104,16 @@ export function Footer() {
           </div>
 
           <div className="flex flex-col gap-6">
-            <h4 className="text-white font-bold uppercase tracking-widest text-sm">Shop</h4>
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-primary rounded-sm" />
+              <h4 className="text-white font-bold uppercase tracking-widest text-xs">Commerce</h4>
+            </div>
             <ul className="flex flex-col gap-4">
               {footerLinks.shop.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-neutral-500 hover:text-primary transition-colors text-sm flex items-center group">
-                    {link.name}
-                    <ArrowUpRight size={14} className="opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all ml-1" />
+                  <Link href={link.href} className="text-neutral-500 hover:text-primary transition-colors text-xs uppercase tracking-widest flex items-center group">
+                    <span className="group-hover:translate-x-1 transition-transform">{link.name}</span>
+                    <ArrowUpRight size={12} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-1 transition-all ml-1" />
                   </Link>
                 </li>
               ))}
@@ -116,24 +122,27 @@ export function Footer() {
 
           {/* Contact Column */}
           <div className="flex flex-col gap-6">
-            <h4 className="text-white font-bold uppercase tracking-widest text-sm">Contact</h4>
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 bg-primary rounded-sm" />
+              <h4 className="text-white font-bold uppercase tracking-widest text-xs">Comms Link</h4>
+            </div>
             <ul className="flex flex-col gap-6">
-              <li className="flex gap-4">
-                <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-white/5 text-primary">
-                  <MapPin size={20} />
+              <li className="flex gap-4 items-start">
+                <div className="h-10 w-10 shrink-0 flex items-center justify-center bg-black border border-neutral-800 text-primary rounded-sm">
+                  <MapPin size={16} />
                 </div>
-                <div>
-                  <div className="text-white text-xs font-bold uppercase tracking-wider mb-1">Office</div>
-                  <p className="text-neutral-500 text-sm">Dhaka, Bangladesh</p>
+                <div className="pt-1">
+                  <div className="text-white text-[10px] font-bold uppercase tracking-widest mb-1">HQ Location</div>
+                  <p className="text-neutral-500 text-xs uppercase tracking-wider">Dhaka, Bangladesh</p>
                 </div>
               </li>
-              <li className="flex gap-4">
-                <div className="h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-white/5 text-primary">
-                  <Mail size={20} />
+              <li className="flex gap-4 items-start">
+                <div className="h-10 w-10 shrink-0 flex items-center justify-center bg-black border border-neutral-800 text-primary rounded-sm">
+                  <Mail size={16} />
                 </div>
-                <div>
-                  <div className="text-white text-xs font-bold uppercase tracking-wider mb-1">Email</div>
-                  <p className="text-neutral-500 text-sm">contact@a1esportsbd.com</p>
+                <div className="pt-1">
+                  <div className="text-white text-[10px] font-bold uppercase tracking-widest mb-1">Direct Line</div>
+                  <p className="text-neutral-500 text-xs tracking-wider">contact@a1esportsbd.com</p>
                 </div>
               </li>
             </ul>
@@ -141,17 +150,17 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-neutral-600 text-xs font-medium">
-            © {new Date().getFullYear()} A1 Esports. All rights reserved.
-          </p>
-          <p className="text-neutral-600 text-xs font-medium">
-            Developed by Zer0byte
+        <div className="pt-8 border-t border-neutral-800 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-neutral-600 text-[10px] font-bold uppercase tracking-widest">
+            © {new Date().getFullYear()} A1 ESPORTS. ALL RIGHTS RESERVED.
           </p>
           <div className="flex items-center gap-8">
-            <Link href="/privacy-policy" className="text-neutral-600 hover:text-neutral-400 text-xs transition-colors">Privacy Policy</Link>
-            <Link href="/terms-of-service" className="text-neutral-600 hover:text-neutral-400 text-xs transition-colors">Terms of Service</Link>
+            <Link href="/privacy-policy" className="text-neutral-600 hover:text-primary text-[10px] font-bold uppercase tracking-widest transition-colors">Privacy Policy</Link>
+            <Link href="/terms-of-service" className="text-neutral-600 hover:text-primary text-[10px] font-bold uppercase tracking-widest transition-colors">Terms of Service</Link>
           </div>
+          <p className="text-neutral-600 text-[10px] font-bold uppercase tracking-widest">
+            DEV: ZER0BYTE
+          </p>
         </div>
       </div>
     </footer>

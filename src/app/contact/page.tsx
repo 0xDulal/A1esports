@@ -31,7 +31,7 @@ export default function ContactPage() {
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block text-primary font-bold tracking-[0.3em] uppercase mb-4 text-sm italic"
+            className="inline-block text-primary font-bold tracking-[0.3em] uppercase mb-4 text-sm"
           >
             Get In Touch
           </motion.span>
@@ -39,9 +39,9 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl font-black uppercase tracking-tighter"
+            className="text-6xl md:text-8xl font-michroma uppercase tracking-tighter"
           >
-            Contact<span className="text-primary italic">.</span>
+            Contact<span className="text-primary">.</span>
           </motion.h1>
         </div>
         <GlowBar position="bottom" />
@@ -52,8 +52,8 @@ export default function ContactPage() {
           {/* Left Side Info */}
           <div className="lg:col-span-5 space-y-8">
             <div className="space-y-4">
-              <span className="text-primary font-black uppercase text-xs tracking-[0.3em] italic">Reach Out</span>
-              <h2 className="text-4xl font-black uppercase tracking-tighter leading-tight">
+              <span className="text-primary font-black uppercase text-xs tracking-[0.3em]">Reach Out</span>
+              <h2 className="text-4xl font-michroma uppercase tracking-tighter leading-tight">
                 Let's Build Something Extraordinary Together
               </h2>
               <p className="text-neutral-400 text-sm leading-relaxed">
@@ -62,8 +62,8 @@ export default function ContactPage() {
             </div>
 
             <div className="space-y-6 pt-4">
-              <div className="flex gap-4 items-start bg-neutral-900/50 border border-white/5 p-6 rounded-2xl">
-                <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+              <div className="flex gap-4 items-start bg-[#0a0a0a] border border-white/5 p-6 rounded-sm">
+                <div className="h-12 w-12 rounded-sm bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
                   <MapPin size={22} />
                 </div>
                 <div>
@@ -73,8 +73,8 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div className="flex gap-4 items-start bg-neutral-900/50 border border-white/5 p-6 rounded-2xl">
-                <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+              <div className="flex gap-4 items-start bg-[#0a0a0a] border border-white/5 p-6 rounded-sm">
+                <div className="h-12 w-12 rounded-sm bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
                   <Mail size={22} />
                 </div>
                 <div>
@@ -100,7 +100,7 @@ export default function ContactPage() {
                     href={social.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="h-12 w-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 hover:text-white hover:bg-primary transition-all duration-300"
+                    className="h-12 w-12 rounded-sm bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 hover:text-white hover:bg-primary transition-all duration-300"
                   >
                     <social.icon size={20} />
                   </a>
@@ -111,15 +111,15 @@ export default function ContactPage() {
 
           {/* Right Side Form */}
           <div className="lg:col-span-7">
-            <div className="bg-neutral-900/60 border border-white/10 rounded-3xl p-8 md:p-12 space-y-6 backdrop-blur-xl">
-              <h3 className="text-2xl font-black uppercase tracking-tight flex items-center gap-3">
+            <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-8 md:p-12 space-y-6 backdrop-blur-xl">
+              <h3 className="text-2xl font-michroma uppercase tracking-tight flex items-center gap-3">
                 <MessageSquare className="text-primary" size={24} /> Send Us a Message
               </h3>
 
               {submitted ? (
-                <div className="bg-primary/10 border border-primary/20 rounded-2xl p-8 text-center space-y-4 my-8">
+                <div className="bg-primary/10 border border-primary/20 rounded-sm p-8 text-center space-y-4 my-8">
                   <CheckCircle2 size={48} className="text-primary mx-auto animate-bounce" />
-                  <h4 className="text-2xl font-black uppercase tracking-tight">Message Received!</h4>
+                  <h4 className="text-2xl font-michroma uppercase tracking-tight">Message Received!</h4>
                   <p className="text-neutral-300 text-sm max-w-sm mx-auto">
                     Thank you for reaching out to A1 Esports. Our team will get back to you within 24 hours.
                   </p>
@@ -143,7 +143,7 @@ export default function ContactPage() {
                         placeholder="John Doe"
                         value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
+                        className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
                       />
                     </div>
 
@@ -157,7 +157,7 @@ export default function ContactPage() {
                         placeholder="john@example.com"
                         value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
+                        className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
                       />
                     </div>
                   </div>
@@ -169,7 +169,7 @@ export default function ContactPage() {
                     <select
                       value={form.subject}
                       onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                      className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                      className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
                     >
                       <option value="Business / Sponsorship">Business & Sponsorship</option>
                       <option value="Merchandise / Order">Merchandise Order Question</option>
@@ -189,7 +189,7 @@ export default function ContactPage() {
                       placeholder="Write your message details here..."
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors resize-none"
+                      className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors resize-none"
                     />
                   </div>
 

@@ -373,9 +373,9 @@ export default function AdminMediaLibrary() {
   return (
     <div className="space-y-8">
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-neutral-900 via-neutral-900/90 to-primary/10 border border-white/10 rounded-3xl p-6 backdrop-blur-xl shadow-2xl">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-neutral-900 via-neutral-900/90 to-primary/10 border border-white/10 rounded-sm p-6 backdrop-blur-xl shadow-2xl">
         <div className="flex items-center gap-4">
-          <div className="h-14 w-14 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-[0_0_30px_rgba(255,0,102,0.25)]">
+          <div className="h-14 w-14 rounded-sm bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-[0_0_30px_rgba(255,0,102,0.25)]">
             <ImageIcon size={30} />
           </div>
           <div>
@@ -392,14 +392,14 @@ export default function AdminMediaLibrary() {
           <button
             onClick={fetchMedia}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2.5 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition-all text-xs uppercase tracking-wider border border-white/10"
+            className="flex items-center gap-2 px-4 py-2.5 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-all text-xs uppercase tracking-wider border border-white/10"
           >
             <RefreshCw size={16} className={loading ? "animate-spin" : ""} /> Refresh Assets
           </button>
 
           <button
             onClick={() => setIsUploadOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition-all text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(255,0,102,0.35)]"
+            className="flex items-center gap-2 px-5 py-2.5 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-all text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(255,0,102,0.35)]"
           >
             <Upload size={16} /> Upload Media
           </button>
@@ -408,9 +408,9 @@ export default function AdminMediaLibrary() {
 
       {/* Optimization Banner Notice if unoptimized images exist */}
       {stats.unoptimizedCount > 0 && (
-        <div className="bg-gradient-to-r from-purple-900/40 via-neutral-900 to-primary/20 border border-purple-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-xl">
+        <div className="bg-gradient-to-r from-purple-900/40 via-neutral-900 to-primary/20 border border-purple-500/30 rounded-sm p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-xl">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shrink-0">
+            <div className="h-10 w-10 rounded-sm bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shrink-0">
               <Zap size={20} className="animate-pulse" />
             </div>
             <div>
@@ -426,7 +426,7 @@ export default function AdminMediaLibrary() {
           <div className="flex items-center gap-2">
             <button
               onClick={handleSelectAllUncompressed}
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors shrink-0 shadow-[0_0_15px_rgba(147,51,234,0.3)]"
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-sm text-xs uppercase tracking-wider transition-colors shrink-0 shadow-[0_0_15px_rgba(147,51,234,0.3)]"
             >
               ⚡ Select {stats.unoptimizedCount} Large Assets
             </button>
@@ -435,56 +435,56 @@ export default function AdminMediaLibrary() {
       )}
 
       {optMessage && (
-        <div className="p-4 bg-primary/10 border border-primary/30 rounded-2xl text-xs font-bold text-primary flex items-center gap-3 animate-pulse">
+        <div className="p-4 bg-primary/10 border border-primary/30 rounded-sm text-xs font-bold text-primary flex items-center gap-3 animate-pulse">
           <RefreshCw size={16} className="animate-spin" /> {optMessage}
         </div>
       )}
 
       {/* Quick Statistics Bar */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-neutral-900/80 border border-white/10 hover:border-primary/40 transition-all rounded-2xl p-5 flex items-center justify-between backdrop-blur-xl shadow-xl">
+        <div className="bg-[#0a0a0a]/80 border border-white/10 hover:border-primary/40 transition-all rounded-sm p-5 flex items-center justify-between backdrop-blur-xl shadow-xl">
           <div>
             <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Total Assets</span>
             <span className="text-2xl font-black text-white mt-1 block">{stats.totalFiles}</span>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-primary">
+          <div className="h-10 w-10 rounded-sm bg-white/5 border border-white/10 flex items-center justify-center text-primary">
             <ImageIcon size={20} />
           </div>
         </div>
 
-        <div className="bg-neutral-900/80 border border-white/10 hover:border-purple-500/40 transition-all rounded-2xl p-5 flex items-center justify-between backdrop-blur-xl shadow-xl">
+        <div className="bg-[#0a0a0a]/80 border border-white/10 hover:border-purple-500/40 transition-all rounded-sm p-5 flex items-center justify-between backdrop-blur-xl shadow-xl">
           <div>
             <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Storage Used</span>
             <span className="text-2xl font-black text-white mt-1 block font-mono">{stats.formattedSize}</span>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+          <div className="h-10 w-10 rounded-sm bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
             <HardDrive size={20} />
           </div>
         </div>
 
-        <div className="bg-neutral-900/80 border border-white/10 hover:border-green-500/40 transition-all rounded-2xl p-5 flex items-center justify-between backdrop-blur-xl shadow-xl">
+        <div className="bg-[#0a0a0a]/80 border border-white/10 hover:border-green-500/40 transition-all rounded-sm p-5 flex items-center justify-between backdrop-blur-xl shadow-xl">
           <div>
             <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">In Use Assets</span>
             <span className="text-2xl font-black text-green-400 mt-1 block">{stats.usedCount}</span>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400">
+          <div className="h-10 w-10 rounded-sm bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400">
             <Check size={20} />
           </div>
         </div>
 
-        <div className="bg-neutral-900/80 border border-white/10 hover:border-yellow-500/40 transition-all rounded-2xl p-5 flex items-center justify-between backdrop-blur-xl shadow-xl">
+        <div className="bg-[#0a0a0a]/80 border border-white/10 hover:border-yellow-500/40 transition-all rounded-sm p-5 flex items-center justify-between backdrop-blur-xl shadow-xl">
           <div>
             <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Unused Assets</span>
             <span className="text-2xl font-black text-yellow-400 mt-1 block">{stats.unusedCount}</span>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-400">
+          <div className="h-10 w-10 rounded-sm bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-400">
             <AlertCircle size={20} />
           </div>
         </div>
       </div>
 
       {/* Toolbar: Search, Status Filters, View Mode, Selection Controls */}
-      <div className="bg-neutral-900/90 border border-white/10 rounded-3xl p-5 space-y-4 backdrop-blur-xl shadow-2xl">
+      <div className="bg-[#0a0a0a]/90 border border-white/10 rounded-sm p-5 space-y-4 backdrop-blur-xl shadow-2xl">
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
           {/* Search Box */}
           <div className="relative flex-1 max-w-md">
@@ -494,16 +494,16 @@ export default function AdminMediaLibrary() {
               placeholder="Search by file name or path..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-neutral-800/80 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-primary transition-colors"
+              className="w-full bg-neutral-800/80 border border-white/10 rounded-sm pl-10 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-primary transition-colors"
             />
           </div>
 
           {/* Status Tabs & View Modes */}
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center bg-neutral-800/90 p-1 rounded-xl border border-white/10">
+            <div className="flex items-center bg-neutral-800/90 p-1 rounded-sm border border-white/10">
               <button
                 onClick={() => setStatusFilter("all")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all ${
+                className={`px-3 py-1.5 rounded-sm text-xs font-bold uppercase transition-all ${
                   statusFilter === "all" ? "bg-primary text-black shadow" : "text-neutral-400 hover:text-white"
                 }`}
               >
@@ -511,7 +511,7 @@ export default function AdminMediaLibrary() {
               </button>
               <button
                 onClick={() => setStatusFilter("used")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all ${
+                className={`px-3 py-1.5 rounded-sm text-xs font-bold uppercase transition-all ${
                   statusFilter === "used" ? "bg-green-500 text-black shadow" : "text-neutral-400 hover:text-white"
                 }`}
               >
@@ -519,7 +519,7 @@ export default function AdminMediaLibrary() {
               </button>
               <button
                 onClick={() => setStatusFilter("unused")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all ${
+                className={`px-3 py-1.5 rounded-sm text-xs font-bold uppercase transition-all ${
                   statusFilter === "unused" ? "bg-yellow-500 text-black shadow" : "text-neutral-400 hover:text-white"
                 }`}
               >
@@ -527,7 +527,7 @@ export default function AdminMediaLibrary() {
               </button>
               <button
                 onClick={() => setStatusFilter("unoptimized")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all ${
+                className={`px-3 py-1.5 rounded-sm text-xs font-bold uppercase transition-all ${
                   statusFilter === "unoptimized" ? "bg-purple-600 text-white shadow" : "text-neutral-400 hover:text-white"
                 }`}
               >
@@ -535,10 +535,10 @@ export default function AdminMediaLibrary() {
               </button>
             </div>
 
-            <div className="flex items-center bg-neutral-800/90 p-1 rounded-xl border border-white/10">
+            <div className="flex items-center bg-neutral-800/90 p-1 rounded-sm border border-white/10">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`p-1.5 rounded-lg transition-colors ${
+                className={`p-1.5 rounded-sm transition-colors ${
                   viewMode === "grid" ? "bg-white/20 text-white" : "text-neutral-400 hover:text-white"
                 }`}
                 title="Grid View"
@@ -547,7 +547,7 @@ export default function AdminMediaLibrary() {
               </button>
               <button
                 onClick={() => setViewMode("list")}
-                className={`p-1.5 rounded-lg transition-colors ${
+                className={`p-1.5 rounded-sm transition-colors ${
                   viewMode === "list" ? "bg-white/20 text-white" : "text-neutral-400 hover:text-white"
                 }`}
                 title="List Table View"
@@ -597,9 +597,9 @@ export default function AdminMediaLibrary() {
 
       {/* Floating Action Bar when items are selected */}
       {selectedPaths.size > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-neutral-900/95 border border-white/20 p-4 rounded-2xl shadow-2xl backdrop-blur-2xl flex items-center justify-between gap-6 animate-in slide-in-from-bottom-4">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#0a0a0a]/95 border border-white/20 p-4 rounded-sm shadow-2xl backdrop-blur-2xl flex items-center justify-between gap-6 animate-in slide-in-from-bottom-4">
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-black text-xs">
+            <div className="h-8 w-8 rounded-sm bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-black text-xs">
               {selectedPaths.size}
             </div>
             <div>
@@ -612,7 +612,7 @@ export default function AdminMediaLibrary() {
             <button
               onClick={handleBulkCompress}
               disabled={optimizing}
-              className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-xl transition-all uppercase text-xs tracking-wider shadow-[0_0_20px_rgba(147,51,234,0.4)] disabled:opacity-50"
+              className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-sm transition-all uppercase text-xs tracking-wider shadow-[0_0_20px_rgba(147,51,234,0.4)] disabled:opacity-50"
             >
               <Zap size={15} className={optimizing ? "animate-spin" : ""} />
               Bulk Compress ({selectedPaths.size})
@@ -621,7 +621,7 @@ export default function AdminMediaLibrary() {
             <button
               onClick={() => setDeleteBulkOpen(true)}
               disabled={deleting}
-              className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl transition-all uppercase text-xs tracking-wider shadow-[0_0_20px_rgba(239,68,68,0.3)] disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-sm transition-all uppercase text-xs tracking-wider shadow-[0_0_20px_rgba(239,68,68,0.3)] disabled:opacity-50"
             >
               <Trash2 size={15} /> Delete ({selectedPaths.size})
             </button>
@@ -639,7 +639,7 @@ export default function AdminMediaLibrary() {
           Scanning Supabase Storage bucket...
         </div>
       ) : filteredMedia.length === 0 ? (
-        <div className="p-16 text-center text-neutral-400 bg-neutral-900 border border-white/10 rounded-2xl flex flex-col items-center gap-3">
+        <div className="p-16 text-center text-neutral-400 bg-[#0a0a0a] border border-white/10 rounded-sm flex flex-col items-center gap-3">
           <ImageIcon size={48} className="text-neutral-600" />
           <p className="font-bold text-lg text-white">No Storage Media Found</p>
           <p className="text-sm text-neutral-500 max-w-sm">
@@ -658,7 +658,7 @@ export default function AdminMediaLibrary() {
             return (
               <div
                 key={item.path}
-                className={`group relative bg-neutral-900 border rounded-2xl overflow-hidden transition-all flex flex-col justify-between ${
+                className={`group relative bg-[#0a0a0a] border rounded-sm overflow-hidden transition-all flex flex-col justify-between ${
                   isSelected
                     ? "border-primary ring-2 ring-primary/40 bg-primary/5"
                     : "border-white/10 hover:border-white/30"
@@ -668,7 +668,7 @@ export default function AdminMediaLibrary() {
                 <button
                   type="button"
                   onClick={() => toggleSelect(item.path)}
-                  className="absolute top-2.5 left-2.5 z-20 p-1 bg-black/60 backdrop-blur-md rounded-lg text-white hover:bg-black/90 transition-colors"
+                  className="absolute top-2.5 left-2.5 z-20 p-1 bg-black/60 backdrop-blur-md rounded-sm text-white hover:bg-black/90 transition-colors"
                 >
                   {isSelected ? (
                     <CheckSquare size={16} className="text-primary" />
@@ -704,7 +704,7 @@ export default function AdminMediaLibrary() {
                 </div>
 
                 {/* Thumbnail Container */}
-                <div className="relative aspect-square w-full bg-neutral-950 overflow-hidden flex items-center justify-center">
+                <div className="relative aspect-square w-full bg-[#0a0a0a] overflow-hidden flex items-center justify-center">
                   <Image
                     src={item.url}
                     alt={item.name}
@@ -717,7 +717,7 @@ export default function AdminMediaLibrary() {
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5 z-10">
                     <button
                       onClick={() => setPreviewMedia(item)}
-                      className="p-2 bg-white/20 hover:bg-white/40 text-white rounded-xl backdrop-blur-md transition-colors"
+                      className="p-2 bg-white/20 hover:bg-white/40 text-white rounded-sm backdrop-blur-md transition-colors"
                       title="Preview Details"
                     >
                       <Eye size={15} />
@@ -726,7 +726,7 @@ export default function AdminMediaLibrary() {
                     <button
                       onClick={() => handleOptimizeSingle(item)}
                       disabled={optimizing}
-                      className="p-2 bg-purple-600/80 hover:bg-purple-600 text-white rounded-xl backdrop-blur-md transition-colors"
+                      className="p-2 bg-purple-600/80 hover:bg-purple-600 text-white rounded-sm backdrop-blur-md transition-colors"
                       title="Compress & Convert to WebP"
                     >
                       <Zap size={15} />
@@ -734,7 +734,7 @@ export default function AdminMediaLibrary() {
 
                     <button
                       onClick={() => handleCopyUrl(item.url, item.path)}
-                      className="p-2 bg-white/20 hover:bg-white/40 text-white rounded-xl backdrop-blur-md transition-colors"
+                      className="p-2 bg-white/20 hover:bg-white/40 text-white rounded-sm backdrop-blur-md transition-colors"
                       title="Copy Public URL"
                     >
                       {copiedPath === item.path ? <Check size={15} className="text-green-400" /> : <Copy size={15} />}
@@ -742,7 +742,7 @@ export default function AdminMediaLibrary() {
 
                     <button
                       onClick={() => setDeleteSingleItem(item)}
-                      className="p-2 bg-red-600/80 hover:bg-red-600 text-white rounded-xl backdrop-blur-md transition-colors"
+                      className="p-2 bg-red-600/80 hover:bg-red-600 text-white rounded-sm backdrop-blur-md transition-colors"
                       title="Delete Image"
                     >
                       <Trash2 size={15} />
@@ -751,7 +751,7 @@ export default function AdminMediaLibrary() {
                 </div>
 
                 {/* Footer Info */}
-                <div className="p-3 bg-neutral-900 border-t border-white/5 space-y-1">
+                <div className="p-3 bg-[#0a0a0a] border-t border-white/5 space-y-1">
                   <p className="text-xs font-bold text-white truncate" title={item.name}>
                     {item.name}
                   </p>
@@ -776,7 +776,7 @@ export default function AdminMediaLibrary() {
         </div>
       ) : (
         /* LIST TABLE VIEW */
-        <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden">
+        <div className="bg-[#0a0a0a] border border-white/10 rounded-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[750px]">
               <thead className="bg-white/5 text-xs text-neutral-400 uppercase">
@@ -815,7 +815,7 @@ export default function AdminMediaLibrary() {
                       </td>
 
                       <td className="p-4">
-                        <div className="relative h-12 w-12 rounded-lg overflow-hidden bg-neutral-950 border border-white/10">
+                        <div className="relative h-12 w-12 rounded-sm overflow-hidden bg-[#0a0a0a] border border-white/10">
                           <Image src={item.url} alt={item.name} fill className="object-cover" />
                         </div>
                       </td>
@@ -865,7 +865,7 @@ export default function AdminMediaLibrary() {
                           <button
                             onClick={() => handleOptimizeSingle(item)}
                             disabled={optimizing}
-                            className="p-2 hover:bg-purple-500/20 text-purple-400 rounded-lg transition-colors"
+                            className="p-2 hover:bg-purple-500/20 text-purple-400 rounded-sm transition-colors"
                             title="Compress & Convert to WebP"
                           >
                             <Zap size={14} />
@@ -873,7 +873,7 @@ export default function AdminMediaLibrary() {
 
                           <button
                             onClick={() => handleCopyUrl(item.url, item.path)}
-                            className="p-2 hover:bg-white/10 text-white rounded-lg transition-colors"
+                            className="p-2 hover:bg-white/10 text-white rounded-sm transition-colors"
                             title="Copy Link"
                           >
                             {copiedPath === item.path ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
@@ -883,7 +883,7 @@ export default function AdminMediaLibrary() {
                             href={item.url}
                             target="_blank"
                             rel="noreferrer"
-                            className="p-2 hover:bg-white/10 text-white rounded-lg transition-colors"
+                            className="p-2 hover:bg-white/10 text-white rounded-sm transition-colors"
                             title="Open Link"
                           >
                             <ExternalLink size={14} />
@@ -891,7 +891,7 @@ export default function AdminMediaLibrary() {
 
                           <button
                             onClick={() => setDeleteSingleItem(item)}
-                            className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
+                            className="p-2 hover:bg-red-500/20 text-red-500 rounded-sm transition-colors"
                             title="Delete File"
                           >
                             <Trash2 size={14} />
@@ -910,17 +910,17 @@ export default function AdminMediaLibrary() {
       {/* --- PREVIEW MODAL --- */}
       {previewMedia && (
         <Dialog open={!!previewMedia} onOpenChange={() => setPreviewMedia(null)}>
-          <DialogContent className="bg-neutral-900 border-white/10 text-white max-w-xl">
+          <DialogContent className="bg-[#0a0a0a] border-white/10 text-white max-w-xl">
             <DialogHeader>
               <DialogTitle className="text-lg font-bold truncate pr-6">{previewMedia.name}</DialogTitle>
             </DialogHeader>
 
             <div className="space-y-4 pt-2">
-              <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-black border border-white/10 flex items-center justify-center">
+              <div className="relative aspect-video w-full rounded-sm overflow-hidden bg-black border border-white/10 flex items-center justify-center">
                 <Image src={previewMedia.url} alt={previewMedia.name} fill className="object-contain" />
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-xs bg-neutral-950 p-4 rounded-xl border border-white/5 font-mono">
+              <div className="grid grid-cols-2 gap-4 text-xs bg-[#0a0a0a] p-4 rounded-sm border border-white/5 font-mono">
                 <div>
                   <span className="text-neutral-400 block uppercase font-bold text-[10px]">Storage Path</span>
                   <span className="text-white font-bold truncate block">{previewMedia.path}</span>
@@ -947,7 +947,7 @@ export default function AdminMediaLibrary() {
               </div>
 
               {previewMedia.is_used && (
-                <div className="bg-green-500/10 border border-green-500/20 p-3 rounded-xl text-xs space-y-1">
+                <div className="bg-green-500/10 border border-green-500/20 p-3 rounded-sm text-xs space-y-1">
                   <span className="font-bold text-green-400 block uppercase tracking-wider text-[10px]">
                     Linked Entities:
                   </span>
@@ -963,7 +963,7 @@ export default function AdminMediaLibrary() {
                 <button
                   onClick={() => handleOptimizeSingle(previewMedia)}
                   disabled={optimizing}
-                  className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-sm text-xs uppercase tracking-wider transition-colors"
                 >
                   <Zap size={14} /> Optimize to WebP
                 </button>
@@ -973,11 +973,11 @@ export default function AdminMediaLibrary() {
                     type="text"
                     readOnly
                     value={previewMedia.url}
-                    className="flex-1 bg-neutral-950 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none"
+                    className="flex-1 bg-[#0a0a0a] border border-white/10 rounded-sm px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none"
                   />
                   <button
                     onClick={() => handleCopyUrl(previewMedia.url, previewMedia.path)}
-                    className="px-4 py-2 bg-primary text-black font-bold rounded-xl text-xs uppercase tracking-wider hover:bg-primary/90 transition-colors shrink-0"
+                    className="px-4 py-2 bg-primary text-black font-bold rounded-sm text-xs uppercase tracking-wider hover:bg-primary/90 transition-colors shrink-0"
                   >
                     Copy URL
                   </button>
@@ -991,13 +991,13 @@ export default function AdminMediaLibrary() {
       {/* --- UPLOAD MODAL --- */}
       {isUploadOpen && (
         <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
-          <DialogContent className="bg-neutral-900 border-white/10 text-white max-w-md">
+          <DialogContent className="bg-[#0a0a0a] border-white/10 text-white max-w-md">
             <DialogHeader>
-              <DialogTitle className="text-xl font-bold uppercase">Upload New Media Asset</DialogTitle>
+              <DialogTitle className="text-xl font-michroma uppercase uppercase">Upload New Media Asset</DialogTitle>
             </DialogHeader>
 
             <div className="space-y-4 pt-4 text-center">
-              <div className="border-2 border-dashed border-white/20 hover:border-primary/50 rounded-2xl p-8 transition-colors flex flex-col items-center justify-center gap-3 bg-neutral-950">
+              <div className="border-2 border-dashed border-white/20 hover:border-primary/50 rounded-sm p-8 transition-colors flex flex-col items-center justify-center gap-3 bg-[#0a0a0a]">
                 <Upload size={40} className="text-neutral-500" />
                 <div className="space-y-1">
                   <p className="text-sm font-bold text-white">Select image from your device</p>
@@ -1011,7 +1011,7 @@ export default function AdminMediaLibrary() {
                   accept="image/*"
                   onChange={handleUploadFile}
                   disabled={uploading}
-                  className="w-full text-xs text-neutral-400 file:mr-3 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-primary file:text-black hover:file:bg-primary/90 cursor-pointer mt-2"
+                  className="w-full text-xs text-neutral-400 file:mr-3 file:py-2.5 file:px-5 file:rounded-sm file:border-0 file:text-xs file:font-black file:bg-primary file:text-black hover:file:bg-primary/90 cursor-pointer mt-2"
                 />
 
                 {uploading && (

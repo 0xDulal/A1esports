@@ -191,12 +191,12 @@ export default function AdminSettings() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Store Settings</h1>
+          <h1 className="text-3xl font-michroma uppercase mb-2">Store Settings</h1>
           <p className="text-neutral-400">Configure delivery charges, payment options, and store preferences</p>
         </div>
         <button
           onClick={fetchSettings}
-          className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-colors"
         >
           <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
           Refresh
@@ -204,9 +204,9 @@ export default function AdminSettings() {
       </div>
 
       {/* Appearance Settings Box */}
-      <form onSubmit={handleSaveAppearance} className="bg-neutral-900 border border-white/10 rounded-2xl p-6 space-y-6">
+      <form onSubmit={handleSaveAppearance} className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold flex items-center gap-2">
+          <h2 className="text-xl font-michroma uppercase flex items-center gap-2">
             <Edit2 size={20} className="text-primary" /> Appearance Settings
           </h2>
           {appearanceSaved && (
@@ -233,7 +233,7 @@ export default function AdminSettings() {
                 value={primaryColor}
                 onChange={(e) => setPrimaryColor(e.target.value)}
                 placeholder="#000000"
-                className="flex-1 px-4 py-2.5 bg-neutral-800 border border-white/10 rounded-xl focus:outline-none focus:border-primary text-white font-bold"
+                className="flex-1 px-4 py-2.5 bg-neutral-800 border border-white/10 rounded-sm focus:outline-none focus:border-primary text-white font-bold"
               />
             </div>
           </div>
@@ -253,7 +253,7 @@ export default function AdminSettings() {
                 value={secondaryColor}
                 onChange={(e) => setSecondaryColor(e.target.value)}
                 placeholder="#000000"
-                className="flex-1 px-4 py-2.5 bg-neutral-800 border border-white/10 rounded-xl focus:outline-none focus:border-primary text-white font-bold"
+                className="flex-1 px-4 py-2.5 bg-neutral-800 border border-white/10 rounded-sm focus:outline-none focus:border-primary text-white font-bold"
               />
             </div>
           </div>
@@ -263,7 +263,7 @@ export default function AdminSettings() {
           <button
             type="submit"
             disabled={savingAppearance}
-            className="px-6 py-2.5 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition-colors uppercase text-xs tracking-wider disabled:opacity-50"
+            className="px-6 py-2.5 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-colors uppercase text-xs tracking-wider disabled:opacity-50"
           >
             {savingAppearance ? "Saving..." : "Save Appearance"}
           </button>
@@ -271,9 +271,9 @@ export default function AdminSettings() {
       </form>
 
       {/* Delivery Charges Settings Box */}
-      <form onSubmit={handleSaveDelivery} className="bg-neutral-900 border border-white/10 rounded-2xl p-6 space-y-6">
+      <form onSubmit={handleSaveDelivery} className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold flex items-center gap-2">
+          <h2 className="text-xl font-michroma uppercase flex items-center gap-2">
             <Truck size={20} className="text-primary" /> Delivery Charges Configuration
           </h2>
           {deliverySaved && (
@@ -293,7 +293,7 @@ export default function AdminSettings() {
               required
               value={delivery.inside_dhaka}
               onChange={(e) => setDelivery({ ...delivery, inside_dhaka: Number(e.target.value) })}
-              className="w-full px-4 py-2.5 bg-neutral-800 border border-white/10 rounded-xl focus:outline-none focus:border-primary text-white font-bold"
+              className="w-full px-4 py-2.5 bg-neutral-800 border border-white/10 rounded-sm focus:outline-none focus:border-primary text-white font-bold"
             />
           </div>
 
@@ -306,7 +306,7 @@ export default function AdminSettings() {
               required
               value={delivery.outside_dhaka}
               onChange={(e) => setDelivery({ ...delivery, outside_dhaka: Number(e.target.value) })}
-              className="w-full px-4 py-2.5 bg-neutral-800 border border-white/10 rounded-xl focus:outline-none focus:border-primary text-white font-bold"
+              className="w-full px-4 py-2.5 bg-neutral-800 border border-white/10 rounded-sm focus:outline-none focus:border-primary text-white font-bold"
             />
           </div>
         </div>
@@ -315,7 +315,7 @@ export default function AdminSettings() {
           <button
             type="submit"
             disabled={savingDelivery}
-            className="px-6 py-2.5 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition-colors uppercase text-xs tracking-wider disabled:opacity-50"
+            className="px-6 py-2.5 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-colors uppercase text-xs tracking-wider disabled:opacity-50"
           >
             {savingDelivery ? "Saving Charges..." : "Save Delivery Fees"}
           </button>
@@ -323,17 +323,17 @@ export default function AdminSettings() {
       </form>
 
       {/* Payment Methods Management Section */}
-      <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 space-y-6">
+      <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold flex items-center gap-2">
+            <h2 className="text-xl font-michroma uppercase flex items-center gap-2">
               <CreditCard size={20} className="text-primary" /> Payment Methods Manager
             </h2>
             <p className="text-xs text-neutral-400 mt-1">Enable/disable payment methods or update account numbers & instructions</p>
           </div>
           <button
             onClick={() => setIsAddPmOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-black rounded-lg hover:bg-primary/90 transition-colors uppercase tracking-wider text-xs"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-colors uppercase tracking-wider text-xs"
           >
             <Plus size={16} /> Add Payment Method
           </button>
@@ -343,10 +343,10 @@ export default function AdminSettings() {
           {paymentMethods.map((pm) => (
             <div
               key={pm.id}
-              className={`p-5 rounded-2xl border transition-all ${
+              className={`p-5 rounded-sm border transition-all ${
                 pm.is_active
                   ? "bg-neutral-800/80 border-white/10"
-                  : "bg-neutral-950/60 border-white/5 opacity-60"
+                  : "bg-[#0a0a0a]/60 border-white/5 opacity-60"
               }`}
             >
               <div className="flex items-center justify-between mb-3">
@@ -369,7 +369,7 @@ export default function AdminSettings() {
                   </button>
                   <button
                     onClick={() => setDeletePmId(pm.id)}
-                    className="p-1.5 text-neutral-500 hover:text-red-400 rounded-lg"
+                    className="p-1.5 text-neutral-500 hover:text-red-400 rounded-sm"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -387,7 +387,7 @@ export default function AdminSettings() {
                       defaultValue={pm.account_number}
                       onBlur={(e) => handleUpdatePm(pm.id, e.target.value, pm.instructions)}
                       placeholder="01700000000"
-                      className="w-full bg-neutral-900 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-primary"
+                      className="w-full bg-[#0a0a0a] border border-white/10 rounded-sm px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-primary"
                     />
                   </div>
                   <div>
@@ -399,7 +399,7 @@ export default function AdminSettings() {
                       defaultValue={pm.instructions}
                       onBlur={(e) => handleUpdatePm(pm.id, pm.account_number, e.target.value)}
                       placeholder="e.g. Send Money (Personal)"
-                      className="w-full bg-neutral-900 border border-white/10 rounded-lg px-3 py-1.5 text-xs text-neutral-300 focus:outline-none focus:border-primary"
+                      className="w-full bg-[#0a0a0a] border border-white/10 rounded-sm px-3 py-1.5 text-xs text-neutral-300 focus:outline-none focus:border-primary"
                     />
                   </div>
                 </div>
@@ -411,9 +411,9 @@ export default function AdminSettings() {
 
       {/* Add Payment Method Modal */}
       <Dialog open={isAddPmOpen} onOpenChange={setIsAddPmOpen}>
-        <DialogContent className="bg-neutral-900 border-white/10 text-white max-w-md">
+        <DialogContent className="bg-[#0a0a0a] border-white/10 text-white max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold uppercase">Add Payment Method</DialogTitle>
+            <DialogTitle className="text-xl font-michroma uppercase uppercase">Add Payment Method</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleAddPm} className="space-y-4 pt-2">
@@ -427,7 +427,7 @@ export default function AdminSettings() {
                 placeholder="e.g. Upay, CellFin, Rocket"
                 value={newPm.name}
                 onChange={(e) => setNewPm({ ...newPm, name: e.target.value })}
-                className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
               />
             </div>
 
@@ -438,7 +438,7 @@ export default function AdminSettings() {
               <select
                 value={newPm.type}
                 onChange={(e) => setNewPm({ ...newPm, type: e.target.value as any })}
-                className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
               >
                 <option value="digital">Mobile Transfer / Digital</option>
                 <option value="cod">Cash on Delivery</option>
@@ -456,7 +456,7 @@ export default function AdminSettings() {
                     placeholder="01700000000"
                     value={newPm.account_number}
                     onChange={(e) => setNewPm({ ...newPm, account_number: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white font-mono"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white font-mono"
                   />
                 </div>
 
@@ -469,7 +469,7 @@ export default function AdminSettings() {
                     placeholder="Send Money (Personal) to..."
                     value={newPm.instructions}
                     onChange={(e) => setNewPm({ ...newPm, instructions: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
                   />
                 </div>
               </>
@@ -479,13 +479,13 @@ export default function AdminSettings() {
               <button
                 type="button"
                 onClick={() => setIsAddPmOpen(false)}
-                className="px-4 py-2 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 text-xs uppercase"
+                className="px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 text-xs uppercase"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 bg-primary text-black font-black rounded-xl hover:bg-primary/90 text-xs uppercase tracking-wider"
+                className="px-5 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 text-xs uppercase tracking-wider"
               >
                 Save Payment Method
               </button>

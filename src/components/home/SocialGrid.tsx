@@ -1,13 +1,9 @@
 "use client";
 
-import { motion, useSpring, useTransform, useInView } from "framer-motion";
-import { ArrowUpRight, Share2 } from "lucide-react";
+import { Share2, ArrowUpRight } from "lucide-react";
 import { FaDiscord, FaYoutube, FaFacebookF, FaInstagram } from "react-icons/fa";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
-import { Section } from "@/components/ui/Section";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { GlowBar } from "@/components/ui/GlowBar";
+import { motion } from "framer-motion";
 
 type Stats = {
   youtube: string;
@@ -16,126 +12,57 @@ type Stats = {
   discord: string;
 };
 
-const AnimatedCounter = ({ value, label }: { value: string; label: string }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-20px" });
-  
-  const numValue = parseFloat(value.replace(/[^0-9.]/g, ""));
-  const suffix = value.replace(/[0-9.]/g, "");
-  
-  const spring = useSpring(0, { duration: 2000, bounce: 0 });
-  const display = useTransform(spring, (current) => {
-    if (Math.floor(current) === current) return Math.floor(current).toString() + suffix;
-    return current.toFixed(value.includes(".") ? 1 : 0) + suffix;
-  });
-
-  useEffect(() => {
-    if (isInView) {
-      spring.set(numValue);
-    }
-  }, [isInView, numValue, spring]);
-
-  return (
-    <div ref={ref}>
-      <motion.div className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl text-white">
-        {display}
-      </motion.div>
-      <div className="mt-2 text-xs font-bold uppercase tracking-widest text-neutral-500 group-hover:text-neutral-300">
-        {label}
-      </div>
-    </div>
-  );
-};
-
 export function SocialGrid({ stats }: { stats?: Stats }) {
   const socials = [
-    {
-      name: "Discord",
-      icon: FaDiscord,
-      followers: stats?.discord || "15.2K",
-      label: "Members",
-      href: "https://discord.gg/EKRQMA83",
-    },
-    {
-      name: "YouTube",
-      icon: FaYoutube,
-      followers: stats?.youtube || "15.1K",
-      label: "Subscribers",
-      href: "https://youtube.com/@a1esportsbd",
-    },
-    {
-      name: "Facebook",
-      icon: FaFacebookF,
-      followers: stats?.facebook || "1.2M",
-      label: "Followers",
-      href: "https://facebook.com/a1esportsbd",
-    },
-    {
-      name: "Instagram",
-      icon: FaInstagram,
-      followers: stats?.instagram || "512K",
-      label: "Followers",
-      href: "https://www.instagram.com/a1esports.bd",
-    },
+    { name: "Discord", icon: FaDiscord, followers: stats?.discord || "15.2K", label: "Members", href: "https://discord.gg/EKRQMA83" },
+    { name: "YouTube", icon: FaYoutube, followers: stats?.youtube || "15.1K", label: "Subscribers", href: "https://youtube.com/@a1esportsbd" },
+    { name: "Facebook", icon: FaFacebookF, followers: stats?.facebook || "1.2M", label: "Followers", href: "https://facebook.com/a1esportsbd" },
+    { name: "Instagram", icon: FaInstagram, followers: stats?.instagram || "512K", label: "Followers", href: "https://www.instagram.com/a1esports.bd" },
   ];
 
   return (
-    <Section className="pb-12 sm:pb-24" containerClassName="max-w-7xl">
-      <GlowBar position="top" className="-top-[1px]" />
+    <section className="bg-[#0a0a0a] text-neutral-400 py-24 px-4 md:px-8 font-mono border-t border-neutral-800">
+      <div className="max-w-[1600px] mx-auto">
+        <div className="flex items-center gap-4 mb-12">
+          <Share2 className="w-6 h-6 text-primary" />
+          <h2 className="text-2xl font-bold tracking-widest text-white uppercase">Connect With Us</h2>
+          <div className="flex-1 h-px bg-neutral-800 ml-4" />
+        </div>
 
-      <SectionHeader
-        title={
-          <>
-            Connect <span className="text-primary">With Us</span>
-          </>
-        }
-        subtitle="Social Presence"
-        icon={Share2}
-        align="center"
-        className="mb-10 sm:mb-20 pt-10 sm:pt-20"
-      />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {socials.map((social, i) => (
+            <Link
+              key={social.name}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative flex flex-col justify-between border border-neutral-800 bg-neutral-900/30 p-6 h-48 hover:border-primary/50 transition-colors"
+            >
+              <div className="flex justify-between items-start z-10">
+                <div className="text-white bg-neutral-800 p-2 border border-neutral-700 group-hover:bg-primary group-hover:border-primary transition-colors">
+                  <social.icon size={20} />
+                </div>
+                <div className="text-neutral-600 group-hover:text-primary transition-colors">
+                  <ArrowUpRight size={16} />
+                </div>
+              </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {socials.map((social, i) => (
-          <Link
-            key={social.name}
-            href={social.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 bg-neutral-900/50 p-6 sm:p-8 transition-all duration-500 hover:border-primary/50 hover:bg-neutral-900/80 hover:shadow-[0_0_40px_rgba(255,0,102,0.1)]"
-          >
-            {/* Background Icon Watermark */}
-            <div className="absolute -right-8 -top-8 opacity-5 transition-transform duration-700 group-hover:scale-110 group-hover:opacity-10">
-              <social.icon size={200} />
-            </div>
-
-            {/* Top Row: Icon & Arrow */}
-            <div className="relative z-10 flex items-start justify-between">
-              <div className="rounded-2xl bg-white/5 p-4 text-white ring-1 ring-white/10 transition-all duration-300 group-hover:bg-primary group-hover:text-white group-hover:ring-primary/50">
-                <social.icon size={24} />
+              <div className="relative z-10 mt-auto">
+                <div className="text-3xl font-bold text-white group-hover:text-primary transition-colors">
+                  {social.followers}
+                </div>
+                <div className="mt-1 flex items-center justify-between text-xs font-bold uppercase tracking-widest text-neutral-500">
+                  <span>{social.name}</span>
+                  <span className="text-[10px] text-neutral-600">[{social.label}]</span>
+                </div>
               </div>
               
-              <div className="h-10 w-10 rounded-xl bg-black/40 flex items-center justify-center border border-white/5 text-neutral-500 transition-all duration-300 group-hover:border-primary/50 group-hover:text-white">
-                <ArrowUpRight size={20} className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
-              </div>
-            </div>
-
-            {/* Content Section */}
-            <div className="relative z-10 mt-10 sm:mt-16">
-              <AnimatedCounter value={social.followers} label={social.label} />
-              
-              {/* Hover Indicator */}
-              <div className="mt-4 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary opacity-0 -translate-x-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-0">
-                <span>Follow {social.name}</span>
-                <ArrowUpRight size={10} />
-              </div>
-            </div>
-
-            {/* Hover Glow */}
-            <div className="absolute inset-0 z-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-gradient-to-t from-primary/5 to-transparent pointer-events-none" />
-          </Link>
-        ))}
+              {/* Hardware crosshair accent */}
+              <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-neutral-600 m-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </Link>
+          ))}
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }

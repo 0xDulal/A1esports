@@ -110,27 +110,27 @@ export default function AdminCoupons() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Coupons & Discounts</h1>
+          <h1 className="text-3xl font-michroma uppercase mb-2">Coupons & Discounts</h1>
           <p className="text-neutral-400">Create promo codes, set claim limits (e.g. WinnerPMC), and 100% free discounts</p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={fetchCoupons}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-colors text-xs uppercase"
+            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-colors text-xs uppercase"
           >
             <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
             Refresh
           </button>
           <button
             onClick={() => setIsAddOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-black rounded-lg hover:bg-primary/90 transition-colors uppercase tracking-wider text-xs"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-colors uppercase tracking-wider text-xs"
           >
             <Plus size={16} /> Create Coupon
           </button>
         </div>
       </div>
 
-      <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden">
+      <div className="bg-[#0a0a0a] border border-white/10 rounded-sm overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-neutral-400">Loading coupons...</div>
         ) : coupons.length === 0 ? (
@@ -212,7 +212,7 @@ export default function AdminCoupons() {
                       <td className="p-4">
                         <button
                           onClick={() => setDeleteId(coupon.id)}
-                          className="p-2 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors"
+                          className="p-2 hover:bg-red-500/20 text-red-400 rounded-sm transition-colors"
                           title="Delete Coupon"
                         >
                           <Trash2 size={16} />
@@ -229,14 +229,14 @@ export default function AdminCoupons() {
 
       {/* Create Coupon Modal */}
       <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-        <DialogContent className="bg-neutral-900 border-white/10 text-white max-w-md">
+        <DialogContent className="bg-[#0a0a0a] border-white/10 text-white max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold uppercase">Create New Coupon</DialogTitle>
+            <DialogTitle className="text-xl font-michroma uppercase uppercase">Create New Coupon</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleCreateCoupon} className="space-y-4 pt-2">
             {/* Quick Preset */}
-            <div className="p-3 rounded-xl bg-purple-950/40 border border-purple-500/30 flex items-center justify-between gap-2">
+            <div className="p-3 rounded-sm bg-purple-950/40 border border-purple-500/30 flex items-center justify-between gap-2">
               <div className="text-xs text-purple-200">
                 <span className="font-bold flex items-center gap-1">
                   <Sparkles size={14} className="text-primary" /> 100% Free Product Coupon
@@ -246,7 +246,7 @@ export default function AdminCoupons() {
               <button
                 type="button"
                 onClick={apply100PercentPreset}
-                className="px-3 py-1 bg-primary text-black font-black rounded-lg text-[10px] uppercase tracking-wider shrink-0 hover:bg-primary/90"
+                className="px-3 py-1 bg-primary text-black font-black rounded-sm text-[10px] uppercase tracking-wider shrink-0 hover:bg-primary/90"
               >
                 Apply Preset
               </button>
@@ -262,7 +262,7 @@ export default function AdminCoupons() {
                 placeholder="e.g. WinnerPMC"
                 value={formData.code}
                 onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm font-mono uppercase focus:outline-none focus:border-primary text-white"
+                className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm font-mono uppercase focus:outline-none focus:border-primary text-white"
               />
             </div>
 
@@ -274,7 +274,7 @@ export default function AdminCoupons() {
                 <select
                   value={formData.discount_type}
                   onChange={(e) => setFormData({ ...formData, discount_type: e.target.value as any })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
                 >
                   <option value="fixed">Fixed Amount (৳)</option>
                   <option value="percentage">Percentage (%)</option>
@@ -291,7 +291,7 @@ export default function AdminCoupons() {
                   placeholder="100 for 100% Free"
                   value={formData.discount_value}
                   onChange={(e) => setFormData({ ...formData, discount_value: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
                 />
               </div>
             </div>
@@ -306,7 +306,7 @@ export default function AdminCoupons() {
                   placeholder="e.g. 3 (0 for unlimited)"
                   value={formData.max_uses}
                   onChange={(e) => setFormData({ ...formData, max_uses: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
                 />
                 <span className="text-[10px] text-neutral-500 block mt-1">Total times code can be claimed</span>
               </div>
@@ -320,7 +320,7 @@ export default function AdminCoupons() {
                   placeholder="0 for no minimum"
                   value={formData.min_order_amount}
                   onChange={(e) => setFormData({ ...formData, min_order_amount: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
                 />
               </div>
             </div>
@@ -329,13 +329,13 @@ export default function AdminCoupons() {
               <button
                 type="button"
                 onClick={() => setIsAddOpen(false)}
-                className="px-4 py-2 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 text-xs uppercase"
+                className="px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 text-xs uppercase"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 bg-primary text-black font-black rounded-xl hover:bg-primary/90 text-xs uppercase tracking-wider"
+                className="px-5 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 text-xs uppercase tracking-wider"
               >
                 Save Coupon
               </button>

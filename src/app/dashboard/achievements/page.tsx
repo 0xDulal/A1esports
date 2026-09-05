@@ -160,14 +160,14 @@ export default function AdminAchievements() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Tournament Achievements</h1>
+          <h1 className="text-3xl font-michroma uppercase mb-2">Tournament Achievements</h1>
           <p className="text-neutral-400">Configure homepage source priority and manage custom tournament records</p>
         </div>
 
         <div className="flex items-center gap-3">
           <button
             onClick={fetchData}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition-colors text-xs uppercase"
+            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-colors text-xs uppercase"
           >
             <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
             Refresh
@@ -175,7 +175,7 @@ export default function AdminAchievements() {
 
           <button
             onClick={handleOpenAdd}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-black rounded-xl hover:bg-primary/90 transition-colors text-xs uppercase tracking-wider"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-colors text-xs uppercase tracking-wider"
           >
             <Plus size={16} /> Add Achievement
           </button>
@@ -183,10 +183,10 @@ export default function AdminAchievements() {
       </div>
 
       {/* Priority Toggle Card */}
-      <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 space-y-4">
+      <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold flex items-center gap-2">
+            <h2 className="text-xl font-michroma uppercase flex items-center gap-2">
               <Layers size={20} className="text-primary" /> Homepage Source Priority Mode
             </h2>
             <p className="text-xs text-neutral-400 mt-1">
@@ -228,7 +228,7 @@ export default function AdminAchievements() {
                 type="button"
                 onClick={() => handleUpdateSourceMode(modeItem.id as any)}
                 disabled={savingSource}
-                className={`p-5 rounded-2xl border text-left flex flex-col justify-between transition-all ${
+                className={`p-5 rounded-sm border text-left flex flex-col justify-between transition-all ${
                   isSelected
                     ? "bg-primary/15 border-primary text-white shadow-[0_0_25px_rgba(255,0,102,0.15)]"
                     : "bg-white/5 border-white/10 text-neutral-400 hover:border-white/20"
@@ -248,9 +248,9 @@ export default function AdminAchievements() {
       </div>
 
       {/* Database Achievements Table */}
-      <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden space-y-4 p-6">
+      <div className="bg-[#0a0a0a] border border-white/10 rounded-sm overflow-hidden space-y-4 p-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold flex items-center gap-2">
+          <h2 className="text-xl font-michroma uppercase flex items-center gap-2">
             <Trophy size={20} className="text-primary" /> Custom Database Records ({achievements.length})
           </h2>
         </div>
@@ -298,14 +298,14 @@ export default function AdminAchievements() {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => handleOpenEdit(achievement)}
-                          className="p-2 hover:bg-white/10 text-white rounded-lg transition-colors"
+                          className="p-2 hover:bg-white/10 text-white rounded-sm transition-colors"
                           title="Edit Achievement"
                         >
                           <Edit size={16} />
                         </button>
                         <button
                           onClick={() => setDeleteId(achievement.id || null)}
-                          className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
+                          className="p-2 hover:bg-red-500/20 text-red-500 rounded-sm transition-colors"
                           title="Delete Achievement"
                         >
                           <Trash2 size={16} />
@@ -323,9 +323,9 @@ export default function AdminAchievements() {
       {/* Form Modal */}
       {isModalOpen && (
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogContent className="bg-neutral-900 border-white/10 text-white max-w-md">
+          <DialogContent className="bg-[#0a0a0a] border-white/10 text-white max-w-md">
             <DialogHeader>
-              <DialogTitle className="text-xl font-bold uppercase">
+              <DialogTitle className="text-xl font-michroma uppercase uppercase">
                 {editingAch ? "Edit Achievement" : "Add New Achievement"}
               </DialogTitle>
             </DialogHeader>
@@ -339,7 +339,7 @@ export default function AdminAchievements() {
                   placeholder="e.g. PUBG Mobile National Championship BD 2026"
                   value={form.event || ""}
                   onChange={(e) => setForm({ ...form, event: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
                 />
               </div>
 
@@ -352,7 +352,7 @@ export default function AdminAchievements() {
                     placeholder="1st, 2nd, Top 16..."
                     value={form.rank || ""}
                     onChange={(e) => setForm({ ...form, rank: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
                   />
                 </div>
 
@@ -361,7 +361,7 @@ export default function AdminAchievements() {
                   <select
                     value={form.tier || "B-Tier"}
                     onChange={(e) => setForm({ ...form, tier: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
                   >
                     <option value="S-Tier">S-Tier (Global)</option>
                     <option value="A-Tier">A-Tier (Regional Pro)</option>
@@ -379,7 +379,7 @@ export default function AdminAchievements() {
                     placeholder="$2,500 or ৳2,00,000"
                     value={form.prize || ""}
                     onChange={(e) => setForm({ ...form, prize: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
                   />
                 </div>
 
@@ -390,7 +390,7 @@ export default function AdminAchievements() {
                     placeholder="2026-05-15 or 2026"
                     value={form.year || ""}
                     onChange={(e) => setForm({ ...form, year: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm px-4 py-2.5 text-sm focus:outline-none focus:border-primary text-white"
                   />
                 </div>
               </div>
@@ -399,13 +399,13 @@ export default function AdminAchievements() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-white/10 text-white rounded-xl text-xs font-bold uppercase hover:bg-white/20 transition-colors"
+                  className="px-4 py-2 bg-white/10 text-white rounded-sm text-xs font-bold uppercase hover:bg-white/20 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-primary text-black rounded-xl text-xs font-black uppercase tracking-wider hover:bg-primary/90 transition-colors"
+                  className="px-5 py-2 bg-primary text-black rounded-sm text-xs font-black uppercase tracking-wider hover:bg-primary/90 transition-colors"
                 >
                   Save Achievement
                 </button>

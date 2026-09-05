@@ -32,7 +32,7 @@ export default function ProductPage() {
   }, []);
 
   const product = products.find((p) => p.slug === params.slug || p.id === params.slug);
-  const productImages = product?.images || (product?.image ? [product.image] : []);
+  const productImages = (product?.images || (product?.image ? [product.image] : [])).filter((img) => img && img.trim() !== "");
 
   useEffect(() => {
     if (productImages.length > 0 && !selectedImage) {

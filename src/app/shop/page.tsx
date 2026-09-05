@@ -48,7 +48,7 @@ export default function ShopPage() {
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block text-primary font-bold tracking-[0.3em] uppercase mb-4 text-sm md:text-base italic"
+            className="inline-block text-primary font-bold tracking-[0.3em] uppercase mb-4 text-sm md:text-base"
           >
             Official Merchandise
           </motion.span>
@@ -56,9 +56,9 @@ export default function ShopPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl font-black uppercase tracking-tighter"
+            className="text-6xl md:text-8xl font-michroma uppercase tracking-tighter"
           >
-            Store<span className="text-primary italic">.</span>
+            Store<span className="text-primary">.</span>
           </motion.h1>
         </div>
         <GlowBar position="bottom" />
@@ -73,9 +73,9 @@ export default function ShopPage() {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-6 py-2 rounded-full text-xs font-black tracking-widest transition-all duration-300 border ${
+                className={`px-6 py-2 rounded-sm text-xs font-black tracking-widest transition-all duration-300 border ${
                   activeCategory === cat
-                    ? "bg-primary border-primary text-white"
+                    ? "bg-primary border-primary text-black"
                     : "bg-white/5 border-white/10 text-neutral-500 hover:text-white hover:border-white/20"
                 }`}
               >
@@ -91,14 +91,14 @@ export default function ShopPage() {
 
             {/* Custom Sort Dropdown */}
             <div className="relative group">
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-2 hover:border-primary/50 transition-all cursor-pointer">
+              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-sm px-4 py-2 hover:border-primary/50 transition-all cursor-pointer">
                 <SlidersHorizontal size={14} className="text-primary" />
                 <span className="text-[10px] font-black uppercase tracking-widest text-white min-w-[120px]">
                   {sortBy === "newest" ? "Featured" : sortBy === "price-low" ? "Price: Low to High" : "Price: High to Low"}
                 </span>
               </div>
 
-              <div className="absolute top-full right-0 mt-2 w-52 bg-neutral-900 border border-white/10 rounded-xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-2xl">
+              <div className="absolute top-full right-0 mt-2 w-52 bg-neutral-900 border border-white/10 rounded-sm overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-2xl">
                 {[
                   { id: "newest", label: "Featured" },
                   { id: "price-low", label: "Price: Low to High" },
@@ -109,7 +109,7 @@ export default function ShopPage() {
                     onClick={() => setSortBy(option.id as any)}
                     className={`w-full text-left px-5 py-3 text-[10px] font-black uppercase tracking-widest transition-colors ${
                       sortBy === option.id
-                        ? "bg-primary text-white"
+                        ? "bg-primary text-black"
                         : "text-neutral-400 hover:bg-white/5 hover:text-white"
                     }`}
                   >
@@ -148,7 +148,7 @@ export default function ShopPage() {
 
           {!loading && filteredProducts.length === 0 && (
             <div className="py-24 text-center space-y-4">
-              <p className="text-4xl font-black text-white/20 uppercase tracking-tighter">No items found</p>
+              <p className="text-4xl font-michroma text-white/20 uppercase tracking-tighter">No items found</p>
               <button
                 onClick={() => setActiveCategory("ALL")}
                 className="text-primary font-bold uppercase tracking-widest text-sm hover:underline"

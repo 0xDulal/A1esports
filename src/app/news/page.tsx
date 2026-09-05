@@ -33,7 +33,7 @@ export default function NewsPage() {
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block text-primary font-bold tracking-[0.3em] uppercase mb-4 text-sm md:text-base italic"
+            className="inline-block text-primary font-bold tracking-[0.3em] uppercase mb-4 text-sm md:text-base"
           >
             Latest Updates & Coverage
           </motion.span>
@@ -41,9 +41,9 @@ export default function NewsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl font-black uppercase tracking-tighter"
+            className="text-6xl md:text-8xl font-michroma uppercase tracking-tighter"
           >
-            News<span className="text-primary italic">.</span>
+            News<span className="text-primary">.</span>
           </motion.h1>
         </div>
         <GlowBar position="bottom" />
@@ -56,9 +56,9 @@ export default function NewsPage() {
             <p className="mt-4 text-sm text-neutral-400 font-bold uppercase tracking-wider">Loading articles...</p>
           </div>
         ) : articles.length === 0 ? (
-          <div className="text-center py-20 bg-neutral-900/40 border border-white/10 rounded-3xl p-12 max-w-xl mx-auto">
+          <div className="text-center py-20 bg-[#0a0a0a] border border-white/10 rounded-sm p-12 max-w-xl mx-auto">
             <Newspaper size={48} className="mx-auto text-neutral-600 mb-4" />
-            <h3 className="text-xl font-bold text-white mb-2">No News Articles Found</h3>
+            <h3 className="text-xl font-bold font-michroma text-white mb-2">No News Articles Found</h3>
             <p className="text-neutral-400 text-sm">Check back soon for the latest tournament announcements, roster updates, and community news.</p>
           </div>
         ) : (
@@ -70,7 +70,7 @@ export default function NewsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -8 }}
-                className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-neutral-900/50 backdrop-blur-md transition-all duration-300 hover:border-primary/50 hover:shadow-[0_10px_30px_rgba(255,0,102,0.15)]"
+                className="group relative flex flex-col overflow-hidden rounded-sm border border-white/10 bg-neutral-900/50 backdrop-blur-md transition-all duration-300 hover:border-primary/50 hover:shadow-[0_10px_30px_rgba(255,0,102,0.15)]"
               >
                 <div className="relative h-60 w-full overflow-hidden bg-neutral-900">
                   {article.image ? (
@@ -85,7 +85,7 @@ export default function NewsPage() {
                       <Newspaper size={48} />
                     </div>
                   )}
-                  <div className="absolute top-4 left-4 bg-primary text-black font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full">
+                  <div className="absolute top-4 left-4 bg-primary text-black font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-sm">
                     {article.category}
                   </div>
                 </div>
@@ -101,7 +101,7 @@ export default function NewsPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-xl font-black uppercase leading-tight text-white group-hover:text-primary transition-colors line-clamp-2">
+                    <h3 className="text-xl font-michroma uppercase leading-tight text-white group-hover:text-primary transition-colors line-clamp-2">
                       {article.title}
                     </h3>
 

@@ -20,11 +20,11 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-center space-y-6 max-w-3xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase">
               <Sparkles size={14} /> Organization Overview
             </div>
             
-            <h1 className="text-3xl sm:text-6xl font-black uppercase tracking-tight font-sans italic">
+            <h1 className="text-3xl sm:text-6xl font-michroma uppercase tracking-tight">
               WE ARE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">A1 ESPORTS</span>
             </h1>
 
@@ -39,7 +39,7 @@ export default function AboutPage() {
       <section className="py-12 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12 sm:mb-16 space-y-3">
           <span className="text-xs font-black uppercase tracking-widest text-primary">Core Pillars</span>
-          <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight">What Drives Our Empire</h2>
+          <h2 className="text-2xl sm:text-3xl font-michroma uppercase tracking-tight">What Drives Our Empire</h2>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
@@ -66,12 +66,12 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="p-6 sm:p-8 rounded-2xl sm:rounded-3xl bg-neutral-900/60 border border-white/10 hover:border-primary/40 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2"
+              className="p-6 sm:p-8 rounded-sm bg-neutral-900/60 border border-white/10 hover:border-primary/40 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2"
             >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-6">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-sm bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-6">
                 <pillar.icon size={26} />
               </div>
-              <h3 className="text-lg sm:text-xl font-black uppercase mb-3 text-white">{pillar.title}</h3>
+              <h3 className="text-lg sm:text-xl font-michroma uppercase mb-3 text-white">{pillar.title}</h3>
               <p className="text-sm text-neutral-400 leading-relaxed">{pillar.desc}</p>
             </motion.div>
           ))}
@@ -88,7 +88,7 @@ export default function AboutPage() {
             { label: "Years Dominating", val: "6+" },
           ].map((st) => (
             <div key={st.label} className="space-y-1">
-              <div className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-sans italic">
+              <div className="text-3xl sm:text-5xl font-michroma text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
                 {st.val}
               </div>
               <div className="text-xs font-bold text-neutral-400 uppercase tracking-widest">{st.label}</div>
@@ -99,9 +99,9 @@ export default function AboutPage() {
 
       {/* Join / CTA Section */}
       <section className="py-12 sm:py-24 max-w-5xl mx-auto px-4 sm:px-6 text-center">
-        <div className="p-6 sm:p-12 rounded-[1.5rem] sm:rounded-[2.5rem] bg-gradient-to-b from-white/10 to-transparent border border-white/10 backdrop-blur-xl space-y-6">
+        <div className="p-6 sm:p-12 rounded-sm bg-gradient-to-b from-white/10 to-transparent border border-white/10 backdrop-blur-xl space-y-6">
           <Shield className="w-10 h-10 sm:w-12 sm:h-12 text-primary mx-auto" />
-          <h2 className="text-2xl sm:text-4xl font-black uppercase">Ready to Join The Movement?</h2>
+          <h2 className="text-2xl sm:text-4xl font-michroma uppercase">Ready to Join The Movement?</h2>
           <p className="text-neutral-400 max-w-xl mx-auto text-sm leading-relaxed">
             Whether you want to represent A1 Esports as a pro player, content creator, or brand partner, we welcome elite talent.
           </p>

@@ -171,7 +171,7 @@ export default function AdminSponsorsPage() {
 
         <button
           onClick={handleOpenAdd}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-black font-black uppercase text-xs rounded-xl hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(255,0,102,0.3)]"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-black font-black uppercase text-xs rounded-sm hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(255,0,102,0.3)]"
         >
           <Plus size={16} /> Add Sponsor
         </button>
@@ -182,7 +182,7 @@ export default function AdminSponsorsPage() {
           Loading sponsors data...
         </div>
       ) : sponsors.length === 0 ? (
-        <div className="py-16 text-center text-neutral-400 bg-neutral-900 border border-white/10 rounded-2xl flex flex-col items-center gap-3">
+        <div className="py-16 text-center text-neutral-400 bg-[#0a0a0a] border border-white/10 rounded-sm flex flex-col items-center gap-3">
           <Handshake size={40} className="text-neutral-600" />
           <p className="font-bold text-lg text-white">No Sponsors Found</p>
           <p className="text-sm text-neutral-500">
@@ -190,7 +190,7 @@ export default function AdminSponsorsPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden">
+        <div className="bg-[#0a0a0a] border border-white/10 rounded-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px]">
               <thead className="bg-white/5">
@@ -221,7 +221,7 @@ export default function AdminSponsorsPage() {
                       <div className="flex items-center gap-1.5">
                         <div
                           title="Click and drag to reorder"
-                          className="cursor-grab active:cursor-grabbing p-2 rounded-lg bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-primary transition-colors flex items-center justify-center"
+                          className="cursor-grab active:cursor-grabbing p-2 rounded-sm bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-primary transition-colors flex items-center justify-center"
                         >
                           <GripVertical size={18} />
                         </div>
@@ -245,11 +245,11 @@ export default function AdminSponsorsPage() {
                     </td>
                     <td className="p-4">
                       {isImageUrl(s.logo) ? (
-                        <div className="relative h-10 w-24 rounded-lg bg-neutral-800 border border-white/10 p-1 flex items-center justify-center overflow-hidden">
+                        <div className="relative h-10 w-24 rounded-sm bg-neutral-800 border border-white/10 p-1 flex items-center justify-center overflow-hidden">
                           <img src={s.logo} alt={s.name} className="max-h-full max-w-full object-contain" />
                         </div>
                       ) : (
-                        <span className="px-3 py-1 bg-white/10 border border-white/10 rounded-lg text-xs font-black text-primary font-sans italic">
+                        <span className="px-3 py-1 bg-white/10 border border-white/10 rounded-sm text-xs font-black text-primary font-sans ">
                           {s.logo}
                         </span>
                       )}
@@ -279,13 +279,13 @@ export default function AdminSponsorsPage() {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => handleOpenEdit(s)}
-                          className="p-2 hover:bg-white/10 text-white rounded-lg transition-colors"
+                          className="p-2 hover:bg-white/10 text-white rounded-sm transition-colors"
                         >
                           <Edit size={16} />
                         </button>
                         <button
                           onClick={() => setDeleteId(s.id)}
-                          className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
+                          className="p-2 hover:bg-red-500/20 text-red-500 rounded-sm transition-colors"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -302,7 +302,7 @@ export default function AdminSponsorsPage() {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 w-full max-w-lg space-y-6">
+          <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6 w-full max-w-lg space-y-6">
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-black uppercase text-white">
                 {editingId ? "Edit Sponsor" : "Add Sponsor"}
@@ -325,7 +325,7 @@ export default function AdminSponsorsPage() {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm p-3 text-white focus:border-primary outline-none"
                   placeholder="e.g. Red Bull"
                 />
               </div>
@@ -340,7 +340,7 @@ export default function AdminSponsorsPage() {
                     required
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-3 text-white focus:border-primary outline-none"
                     placeholder="e.g. Energy Drink Partner"
                   />
                 </div>
@@ -354,7 +354,7 @@ export default function AdminSponsorsPage() {
                     required
                     value={badge}
                     onChange={(e) => setBadge(e.target.value)}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-3 text-white focus:border-primary outline-none"
                     placeholder="e.g. Official Partner"
                   />
                 </div>
@@ -383,7 +383,7 @@ export default function AdminSponsorsPage() {
                           setUploadingLogo(false);
                         }
                       }}
-                      className="w-full text-xs text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-primary file:text-black hover:file:bg-primary/90 cursor-pointer"
+                      className="w-full text-xs text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-sm file:border-0 file:text-xs file:font-bold file:bg-primary file:text-black hover:file:bg-primary/90 cursor-pointer"
                     />
                     {uploadingLogo && <span className="text-xs text-primary animate-pulse">Uploading...</span>}
                   </div>
@@ -392,13 +392,13 @@ export default function AdminSponsorsPage() {
                     type="text"
                     value={logo}
                     onChange={(e) => setLogo(e.target.value)}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none text-sm"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-3 text-white focus:border-primary outline-none text-sm"
                     placeholder="https://... or logo initials (e.g. RED BULL)"
                   />
                 </div>
 
                 {isImageUrl(logo) && (
-                  <div className="mt-2 p-2 bg-neutral-950 border border-white/10 rounded-lg flex items-center gap-3">
+                  <div className="mt-2 p-2 bg-[#0a0a0a] border border-white/10 rounded-sm flex items-center gap-3">
                     <span className="text-[10px] text-neutral-400 font-bold uppercase">Preview:</span>
                     <img src={logo} alt="Preview" className="h-8 object-contain" />
                   </div>
@@ -413,7 +413,7 @@ export default function AdminSponsorsPage() {
                   type="url"
                   value={websiteUrl}
                   onChange={(e) => setWebsiteUrl(e.target.value)}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm p-3 text-white focus:border-primary outline-none"
                   placeholder="https://redbull.com"
                 />
               </div>
@@ -426,7 +426,7 @@ export default function AdminSponsorsPage() {
                   rows={3}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none resize-none"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm p-3 text-white focus:border-primary outline-none resize-none"
                   placeholder="Sponsor partnership details..."
                 />
               </div>
@@ -435,13 +435,13 @@ export default function AdminSponsorsPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 bg-white/5 border border-white/10 text-white rounded-xl font-bold hover:bg-white/10"
+                  className="px-5 py-2.5 bg-white/5 border border-white/10 text-white rounded-sm font-bold hover:bg-white/10"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-primary text-black rounded-xl font-black uppercase flex items-center gap-2 hover:bg-primary/90"
+                  className="px-5 py-2.5 bg-primary text-black rounded-sm font-black uppercase flex items-center gap-2 hover:bg-primary/90"
                 >
                   <Save size={16} /> Save Sponsor
                 </button>

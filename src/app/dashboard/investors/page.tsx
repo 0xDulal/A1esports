@@ -165,7 +165,7 @@ export default function AdminInvestorsPage() {
 
         <button
           onClick={handleOpenAdd}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-black font-black uppercase text-xs rounded-xl hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(255,0,102,0.3)]"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-black font-black uppercase text-xs rounded-sm hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(255,0,102,0.3)]"
         >
           <Plus size={16} /> Add Highlight
         </button>
@@ -176,7 +176,7 @@ export default function AdminInvestorsPage() {
           Loading investor highlights...
         </div>
       ) : investors.length === 0 ? (
-        <div className="py-16 text-center text-neutral-400 bg-neutral-900 border border-white/10 rounded-2xl flex flex-col items-center gap-3">
+        <div className="py-16 text-center text-neutral-400 bg-[#0a0a0a] border border-white/10 rounded-sm flex flex-col items-center gap-3">
           <TrendingUp size={40} className="text-neutral-600" />
           <p className="font-bold text-lg text-white">No Investor Highlights Found</p>
           <p className="text-sm text-neutral-500">
@@ -184,7 +184,7 @@ export default function AdminInvestorsPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden">
+        <div className="bg-[#0a0a0a] border border-white/10 rounded-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px]">
               <thead className="bg-white/5">
@@ -215,7 +215,7 @@ export default function AdminInvestorsPage() {
                       <div className="flex items-center gap-1.5">
                         <div
                           title="Click and drag to reorder"
-                          className="cursor-grab active:cursor-grabbing p-2 rounded-lg bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-primary transition-colors flex items-center justify-center"
+                          className="cursor-grab active:cursor-grabbing p-2 rounded-sm bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-primary transition-colors flex items-center justify-center"
                         >
                           <GripVertical size={18} />
                         </div>
@@ -239,7 +239,7 @@ export default function AdminInvestorsPage() {
                     </td>
                     <td className="p-4">
                       {isImageUrl(i.logo) ? (
-                        <div className="relative h-10 w-24 rounded-lg bg-neutral-800 border border-white/10 p-1 flex items-center justify-center overflow-hidden">
+                        <div className="relative h-10 w-24 rounded-sm bg-neutral-800 border border-white/10 p-1 flex items-center justify-center overflow-hidden">
                           <img src={i.logo} alt={i.title} className="max-h-full max-w-full object-contain" />
                         </div>
                       ) : (
@@ -253,13 +253,13 @@ export default function AdminInvestorsPage() {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => handleOpenEdit(i)}
-                          className="p-2 hover:bg-white/10 text-white rounded-lg transition-colors"
+                          className="p-2 hover:bg-white/10 text-white rounded-sm transition-colors"
                         >
                           <Edit size={16} />
                         </button>
                         <button
                           onClick={() => setDeleteId(i.id)}
-                          className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
+                          className="p-2 hover:bg-red-500/20 text-red-500 rounded-sm transition-colors"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -276,7 +276,7 @@ export default function AdminInvestorsPage() {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 w-full max-w-lg space-y-6">
+          <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6 w-full max-w-lg space-y-6">
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-black uppercase text-white">
                 {editingId ? "Edit Investor Highlight" : "Add Investor Highlight"}
@@ -299,7 +299,7 @@ export default function AdminInvestorsPage() {
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm p-3 text-white focus:border-primary outline-none"
                   placeholder="e.g. South Asian Market Leader"
                 />
               </div>
@@ -314,7 +314,7 @@ export default function AdminInvestorsPage() {
                     required
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-3 text-white focus:border-primary outline-none"
                     placeholder="e.g. Market Position"
                   />
                 </div>
@@ -328,7 +328,7 @@ export default function AdminInvestorsPage() {
                     required
                     value={metric}
                     onChange={(e) => setMetric(e.target.value)}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-3 text-white focus:border-primary outline-none"
                     placeholder="e.g. 1.5M+ Fans"
                   />
                 </div>
@@ -357,7 +357,7 @@ export default function AdminInvestorsPage() {
                           setUploadingLogo(false);
                         }
                       }}
-                      className="w-full text-xs text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-primary file:text-black hover:file:bg-primary/90 cursor-pointer"
+                      className="w-full text-xs text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-sm file:border-0 file:text-xs file:font-bold file:bg-primary file:text-black hover:file:bg-primary/90 cursor-pointer"
                     />
                     {uploadingLogo && <span className="text-xs text-primary animate-pulse">Uploading...</span>}
                   </div>
@@ -366,13 +366,13 @@ export default function AdminInvestorsPage() {
                     type="url"
                     value={logo}
                     onChange={(e) => setLogo(e.target.value)}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none text-sm"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-3 text-white focus:border-primary outline-none text-sm"
                     placeholder="https://..."
                   />
                 </div>
 
                 {isImageUrl(logo) && (
-                  <div className="mt-2 p-2 bg-neutral-950 border border-white/10 rounded-lg flex items-center gap-3">
+                  <div className="mt-2 p-2 bg-[#0a0a0a] border border-white/10 rounded-sm flex items-center gap-3">
                     <span className="text-[10px] text-neutral-400 font-bold uppercase">Preview:</span>
                     <img src={logo} alt="Preview" className="h-8 object-contain" />
                   </div>
@@ -387,7 +387,7 @@ export default function AdminInvestorsPage() {
                   rows={3}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-xl p-3 text-white focus:border-primary outline-none resize-none"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm p-3 text-white focus:border-primary outline-none resize-none"
                   placeholder="Investor growth details..."
                 />
               </div>
@@ -396,13 +396,13 @@ export default function AdminInvestorsPage() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 bg-white/5 border border-white/10 text-white rounded-xl font-bold hover:bg-white/10"
+                  className="px-5 py-2.5 bg-white/5 border border-white/10 text-white rounded-sm font-bold hover:bg-white/10"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-primary text-black rounded-xl font-black uppercase flex items-center gap-2 hover:bg-primary/90"
+                  className="px-5 py-2.5 bg-primary text-black rounded-sm font-black uppercase flex items-center gap-2 hover:bg-primary/90"
                 >
                   <Save size={16} /> Save Highlight
                 </button>

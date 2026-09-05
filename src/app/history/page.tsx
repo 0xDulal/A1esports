@@ -105,7 +105,7 @@ export default function HistoryPage() {
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase"
           >
             <HistoryIcon size={14} /> Interactive Legacy Roadmap
           </motion.div>
@@ -114,7 +114,7 @@ export default function HistoryPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-7xl font-black uppercase tracking-tight font-sans italic"
+            className="text-4xl sm:text-7xl font-michroma uppercase tracking-tight"
           >
             THE CHRONICLES OF <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">A1 ESPORTS</span>
           </motion.h1>
@@ -132,7 +132,7 @@ export default function HistoryPage() {
 
       {/* Era Filter Selector */}
       <section className="py-12 max-w-7xl mx-auto px-6">
-        <div className="flex flex-wrap items-center justify-center gap-3 bg-neutral-900/80 border border-white/10 rounded-2xl p-4 backdrop-blur-xl">
+        <div className="flex flex-wrap items-center justify-center gap-3 bg-neutral-900/80 border border-white/10 rounded-sm p-4 backdrop-blur-xl">
           {[
             { id: "ALL", label: "ALL ERAS (2020-2026)" },
             { id: "2020-2021 BREAKTHROUGH", label: "2020-2021: BREAKTHROUGH & PMGC" },
@@ -142,7 +142,7 @@ export default function HistoryPage() {
             <button
               key={era.id}
               onClick={() => setSelectedEra(era.id)}
-              className={`px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+              className={`px-4 py-2.5 rounded-sm text-xs font-black uppercase tracking-widest transition-all ${
                 selectedEra === era.id
                   ? "bg-primary text-black shadow-[0_0_20px_rgba(255,0,102,0.4)]"
                   : "bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10"
@@ -169,23 +169,23 @@ export default function HistoryPage() {
                 className="relative group"
               >
                 {/* Node Marker */}
-                <div className="absolute -left-[37px] sm:-left-[61px] top-0 w-10 h-10 rounded-2xl bg-black border-2 border-primary flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all shadow-[0_0_20px_rgba(255,0,102,0.6)]">
+                <div className="absolute -left-[37px] sm:-left-[61px] top-0 w-10 h-10 rounded-sm bg-black border-2 border-primary flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all shadow-[0_0_20px_rgba(255,0,102,0.6)]">
                   <m.icon size={18} />
                 </div>
 
-                <div className="p-8 sm:p-10 rounded-[2.5rem] bg-neutral-900/70 border border-white/10 hover:border-primary/50 backdrop-blur-xl transition-all duration-300 hover:shadow-[0_20px_50px_-10px_rgba(255,0,102,0.2)] space-y-6">
+                <div className="p-8 sm:p-10 rounded-sm bg-neutral-900/70 border border-white/10 hover:border-primary/50 backdrop-blur-xl transition-all duration-300 hover:shadow-[0_20px_50px_-10px_rgba(255,0,102,0.2)] space-y-6">
                   {/* Top Bar */}
                   <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      <span className="text-3xl sm:text-4xl font-black text-primary font-sans italic">
+                      <span className="text-3xl sm:text-4xl font-michroma text-primary">
                         {m.year}
                       </span>
-                      <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-black uppercase tracking-wider">
+                      <span className="px-3 py-1 rounded-sm bg-primary/10 border border-primary/30 text-primary text-xs font-black uppercase tracking-wider">
                         {m.badge}
                       </span>
                     </div>
 
-                    <div className="text-sm font-black text-white px-4 py-1.5 rounded-full bg-white/5 border border-white/10">
+                    <div className="text-sm font-black text-white px-4 py-1.5 rounded-sm bg-white/5 border border-white/10">
                       Prize: {m.prize}
                     </div>
                   </div>
@@ -195,7 +195,7 @@ export default function HistoryPage() {
                     <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest flex items-center gap-1.5">
                       <Zap size={14} className="text-primary" /> {m.tournament}
                     </span>
-                    <h3 className="text-2xl sm:text-3xl font-black uppercase text-white leading-tight">
+                    <h3 className="text-2xl sm:text-3xl font-michroma uppercase text-white leading-tight">
                       {m.title}
                     </h3>
                     <p className="text-sm sm:text-base text-neutral-400 font-medium leading-relaxed">
@@ -208,7 +208,7 @@ export default function HistoryPage() {
                     {m.highlights.map((hl) => (
                       <div
                         key={hl}
-                        className="flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/5 text-xs font-bold text-neutral-300"
+                        className="flex items-center gap-2 p-3 rounded-sm bg-white/5 border border-white/5 text-xs font-bold text-neutral-300"
                       >
                         <ChevronRight size={14} className="text-primary shrink-0" />
                         <span>{hl}</span>
@@ -222,9 +222,9 @@ export default function HistoryPage() {
         </div>
 
         {/* Liquipedia Archive Footer Callout */}
-        <div className="mt-24 p-10 rounded-[2.5rem] bg-gradient-to-r from-primary/10 via-secondary/20 to-primary/10 border border-primary/30 text-center space-y-4">
+        <div className="mt-24 p-10 rounded-sm bg-[#0a0a0a] border border-primary/30 text-center space-y-4">
           <Sparkles className="w-10 h-10 text-primary mx-auto" />
-          <h3 className="text-2xl font-black uppercase">Verified Liquipedia Tournament Archives</h3>
+          <h3 className="text-2xl font-michroma uppercase">Verified Liquipedia Tournament Archives</h3>
           <p className="text-neutral-400 text-sm max-w-xl mx-auto font-medium">
             Explore 100+ match placement records, player rosters, and historical stats on the official PUBG Mobile Liquipedia page.
           </p>

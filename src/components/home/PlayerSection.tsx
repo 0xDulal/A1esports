@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import { Team, Player } from "@/types/domain";
 import { getTeamsFromSupabase } from "@/services/supabase/db.service";
+import { Users, Activity } from "lucide-react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+
 import { PlayerCard } from "@/components/ui/PlayerCard";
-import { Section } from "@/components/ui/Section";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { Users } from "lucide-react";
 
 export function PlayerSection() {
   const [teamList, setTeamList] = useState<Team[]>([]);
@@ -19,7 +20,6 @@ export function PlayerSection() {
     });
   }, []);
 
-  // Dynamically find a team with players, prioritizing pro/pubgm teams
   const activeTeam =
     teamList.find((t) => t.players && t.players.length > 0 && (t.game?.toLowerCase().includes("pubg") || t.name?.toLowerCase().includes("pro"))) ||
     teamList.find((t) => t.players && t.players.length > 0) ||
@@ -28,27 +28,27 @@ export function PlayerSection() {
   const players: Player[] = activeTeam ? activeTeam.players : [];
 
   if (!loading && players.length === 0) {
-    return null; // Gracefully hide squad section if no roster exists in DB
+    return null;
   }
 
   return (
-    <Section className="py-12 sm:py-24">
-      <SectionHeader
-        title={
-          <>
-            Meet The <span className="text-primary">Squad</span>
-          </>
-        }
-        subtitle={activeTeam?.name ? `${activeTeam.name} Roster` : "Active Roster"}
-        icon={Users}
-        align="center"
-      />
+    <section className="bg-black text-neutral-400 py-24 px-4 md:px-8 font-mono border-t border-neutral-800">
+      <div className="max-w-[1600px] mx-auto">
+        <div className="flex items-center gap-4 mb-12">
+          <Users className="w-6 h-6 text-primary" />
+          <h2 className="text-2xl font-bold tracking-widest text-white uppercase">Active Roster</h2>
+          <div className="flex-1 h-px bg-neutral-800 ml-4" />
+          <div className="text-xs uppercase tracking-widest text-neutral-500 hidden md:block">
+            {activeTeam?.name || "Squad"}
+          </div>
+        </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {players.map((player, i) => (
-          <PlayerCard key={player.ign || i} player={player} index={i} />
-        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8 justify-items-center">
+          {players.map((player, i) => (
+            <PlayerCard key={player.ign || i} player={player} index={i} />
+          ))}
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }

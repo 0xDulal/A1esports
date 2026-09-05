@@ -3,13 +3,11 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ShoppingCart, ArrowRight } from "lucide-react";
-import { Section } from "@/components/ui/Section";
-import { SectionHeader } from "@/components/ui/SectionHeader";
-import { A1Button } from "@/components/ui/A1Button";
-import { ProductCard } from "@/components/ui/ProductCard";
+import { ShoppingCart, ArrowRight, Package } from "lucide-react";
 import { Product } from "@/lib/data/shop";
 import { getProductsFromSupabase } from "@/lib/supabase/db";
+import Image from "next/image";
+import { useCart } from "@/context/CartContext";
 
 export function Merchandise() {
   const [recentProducts, setRecentProducts] = useState<Product[]>([]);
@@ -23,40 +21,108 @@ export function Merchandise() {
   }, []);
 
   return (
-    <Section withGlow aria-labelledby="merch-heading" className="py-12 sm:py-24">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-8 sm:mb-16 gap-6">
-        <SectionHeader
-          title={
-            <>
-              Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Merchandise</span>
-            </>
-          }
-          subtitle="Official Shop"
-          icon={ShoppingCart}
-          className="mb-0"
-        />
-
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        >
-          <Link href="/shop">
-            <A1Button size="lg" className="group">
-              View All Products
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </A1Button>
+    <section className="bg-[#0a0a0a] text-neutral-400 py-24 px-4 md:px-8 font-mono border-t border-neutral-800">
+      <div className="max-w-[1600px] mx-auto">
+        <div className="flex items-center justify-between mb-12">
+          <div className="flex items-center gap-4">
+            <Package className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl font-bold tracking-widest text-white uppercase">Official Merchandise</h2>
+            <div className="hidden md:block w-32 h-px bg-neutral-800 ml-4" />
+          </div>
+          
+          <Link
+            href="/shop"
+            className="flex items-center gap-2 text-xs border border-neutral-700 hover:border-primary text-white px-4 py-2 bg-neutral-900/50 transition-colors"
+          >
+            VIEW ALL <ArrowRight className="w-3 h-3" />
           </Link>
-        </motion.div>
-      </div>
+        </div>
 
-      {/* Product Grid - Most Recent 4 Products */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {recentProducts.map((product, index) => (
-          <ProductCard key={product.id || product.slug} product={product} index={index} />
-        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {recentProducts.map((product, index) => (
+            <HardwareProductCard key={product.id || product.slug} product={product} index={index} />
+          ))}
+        </div>
       </div>
-    </Section>
+    </section>
+  );
+}
+
+function HardwareProductCard({ product, index }: { product: Product; index: number }) {
+  const { addItem, toggleCart, openCustomModal } = useCart();
+  
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (product.canCustomise) {
+      openCustomModal(product);
+    } else {
+      addItem(product, 1);
+      toggleCart();
+    }
+  };
+
+  const displayImage = product.image || (product.images && product.images[0]) || "";
+  const displayTitle = product.title || product.name || "A1 Official Item";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 }}
+      className="group relative border border-neutral-800 bg-neutral-900/40 overflow-hidden hover:border-primary/50 transition-colors flex flex-col h-full rounded-sm"
+    >
+      <Link href={`/shop/${product.slug}`} className="block relative aspect-square bg-neutral-950 overflow-hidden border-b border-neutral-800">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,0,102,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,102,0.1)_1px,transparent_1px)] bg-[size:10px_10px] opacity-10 pointer-events-none group-hover:opacity-30 transition-opacity" />
+        
+        {displayImage ? (
+          <Image
+            src={displayImage}
+            alt={displayTitle}
+            fill
+            className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <ShoppingCart className="w-12 h-12 text-neutral-800" />
+          </div>
+        )}
+        
+        {product.isNew && (
+          <div className="absolute top-0 left-0 bg-primary text-white px-3 py-1 text-xs font-bold uppercase tracking-widest z-10">
+            NEW
+          </div>
+        )}
+      </Link>
+
+      <div className="p-5 flex flex-col flex-1">
+        <div className="flex justify-between items-start">
+          <Link href={`/shop/${product.slug}`} className="block">
+            <h3 className="text-2xl font-bold text-white tracking-tight leading-tight">
+              {displayTitle}
+            </h3>
+          </Link>
+          <div className="text-lg font-bold text-white shrink-0 ml-4 pt-1">
+            {product.halfSleevePrice && product.fullSleevePrice ? (
+              <span>{product.halfSleevePrice.toLocaleString()} - {product.fullSleevePrice.toLocaleString()} BDT</span>
+            ) : (
+              <span>{product.price?.toLocaleString()} BDT</span>
+            )}
+          </div>
+        </div>
+        
+        <div className="text-[11px] font-bold text-neutral-500 uppercase tracking-widest mt-1 mb-6">
+          {product.category || "Merch"}
+        </div>
+        
+        <button 
+          onClick={handleAddToCart}
+          className="w-full mt-auto flex items-center justify-center gap-2 border border-primary bg-[#1a0a2a] hover:bg-primary text-white transition-all py-3 text-sm font-bold uppercase tracking-widest rounded-sm"
+        >
+          {product.canCustomise ? "Personalize" : "Add to Cart"}
+        </button>
+      </div>
+    </motion.div>
   );
 }

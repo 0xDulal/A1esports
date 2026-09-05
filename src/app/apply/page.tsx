@@ -35,7 +35,7 @@ export default function ApplyPage() {
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-block text-primary font-bold tracking-[0.3em] uppercase mb-4 text-sm italic"
+            className="inline-block text-primary font-bold tracking-[0.3em] uppercase mb-4 text-sm"
           >
             Join A1 Esports
           </motion.span>
@@ -43,21 +43,21 @@ export default function ApplyPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl font-black uppercase tracking-tighter"
+            className="text-6xl md:text-8xl font-michroma uppercase tracking-tighter"
           >
-            Applications<span className="text-primary italic">.</span>
+            Applications<span className="text-primary">.</span>
           </motion.h1>
         </div>
         <GlowBar position="bottom" />
       </section>
 
       <Section containerClassName="max-w-4xl">
-        <div className="bg-neutral-900/60 border border-white/10 rounded-3xl p-8 md:p-14 space-y-8 backdrop-blur-xl">
+        <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-8 md:p-14 space-y-8 backdrop-blur-xl">
           <div className="text-center space-y-3">
-            <span className="px-3.5 py-1 bg-primary/20 text-primary font-black text-xs uppercase tracking-widest rounded-full inline-block">
+            <span className="px-3.5 py-1 bg-primary/20 text-primary font-black text-xs uppercase tracking-widest rounded-sm inline-block">
               Talent Acquisition
             </span>
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-michroma uppercase tracking-tight">
               Think You Have What It Takes?
             </h2>
             <p className="text-neutral-400 text-sm max-w-lg mx-auto">
@@ -66,9 +66,9 @@ export default function ApplyPage() {
           </div>
 
           {submitted ? (
-            <div className="bg-primary/10 border border-primary/20 rounded-2xl p-10 text-center space-y-4 my-8">
+            <div className="bg-primary/10 border border-primary/20 rounded-sm p-10 text-center space-y-4 my-8">
               <CheckCircle2 size={56} className="text-primary mx-auto animate-bounce" />
-              <h3 className="text-3xl font-black uppercase tracking-tight">Application Submitted!</h3>
+              <h3 className="text-3xl font-michroma uppercase tracking-tight">Application Submitted!</h3>
               <p className="text-neutral-300 text-sm max-w-md mx-auto">
                 Thank you for applying. Our talent management team will review your submission and contact shortlisted candidates via email/Discord.
               </p>
@@ -91,7 +91,7 @@ export default function ApplyPage() {
                     placeholder="MD Shakil"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
 
@@ -105,7 +105,7 @@ export default function ApplyPage() {
                     placeholder="SiNiSTER"
                     value={form.ign}
                     onChange={(e) => setForm({ ...form, ign: e.target.value })}
-                    className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
               </div>
@@ -118,7 +118,7 @@ export default function ApplyPage() {
                   <select
                     value={form.role}
                     onChange={(e) => setForm({ ...form, role: e.target.value })}
-                    className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
+                    className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-white"
                   >
                     <option value="Pro Player">Pro Player (Esports)</option>
                     <option value="Academy Player">Academy Player</option>
@@ -138,7 +138,7 @@ export default function ApplyPage() {
                     placeholder="PUBG Mobile, Free Fire..."
                     value={form.game}
                     onChange={(e) => setForm({ ...form, game: e.target.value })}
-                    className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
 
@@ -152,7 +152,7 @@ export default function ApplyPage() {
                     placeholder="18"
                     value={form.age}
                     onChange={(e) => setForm({ ...form, age: e.target.value })}
-                    className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
               </div>
@@ -168,7 +168,7 @@ export default function ApplyPage() {
                     placeholder="player@example.com"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
 
@@ -182,7 +182,7 @@ export default function ApplyPage() {
                     placeholder="01700000000"
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
               </div>
@@ -196,7 +196,7 @@ export default function ApplyPage() {
                   placeholder="https://youtube.com/watch?v=..."
                   value={form.portfolioUrl}
                   onChange={(e) => setForm({ ...form, portfolioUrl: e.target.value })}
-                  className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
+                  className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
 
@@ -210,7 +210,7 @@ export default function ApplyPage() {
                   placeholder="List tournaments played, past teams, achievements, and why you want to join A1 Esports..."
                   value={form.experience}
                   onChange={(e) => setForm({ ...form, experience: e.target.value })}
-                  className="w-full bg-neutral-800/80 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors resize-none"
+                  className="w-full bg-neutral-800/80 border border-white/10 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors resize-none"
                 />
               </div>
 

@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Plus, Edit, Trash2, UserPlus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { MediaPicker } from "@/components/dashboard/MediaPicker";
 import { toast } from "sonner";
 
 const PRESET_ROLES = [
@@ -58,7 +59,9 @@ export default function AdminTeams() {
     instagram: "",
     youtube: "",
   });
-  const [uploadingPlayerImg, setUploadingPlayerImg] = useState(false);
+  
+  const [isTeamMediaPickerOpen, setIsTeamMediaPickerOpen] = useState(false);
+  const [isPlayerMediaPickerOpen, setIsPlayerMediaPickerOpen] = useState(false);
 
   useEffect(() => {
     fetchTeams();
@@ -250,14 +253,14 @@ export default function AdminTeams() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Teams & Roster Management</h1>
+          <h1 className="text-3xl font-michroma uppercase mb-2">Teams & Roster Management</h1>
           <p className="text-neutral-400">
             Create, edit, and delete teams & players. All changes sync live to the website.
           </p>
         </div>
         <button
           onClick={handleOpenAddTeam}
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-bold rounded-lg hover:bg-primary/90 transition-colors shadow-[0_0_20px_rgba(255,0,102,0.3)]"
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-bold rounded-sm hover:bg-primary/90 transition-colors shadow-[0_0_20px_rgba(255,0,102,0.3)]"
         >
           <Plus size={20} />
           Add Team
@@ -271,11 +274,11 @@ export default function AdminTeams() {
       ) : (
         <div className="space-y-6">
           {teamsList.map((team) => (
-            <div key={team.id} className="bg-neutral-900 border border-white/10 rounded-2xl p-6 space-y-6">
+            <div key={team.id} className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6 space-y-6">
               {/* Team Banner Header */}
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="relative h-12 w-12 rounded-lg overflow-hidden bg-neutral-800 shrink-0 border border-white/10">
+                  <div className="relative h-12 w-12 rounded-sm overflow-hidden bg-neutral-800 shrink-0 border border-white/10">
                     <Image
                       src={team.logo || "/A1esports_logo_white.svg"}
                       alt={team.name}
@@ -284,7 +287,7 @@ export default function AdminTeams() {
                     />
                   </div>
                   <div>
-                    <h2 className="font-bold text-xl text-white">{team.name}</h2>
+                    <h2 className="font-michroma uppercase text-xl text-white">{team.name}</h2>
                     <p className="text-xs text-primary font-bold uppercase tracking-widest">{team.game}</p>
                   </div>
                 </div>
@@ -292,20 +295,20 @@ export default function AdminTeams() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleOpenAddPlayer(team.id)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/20 text-primary border border-primary/30 rounded-lg text-xs font-bold hover:bg-primary/30 transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/20 text-primary border border-primary/30 rounded-sm text-xs font-bold hover:bg-primary/30 transition-colors"
                   >
                     <UserPlus size={14} /> Add Player
                   </button>
                   <button
                     onClick={() => handleOpenEditTeam(team)}
-                    className="p-2 hover:bg-white/10 text-white rounded-lg transition-colors"
+                    className="p-2 hover:bg-white/10 text-white rounded-sm transition-colors"
                     title="Edit Team"
                   >
                     <Edit size={16} />
                   </button>
                   <button
                     onClick={() => setDeleteTeamId(team.id)}
-                    className="p-2 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors"
+                    className="p-2 hover:bg-red-500/20 text-red-500 rounded-sm transition-colors"
                     title="Delete Team"
                   >
                     <Trash2 size={16} />
@@ -320,7 +323,7 @@ export default function AdminTeams() {
                 </div>
 
                 {(!team.players || team.players.length === 0) ? (
-                  <div className="py-6 text-center text-neutral-500 text-xs border border-dashed border-white/10 rounded-xl">
+                  <div className="py-6 text-center text-neutral-500 text-xs border border-dashed border-white/10 rounded-sm">
                     No players assigned to this team yet. Click &quot;Add Player&quot; above to add members.
                   </div>
                 ) : (
@@ -328,7 +331,7 @@ export default function AdminTeams() {
                     {team.players.map((player) => (
                       <div
                         key={player.ign}
-                        className="bg-neutral-800/80 border border-white/5 rounded-xl p-4 text-center relative group hover:border-primary/50 transition-all"
+                        className="bg-neutral-800/80 border border-white/5 rounded-sm p-4 text-center relative group hover:border-primary/50 transition-all"
                       >
                         <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                           <button
@@ -347,7 +350,7 @@ export default function AdminTeams() {
                           </button>
                         </div>
 
-                        <div className="relative h-20 w-20 rounded-full mx-auto mb-3 overflow-hidden bg-neutral-900 border border-white/10 shadow-md">
+                        <div className="relative h-20 w-20 rounded-full mx-auto mb-3 overflow-hidden bg-[#0a0a0a] border border-white/10 shadow-md">
                           <Image
                             src={player.image || "/A1esports_logo_white.svg"}
                             alt={player.ign}
@@ -373,9 +376,9 @@ export default function AdminTeams() {
       {/* --- TEAM MODAL --- */}
       {isTeamModalOpen && (
         <Dialog open={isTeamModalOpen} onOpenChange={setIsTeamModalOpen}>
-          <DialogContent className="bg-neutral-900 border-white/10 text-white max-w-md">
+          <DialogContent className="bg-[#0a0a0a] border-white/10 text-white max-w-md">
             <DialogHeader>
-              <DialogTitle className="text-xl font-bold">
+              <DialogTitle className="text-xl font-michroma uppercase">
                 {editingTeam ? "Edit Team" : "Add New Team"}
               </DialogTitle>
             </DialogHeader>
@@ -388,7 +391,7 @@ export default function AdminTeams() {
                   required
                   value={teamForm.name || ""}
                   onChange={(e) => setTeamForm({ ...teamForm, name: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-lg p-2.5 text-sm focus:outline-none focus:border-primary"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2.5 text-sm focus:outline-none focus:border-primary"
                   placeholder="e.g. A1 Esports PUBG Mobile"
                 />
               </div>
@@ -400,33 +403,43 @@ export default function AdminTeams() {
                   required
                   value={teamForm.game || ""}
                   onChange={(e) => setTeamForm({ ...teamForm, game: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-lg p-2.5 text-sm focus:outline-none focus:border-primary"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2.5 text-sm focus:outline-none focus:border-primary"
                   placeholder="e.g. PUBG Mobile Pro"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-neutral-400 uppercase mb-1">Logo URL</label>
-                <input
-                  type="text"
-                  required
-                  value={teamForm.logo || ""}
-                  onChange={(e) => setTeamForm({ ...teamForm, logo: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-lg p-2.5 text-sm focus:outline-none focus:border-primary"
-                />
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-neutral-400 uppercase">Logo URL</label>
+                  <button type="button" onClick={() => setIsTeamMediaPickerOpen(true)} className="text-[10px] text-primary font-bold uppercase hover:underline">Select Media</button>
+                </div>
+                <div className="space-y-2">
+                  {teamForm.logo && (
+                    <div className="relative w-20 h-20 rounded-sm border border-white/10 overflow-hidden bg-neutral-800 p-2">
+                      <Image src={teamForm.logo} alt="Preview" fill className="object-contain" />
+                    </div>
+                  )}
+                  <input
+                    type="url"
+                    required
+                    value={teamForm.logo || ""}
+                    onChange={(e) => setTeamForm({ ...teamForm, logo: e.target.value })}
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2.5 text-sm focus:outline-none focus:border-primary"
+                  />
+                </div>
               </div>
 
               <div className="pt-4 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsTeamModalOpen(false)}
-                  className="px-4 py-2 bg-white/10 text-white rounded-lg text-sm font-bold hover:bg-white/20 transition-colors"
+                  className="px-4 py-2 bg-white/10 text-white rounded-sm text-sm font-bold hover:bg-white/20 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-primary text-black rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors"
+                  className="px-4 py-2 bg-primary text-black rounded-sm text-sm font-bold hover:bg-primary/90 transition-colors"
                 >
                   Save Team
                 </button>
@@ -439,9 +452,9 @@ export default function AdminTeams() {
       {/* --- PLAYER MODAL --- */}
       {isPlayerModalOpen && (
         <Dialog open={isPlayerModalOpen} onOpenChange={setIsPlayerModalOpen}>
-          <DialogContent className="bg-neutral-900 border-white/10 text-white max-w-md max-h-[90vh] overflow-y-auto">
+          <DialogContent className="bg-[#0a0a0a] border-white/10 text-white max-w-md max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-xl font-bold">
+              <DialogTitle className="text-xl font-michroma uppercase">
                 {editingPlayer ? "Edit Player Profile" : "Add Player to Roster"}
               </DialogTitle>
             </DialogHeader>
@@ -455,7 +468,7 @@ export default function AdminTeams() {
                     required
                     value={playerForm.ign}
                     onChange={(e) => setPlayerForm({ ...playerForm, ign: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-lg p-2.5 text-sm focus:outline-none focus:border-primary"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2.5 text-sm focus:outline-none focus:border-primary"
                     placeholder="e.g. SiBOX"
                   />
                 </div>
@@ -467,7 +480,7 @@ export default function AdminTeams() {
                     required
                     value={playerForm.name}
                     onChange={(e) => setPlayerForm({ ...playerForm, name: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-lg p-2.5 text-sm focus:outline-none focus:border-primary"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2.5 text-sm focus:outline-none focus:border-primary"
                     placeholder="e.g. Abdullah Al Mamun"
                   />
                 </div>
@@ -487,7 +500,7 @@ export default function AdminTeams() {
                     placeholder="Type custom role or select below..."
                     value={playerForm.role}
                     onChange={(e) => setPlayerForm({ ...playerForm, role: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-lg p-2.5 text-sm font-bold text-primary focus:outline-none focus:border-primary"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2.5 text-sm font-bold text-primary focus:outline-none focus:border-primary"
                   />
 
                   {/* Preset Suggestions */}
@@ -511,38 +524,23 @@ export default function AdminTeams() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-neutral-400 uppercase mb-1">Player Headshot Image</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-neutral-400 uppercase">Player Headshot Image</label>
+                  <button type="button" onClick={() => setIsPlayerMediaPickerOpen(true)} className="text-[10px] text-primary font-bold uppercase hover:underline">Select Media</button>
+                </div>
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (!file) return;
-                        setUploadingPlayerImg(true);
-                        try {
-                          const { uploadImageToSupabase } = await import("@/lib/supabase/client");
-                          const url = await uploadImageToSupabase(file, "images");
-                          setPlayerForm((prev) => ({ ...prev, image: url }));
-                        } catch (err) {
-                          alert("Upload note: Using URL fallback");
-                        } finally {
-                          setUploadingPlayerImg(false);
-                        }
-                      }}
-                      className="w-full text-xs text-neutral-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-primary file:text-black hover:file:bg-primary/90 cursor-pointer"
-                    />
-                    {uploadingPlayerImg && <span className="text-xs text-primary animate-pulse">Uploading...</span>}
-                  </div>
-
+                  {playerForm.image && (
+                    <div className="relative w-32 h-32 rounded-sm border border-white/10 overflow-hidden bg-neutral-800">
+                      <Image src={playerForm.image} alt="Preview" fill className="object-cover object-top" />
+                    </div>
+                  )}
                   <input
                     type="url"
                     required
                     placeholder="https://..."
                     value={playerForm.image}
                     onChange={(e) => setPlayerForm({ ...playerForm, image: e.target.value })}
-                    className="w-full bg-neutral-800 border border-white/10 rounded-lg p-2.5 text-sm focus:outline-none focus:border-primary"
+                    className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2.5 text-sm focus:outline-none focus:border-primary"
                   />
                 </div>
               </div>
@@ -554,28 +552,28 @@ export default function AdminTeams() {
                   placeholder="Facebook profile or page link..."
                   value={playerForm.facebook || ""}
                   onChange={(e) => setPlayerForm({ ...playerForm, facebook: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-lg p-2 text-xs focus:outline-none focus:border-primary"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2 text-xs focus:outline-none focus:border-primary"
                 />
                 <input
                   type="text"
                   placeholder="Instagram handle or link..."
                   value={playerForm.instagram || ""}
                   onChange={(e) => setPlayerForm({ ...playerForm, instagram: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-lg p-2 text-xs focus:outline-none focus:border-primary"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2 text-xs focus:outline-none focus:border-primary"
                 />
                 <input
                   type="text"
                   placeholder="Twitter / X handle or link..."
                   value={playerForm.twitter || ""}
                   onChange={(e) => setPlayerForm({ ...playerForm, twitter: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-lg p-2 text-xs focus:outline-none focus:border-primary"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2 text-xs focus:outline-none focus:border-primary"
                 />
                 <input
                   type="text"
                   placeholder="YouTube channel link..."
                   value={playerForm.youtube || ""}
                   onChange={(e) => setPlayerForm({ ...playerForm, youtube: e.target.value })}
-                  className="w-full bg-neutral-800 border border-white/10 rounded-lg p-2 text-xs focus:outline-none focus:border-primary"
+                  className="w-full bg-neutral-800 border border-white/10 rounded-sm p-2 text-xs focus:outline-none focus:border-primary"
                 />
               </div>
 
@@ -583,13 +581,13 @@ export default function AdminTeams() {
                 <button
                   type="button"
                   onClick={() => setIsPlayerModalOpen(false)}
-                  className="px-4 py-2 bg-white/10 text-white rounded-lg text-sm font-bold hover:bg-white/20 transition-colors"
+                  className="px-4 py-2 bg-white/10 text-white rounded-sm text-sm font-bold hover:bg-white/20 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-primary text-black rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors"
+                  className="px-4 py-2 bg-primary text-black rounded-sm text-sm font-bold hover:bg-primary/90 transition-colors"
                 >
                   Save Player
                 </button>
@@ -598,6 +596,18 @@ export default function AdminTeams() {
           </DialogContent>
         </Dialog>
       )}
+      
+      {/* Media Pickers */}
+      <MediaPicker
+        open={isTeamMediaPickerOpen}
+        onOpenChange={setIsTeamMediaPickerOpen}
+        onSelect={(url) => setTeamForm({ ...teamForm, logo: url })}
+      />
+      <MediaPicker
+        open={isPlayerMediaPickerOpen}
+        onOpenChange={setIsPlayerMediaPickerOpen}
+        onSelect={(url) => setPlayerForm({ ...playerForm, image: url })}
+      />
       {/* Confirm Team Delete Modal */}
       <ConfirmModal
         isOpen={!!deleteTeamId}

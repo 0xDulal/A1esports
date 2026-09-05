@@ -17,13 +17,13 @@ export default function DashboardError({
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center p-4">
-      <div className="bg-neutral-900 border border-white/10 rounded-2xl p-8 max-w-md text-center space-y-5">
-        <div className="h-12 w-12 bg-red-500/10 rounded-xl flex items-center justify-center mx-auto text-red-400">
+      <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-8 max-w-md text-center space-y-5">
+        <div className="h-12 w-12 bg-red-500/10 rounded-sm flex items-center justify-center mx-auto text-red-400">
           <ShieldAlert size={28} />
         </div>
 
         <div className="space-y-1">
-          <h3 className="text-xl font-bold text-white">Admin Section Error</h3>
+          <h3 className="text-xl font-michroma uppercase text-white">Admin Section Error</h3>
           <p className="text-xs text-neutral-400">
             Failed to render dashboard view. Check network connection or Supabase status.
           </p>

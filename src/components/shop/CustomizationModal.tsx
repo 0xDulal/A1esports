@@ -4,9 +4,8 @@ import { useCart } from "@/context/CartContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
 import Image from "next/image";
-import { A1Button } from "@/components/ui/A1Button";
 import { Input } from "@/components/ui/input";
-import { X, CheckCircle2 } from "lucide-react";
+import { CheckCircle2, ShoppingCart } from "lucide-react";
 
 const SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"] as const;
 const SLEEVE_TYPES = [
@@ -33,33 +32,39 @@ export function CustomizationModal() {
     }
   };
 
+  const displayImage = product.image || (product.images && product.images[0]) || "";
+  const displayTitle = product.title || product.name || "Product";
+
   return (
     <Dialog open={isOpen} onOpenChange={closeCustomModal}>
-      <DialogContent className="sm:max-w-2xl bg-black border border-white/10 p-0 overflow-hidden shadow-2xl">
+      <DialogContent className="sm:max-w-4xl bg-[#0a0a0a] border border-neutral-800 p-0 overflow-hidden shadow-2xl rounded-sm font-mono">
         <div className="flex flex-col md:flex-row h-full">
           {/* Left: Product Preview */}
-          <div className="w-full md:w-5/12 bg-neutral-900 relative min-h-[400px]">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent opacity-50 z-10" />
-            <Image 
-              src={product.image} 
-              alt={product.title} 
-              fill 
-              className="object-cover"
-            />
+          <div className="w-full md:w-1/2 bg-neutral-950 relative min-h-[500px] border-r border-neutral-800">
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,0,102,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,102,0.1)_1px,transparent_1px)] bg-[size:10px_10px] opacity-10 pointer-events-none z-10" />
+            
+            {displayImage && (
+              <Image 
+                src={displayImage} 
+                alt={product.title || product.name || "Product"} 
+                fill 
+                className="object-cover opacity-90"
+              />
+            )}
             
             {/* Backside Overlay Mockup */}
-            <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none z-20">
-              <div className="bg-black/40 backdrop-blur-md py-6 w-full border-y border-white/5">
-                <span className="text-[22px] font-black text-white uppercase tracking-[0.5em] select-none break-all px-4 block drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none z-20">
+              <div className="bg-[#0a0a0a]/90 backdrop-blur-md py-6 w-full border-y border-primary/50">
+                <span className="text-[22px] font-bold text-white uppercase tracking-[0.3em] select-none break-all px-4 block">
                   {customName || "YOUR NAME"}
                 </span>
-                <div className="flex items-center justify-center gap-3 mt-3">
+                <div className="flex items-center justify-center gap-2 mt-4">
                   {selectedSize && (
-                    <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] px-2 py-0.5 bg-primary/10 rounded">
-                      SIZE: {selectedSize}
+                    <span className="text-[10px] font-bold text-primary uppercase tracking-widest px-2 py-1 bg-primary/10 border border-primary/20 rounded-sm">
+                      {selectedSize}
                     </span>
                   )}
-                  <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] px-2 py-0.5 bg-primary/10 rounded">
+                  <span className="text-[10px] font-bold text-primary uppercase tracking-widest px-2 py-1 bg-primary/10 border border-primary/20 rounded-sm">
                     {selectedSleeve === "half" ? "HALF SLEEVE" : "FULL SLEEVE"}
                   </span>
                 </div>
@@ -68,43 +73,46 @@ export function CustomizationModal() {
           </div>
 
           {/* Right: Input */}
-          <div className="flex-1 p-8 flex flex-col justify-center max-h-[90vh] overflow-y-auto">
-            <DialogHeader className="mb-6">
-              <div className="text-primary font-bold text-[10px] tracking-[0.3em] uppercase mb-2 italic">
-                Personalize Item
+          <div className="flex-1 p-8 flex flex-col justify-center max-h-[90vh] overflow-y-auto bg-[#0a0a0a]">
+            <DialogHeader className="mb-8">
+              <div className="text-primary font-semibold text-xs tracking-widest uppercase mb-2 bg-primary/10 inline-block px-2 py-0.5 rounded-sm self-start">
+                Personalization
               </div>
-              <DialogTitle className="text-2xl font-black text-white uppercase tracking-tighter leading-none">
-                Customize <span className="text-primary italic">Your</span> GEAR<span className="text-primary">.</span>
+              <DialogTitle className="text-3xl font-bold text-white uppercase tracking-tight leading-none mt-2">
+                {displayTitle}
               </DialogTitle>
             </DialogHeader>
 
-            <div className="space-y-6">
+            <div className="space-y-8">
               {/* Sleeve Selection */}
               <div className="space-y-3">
-                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest block">
-                  Select Sleeve Type
-                </label>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-primary rounded-sm" />
+                  <label className="text-xs font-bold text-neutral-400 uppercase tracking-widest">
+                    Sleeve Format
+                  </label>
+                </div>
                 <div className="grid grid-cols-2 gap-3">
                   {[
                     { id: "half", label: "Half Sleeve", price: product.halfSleevePrice || product.price },
-                    { id: "full", label: "Full Sleeve", price: product.fullSleevePrice || (product.price + 150) },
+                    { id: "full", label: "Full Sleeve", price: product.fullSleevePrice || (product.price ? product.price + 150 : 0) },
                   ].map((type) => (
                     <button
                       key={type.id}
                       onClick={() => setSelectedSleeve(type.id as any)}
-                      className={`relative p-4 rounded-xl border text-left transition-all group ${
+                      className={`relative p-4 rounded-sm border text-left transition-all ${
                         selectedSleeve === type.id
                           ? "bg-primary/10 border-primary text-white"
-                          : "bg-white/5 border-white/10 text-neutral-500 hover:text-white hover:border-white/20"
+                          : "bg-neutral-900/50 border-neutral-800 text-neutral-300 hover:text-white hover:border-primary/50 hover:bg-neutral-900"
                       }`}
                     >
-                      <div className="text-[10px] font-black uppercase tracking-widest">{type.label}</div>
-                      <div className={`text-[9px] font-bold mt-1 ${selectedSleeve === type.id ? 'text-primary' : 'text-neutral-600'}`}>
+                      <div className="text-sm font-bold uppercase tracking-widest">{type.label}</div>
+                      <div className={`text-xs font-semibold mt-1 ${selectedSleeve === type.id ? 'text-primary' : 'text-neutral-500'}`}>
                         {type.price} BDT
                       </div>
                       {selectedSleeve === type.id && (
                         <div className="absolute top-2 right-2">
-                          <CheckCircle2 size={12} className="text-primary" />
+                          <CheckCircle2 size={16} className="text-primary" />
                         </div>
                       )}
                     </button>
@@ -114,18 +122,21 @@ export function CustomizationModal() {
 
               {/* Size Selection */}
               <div className="space-y-3">
-                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest block">
-                  Select Size
-                </label>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-primary rounded-sm" />
+                  <label className="text-xs font-bold text-neutral-400 uppercase tracking-widest">
+                    Chassis Size
+                  </label>
+                </div>
                 <div className="grid grid-cols-4 gap-2">
                   {SIZES.map((size) => (
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`py-2 text-[10px] font-black uppercase tracking-widest border transition-all ${
+                      className={`py-3 text-[11px] font-bold uppercase tracking-widest border transition-all rounded-sm ${
                         selectedSize === size
                           ? "bg-primary border-primary text-white"
-                          : "bg-white/5 border-white/10 text-neutral-500 hover:text-white hover:border-white/20"
+                          : "bg-black border-neutral-800 text-neutral-500 hover:text-white hover:border-primary/50"
                       }`}
                     >
                       {size}
@@ -136,35 +147,37 @@ export function CustomizationModal() {
 
               {/* Name Input */}
               <div className="space-y-3">
-                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest block">
-                  Backside Name
-                </label>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-primary rounded-sm" />
+                  <label className="text-xs font-bold text-neutral-400 uppercase tracking-widest">
+                    Callsign / Name
+                  </label>
+                </div>
                 <div className="relative">
                   <Input
-                    placeholder="e.g. SHAKIL"
+                    placeholder="ENTER NAME"
                     value={customName}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCustomName(e.target.value.toUpperCase())}
                     maxLength={12}
-                    className="bg-white/5 border-white/10 text-white font-black uppercase tracking-widest py-6 px-4 focus:ring-primary focus:border-primary placeholder:text-neutral-700"
+                    className="bg-black border-neutral-800 text-white font-bold uppercase tracking-widest py-6 px-4 rounded-sm focus:ring-0 focus-visible:ring-0 focus:border-primary focus-visible:border-primary placeholder:text-neutral-700"
                   />
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-neutral-600">
+                  <div className={`absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold ${customName.length > 0 ? 'text-primary' : 'text-neutral-600'}`}>
                     {customName.length}/12
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4 space-y-3">
-                <A1Button 
-                  variant="primary" 
-                  className="w-full py-4 text-xs"
+              <div className="pt-6 space-y-3">
+                <button 
                   onClick={handleAdd}
                   disabled={!customName.trim() || !selectedSize}
+                  className="w-full flex items-center justify-center gap-2 border border-primary bg-[#1a0a2a] hover:bg-primary disabled:bg-neutral-900 disabled:border-neutral-800 disabled:text-neutral-600 disabled:cursor-not-allowed text-white transition-all py-4 text-sm font-bold uppercase tracking-widest rounded-sm"
                 >
-                  Confirm & Add to Cart
-                </A1Button>
+                  <ShoppingCart className="w-4 h-4" /> Add to Cart
+                </button>
                 <button 
                   onClick={closeCustomModal}
-                  className="w-full text-neutral-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors py-2"
+                  className="w-full text-neutral-500 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors py-3"
                 >
                   Cancel
                 </button>

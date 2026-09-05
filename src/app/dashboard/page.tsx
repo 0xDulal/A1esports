@@ -65,7 +65,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
+        <h1 className="text-3xl font-michroma uppercase mb-2">Admin Dashboard</h1>
         <p className="text-neutral-400">Live organization metrics and system overview</p>
       </div>
 
@@ -75,17 +75,17 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-neutral-900 border border-white/10 rounded-2xl p-6 relative overflow-hidden"
+          className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6 relative overflow-hidden"
         >
           <div className="flex items-center justify-between mb-4">
-            <div className="h-12 w-12 bg-primary/20 rounded-xl flex items-center justify-center">
+            <div className="h-12 w-12 bg-primary/20 rounded-sm flex items-center justify-center">
               <ShoppingBag className="text-primary" size={24} />
             </div>
             <Link href="/dashboard/products" className="text-neutral-500 hover:text-white transition-colors">
               <ArrowRight size={18} />
             </Link>
           </div>
-          <h3 className="text-3xl font-bold">{loading ? "..." : productsCount}</h3>
+          <h3 className="text-3xl font-michroma uppercase">{loading ? "..." : productsCount}</h3>
           <p className="text-neutral-400 text-sm">Products Inventory</p>
         </motion.div>
 
@@ -93,17 +93,17 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-neutral-900 border border-white/10 rounded-2xl p-6 relative overflow-hidden"
+          className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6 relative overflow-hidden"
         >
           <div className="flex items-center justify-between mb-4">
-            <div className="h-12 w-12 bg-green-500/20 rounded-xl flex items-center justify-center">
+            <div className="h-12 w-12 bg-green-500/20 rounded-sm flex items-center justify-center">
               <Users className="text-green-500" size={24} />
             </div>
             <Link href="/dashboard/teams" className="text-neutral-500 hover:text-white transition-colors">
               <ArrowRight size={18} />
             </Link>
           </div>
-          <h3 className="text-3xl font-bold">{loading ? "..." : playersCount}</h3>
+          <h3 className="text-3xl font-michroma uppercase">{loading ? "..." : playersCount}</h3>
           <p className="text-neutral-400 text-sm">Active Players</p>
         </motion.div>
 
@@ -111,17 +111,17 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-neutral-900 border border-white/10 rounded-2xl p-6 relative overflow-hidden"
+          className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6 relative overflow-hidden"
         >
           <div className="flex items-center justify-between mb-4">
-            <div className="h-12 w-12 bg-yellow-500/20 rounded-xl flex items-center justify-center">
+            <div className="h-12 w-12 bg-yellow-500/20 rounded-sm flex items-center justify-center">
               <Trophy className="text-yellow-500" size={24} />
             </div>
             <Link href="/dashboard/teams" className="text-neutral-500 hover:text-white transition-colors">
               <ArrowRight size={18} />
             </Link>
           </div>
-          <h3 className="text-3xl font-bold">{loading ? "..." : teamsCount}</h3>
+          <h3 className="text-3xl font-michroma uppercase">{loading ? "..." : teamsCount}</h3>
           <p className="text-neutral-400 text-sm">Active Teams & Divisions</p>
         </motion.div>
 
@@ -129,17 +129,17 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-neutral-900 border border-white/10 rounded-2xl p-6 relative overflow-hidden"
+          className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6 relative overflow-hidden"
         >
           <div className="flex items-center justify-between mb-4">
-            <div className="h-12 w-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
+            <div className="h-12 w-12 bg-blue-500/20 rounded-sm flex items-center justify-center">
               <DollarSign className="text-blue-500" size={24} />
             </div>
             <Link href="/dashboard/orders" className="text-neutral-500 hover:text-white transition-colors">
               <ArrowRight size={18} />
             </Link>
           </div>
-          <h3 className="text-3xl font-bold">
+          <h3 className="text-3xl font-michroma uppercase">
             {loading ? "..." : `৳${totalRevenue.toLocaleString()}`}
           </h3>
           <p className="text-neutral-400 text-sm">Total Revenue ({ordersCount} orders)</p>
@@ -148,34 +148,34 @@ export default function AdminDashboard() {
 
       {/* Quick Actions & Recent Activity */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6">
-          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+        <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6">
+          <h2 className="text-xl font-michroma uppercase mb-4 flex items-center gap-2">
             <Sparkles size={18} className="text-primary" /> Quick Actions
           </h2>
           <div className="flex flex-wrap gap-3">
             <Link
               href="/dashboard/products"
-              className="px-4 py-2 bg-primary text-black font-bold rounded-lg hover:bg-primary/90 transition-colors inline-block text-sm"
+              className="px-4 py-2 bg-primary text-black font-bold rounded-sm hover:bg-primary/90 transition-colors inline-block text-sm"
             >
               Add Product
             </Link>
             <Link
               href="/dashboard/teams"
-              className="px-4 py-2 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-colors inline-block text-sm"
+              className="px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-colors inline-block text-sm"
             >
               Add Team / Player
             </Link>
             <Link
               href="/dashboard/achievements"
-              className="px-4 py-2 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-colors inline-block text-sm"
+              className="px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-colors inline-block text-sm"
             >
               Add Achievement
             </Link>
           </div>
         </div>
 
-        <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6">
-          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+        <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-6">
+          <h2 className="text-xl font-michroma uppercase mb-4 flex items-center gap-2">
             <Package size={18} className="text-primary" /> Recent Orders & Activity
           </h2>
           {recentOrders.length === 0 ? (

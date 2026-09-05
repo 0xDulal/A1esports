@@ -89,11 +89,11 @@ export default function ChampionshipsPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,0,102,0.15),rgba(255,255,255,0))]" />
 
         <div className="relative max-w-7xl mx-auto px-6 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase">
             <Trophy size={14} /> Trophy Cabinet
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight font-sans italic">
+          <h1 className="text-4xl sm:text-6xl font-michroma uppercase tracking-tight">
             HALL OF <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">CHAMPIONSHIPS</span>
           </h1>
 
@@ -105,7 +105,7 @@ export default function ChampionshipsPage() {
 
       {/* Filter Bar Section */}
       <section className="py-12 max-w-7xl mx-auto px-6">
-        <div className="bg-neutral-900/80 border border-white/10 rounded-2xl p-4 mb-10 space-y-4 backdrop-blur-xl">
+        <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-4 mb-10 space-y-4 backdrop-blur-xl">
           <div className="flex flex-wrap items-center justify-between gap-4">
             {/* Place Filter */}
             <div className="flex flex-wrap items-center gap-2">
@@ -122,7 +122,7 @@ export default function ChampionshipsPage() {
                 <button
                   key={p.id}
                   onClick={() => setSelectedPlace(p.id)}
-                  className={`px-3 py-1.5 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${
+                  className={`px-3 py-1.5 rounded-sm text-[10px] font-black tracking-widest uppercase transition-all ${
                     selectedPlace === p.id
                       ? "bg-primary text-black"
                       : "bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10"
@@ -142,7 +142,7 @@ export default function ChampionshipsPage() {
                 <button
                   key={t}
                   onClick={() => setSelectedTier(t)}
-                  className={`px-3 py-1.5 rounded-lg text-[10px] font-black tracking-widest uppercase transition-all ${
+                  className={`px-3 py-1.5 rounded-sm text-[10px] font-black tracking-widest uppercase transition-all ${
                     selectedTier === t
                       ? "bg-primary text-black"
                       : "bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10"
@@ -175,11 +175,11 @@ export default function ChampionshipsPage() {
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ delay: i * 0.04 }}
                   whileHover={{ y: -6 }}
-                  className="p-8 rounded-[2rem] bg-neutral-900/60 border border-white/10 hover:border-primary/40 backdrop-blur-xl flex flex-col justify-between transition-all duration-300 group"
+                  className="p-8 rounded-sm bg-neutral-900/60 border border-white/10 hover:border-primary/40 backdrop-blur-xl flex flex-col justify-between transition-all duration-300 group"
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest border ${
+                      <span className={`px-3 py-1 rounded-sm text-xs font-black uppercase tracking-widest border ${
                         item.place.includes("1st")
                           ? "border-yellow-500/40 bg-yellow-500/10 text-yellow-500"
                           : item.place.includes("2nd")
@@ -190,13 +190,13 @@ export default function ChampionshipsPage() {
                       }`}>
                         {item.place}
                       </span>
-                      <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-neutral-400 text-xs font-bold uppercase flex items-center gap-1">
+                      <span className="px-3 py-1 rounded-sm bg-white/5 border border-white/10 text-neutral-400 text-xs font-bold uppercase flex items-center gap-1">
                         <Medal size={12} className="text-primary" />
                         {item.tier}
                       </span>
                     </div>
 
-                    <h3 className="text-xl font-black uppercase leading-tight text-white group-hover:text-primary transition-colors line-clamp-3">
+                    <h3 className="text-xl font-michroma uppercase leading-tight text-white group-hover:text-primary transition-colors line-clamp-3">
                       {item.tournament}
                     </h3>
                   </div>
@@ -206,7 +206,7 @@ export default function ChampionshipsPage() {
                       <Calendar size={14} />
                       {item.date}
                     </div>
-                    <div className="text-lg font-black text-white">
+                    <div className="text-lg font-michroma text-white">
                       {item.prize}
                     </div>
                   </div>
@@ -217,8 +217,8 @@ export default function ChampionshipsPage() {
         )}
 
         {!loading && filteredAchievements.length === 0 && (
-          <div className="py-16 text-center space-y-3 bg-white/5 border border-white/10 rounded-2xl">
-            <p className="text-xl font-bold uppercase text-neutral-400">No achievements found for this filter</p>
+          <div className="py-16 text-center space-y-3 bg-white/5 border border-white/10 rounded-sm">
+            <p className="text-xl font-michroma uppercase text-neutral-400">No achievements found for this filter</p>
             <button
               onClick={() => {
                 setSelectedPlace("ALL");
@@ -237,7 +237,7 @@ export default function ChampionshipsPage() {
             href={LIQUIPEDIA_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white/5 border border-white/10 hover:border-primary/40 text-white hover:text-primary text-xs font-black uppercase tracking-widest transition-all"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-white/5 border border-white/10 hover:border-primary/40 text-white hover:text-primary text-xs font-black uppercase tracking-widest transition-all"
           >
             <span>View All Live Liquipedia Match Statistics</span>
             <ExternalLink size={14} />

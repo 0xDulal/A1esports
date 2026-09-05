@@ -2,127 +2,99 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Users, Trophy, Globe, Zap } from "lucide-react";
-import { Section } from "@/components/ui/Section";
-import { SectionHeader } from "@/components/ui/SectionHeader";
+import { Users, Trophy, Globe, Zap, CircuitBoard } from "lucide-react";
 
 const stats = [
-  {
-    label: "Founded",
-    value: "2020",
-    icon: Zap,
-  },
-  {
-    label: "Pro Players",
-    value: "25+",
-    icon: Users,
-  },
-  {
-    label: "Championships",
-    value: "15+",
-    icon: Trophy,
-  },
-  {
-    label: "Global Reach",
-    value: "Millions",
-    icon: Globe,
-  },
+  { label: "Founded", value: "2020", icon: Zap },
+  { label: "Pro Players", value: "25+", icon: Users },
+  { label: "Championships", value: "15+", icon: Trophy },
+  { label: "Global Reach", value: "Millions", icon: Globe },
 ];
 
 export function AboutUs() {
   return (
-    <Section id="about" className="pt-16 sm:pt-32 pb-12 sm:pb-24">
-      {/* Background Decorative Logo */}
-      <div className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/3 opacity-5 pointer-events-none select-none z-0">
-        <Image
-          src="/A1esports_logo_white.svg"
-          alt=""
-          width={800}
-          height={800}
-          className="object-contain"
-        />
-      </div>
+    <section id="about" className="bg-[#0a0a0a] text-neutral-400 py-24 px-4 md:px-8 font-mono border-t border-neutral-800">
+      <div className="max-w-[1600px] mx-auto">
+        <div className="flex items-center gap-4 mb-12">
+          <CircuitBoard className="w-6 h-6 text-primary" />
+          <h2 className="text-2xl font-bold tracking-widest text-white uppercase">About Us</h2>
+          <div className="flex-1 h-px bg-neutral-800 ml-4" />
+        </div>
 
-      <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center relative z-10 pt-4 sm:pt-12">
-        {/* Left Side: Content */}
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-            </span>
-            Our Story
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4">
           
-          <SectionHeader
-            title={
-              <>
-                Redefining{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
-                  South Asian
-                </span>{" "}
-                Esports
-              </>
-            }
-            className="mb-8"
-          />
+          {/* Mission Spec Sheet */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="lg:col-span-5 border border-neutral-800 bg-neutral-900/30 p-8 flex flex-col justify-between"
+          >
+            <div>
+              <div className="inline-flex items-center gap-2 px-2 py-1 bg-neutral-800 text-xs font-bold uppercase tracking-widest mb-8">
+                <span className="text-primary">Our Story</span>
+              </div>
+              
+              <h3 className="text-3xl font-bold text-white mb-6 uppercase tracking-tight">
+                South Asia's <br/> Premier <span className="text-primary">Powerhouse</span>
+              </h3>
+              
+              <div className="space-y-6 text-sm leading-relaxed max-w-md text-neutral-400">
+                <p>
+                  Founded in 2020, <span className="text-white">A1 Esports</span> operates as a high-performance organization dedicated to excellence, precision, and the systemic growth of the competitive gaming ecosystem.
+                </p>
+                <p>
+                  Deploying top-tier professional rosters and world-class analytical coaching staff, we execute at the highest level in global tournaments, consistently optimizing the boundaries of competitive mechanics.
+                </p>
+              </div>
+            </div>
+          </motion.div>
 
-          <div className="space-y-4 sm:space-y-6 text-neutral-400 text-base sm:text-lg leading-relaxed max-w-xl">
-            <p>
-              Founded in 2020, <span className="text-white font-bold">A1 Esports</span> has rapidly ascended to become South Asia's premier esports powerhouse. We are more than just a team; we are a visionary movement dedicated to excellence, performance, and the growth of the gaming ecosystem.
-            </p>
-            <p>
-              With a roster of top-tier professional players and world-class coaching staff, we compete at the highest level in global tournaments, consistently pushing the boundaries of what's possible in competitive gaming.
-            </p>
-          </div>
+          {/* Visual Hardware Schematic */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="lg:col-span-4 border border-primary/50 bg-neutral-900/30 p-2 relative overflow-hidden transition-colors"
+          >
+            <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+              <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+              <span className="text-[10px] text-white bg-black/50 px-2 py-1 uppercase tracking-widest">Live Feed</span>
+            </div>
+            <div className="relative h-full min-h-[300px] w-full border border-neutral-800 bg-black overflow-hidden flex items-center justify-center">
+              {/* Technical schematic overlay */}
+              <div className="absolute inset-0 bg-[url('/images/regular/a1team.jpg')] bg-cover bg-center opacity-90 transition-all duration-700" />
+              <div className="absolute inset-0 border border-primary/20 m-4 pointer-events-none" />
+              <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(138,43,226, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(138,43,226, 0.15) 1px, transparent 1px)', backgroundSize: '20px 20px', opacity: 0.8 }} />
+            </div>
+          </motion.div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 mt-8 sm:mt-12 pt-8 sm:pt-12 pb-8 sm:pb-12 border-t border-white/10">
+          {/* Telemetry Stats */}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-3 grid grid-rows-4 gap-4"
+          >
             {stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <div className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-1">
-                  {stat.value}
+              <div key={stat.label} className="border border-neutral-800 bg-neutral-900/30 p-4 flex items-center justify-between group hover:border-primary/50 transition-colors">
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-neutral-600 mb-1">
+                    {stat.label}
+                  </div>
+                  <div className="text-xl font-bold text-white group-hover:text-primary transition-colors">
+                    {stat.value}
+                  </div>
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">
-                  {stat.label}
-                </div>
-              </motion.div>
+                <stat.icon className="w-5 h-5 text-neutral-700 group-hover:text-primary/70 transition-colors" />
+              </div>
             ))}
-          </div>
-        </motion.div>
+          </motion.div>
 
-        {/* Right Side: Visual Section */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="relative aspect-square"
-        >
-          <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-[3rem] blur-3xl opacity-50" />
-          <div className="relative h-full w-full rounded-[3rem] overflow-hidden border border-white/10">
-            <Image
-              src="/images/regular/a1team.jpg"
-              alt="A1 Esports Team"
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-          </div>
-        </motion.div>
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }

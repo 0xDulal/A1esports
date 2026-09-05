@@ -30,11 +30,11 @@ export default function SponsorsPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,0,102,0.15),rgba(255,255,255,0))]" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase">
             <Handshake size={14} /> Global Alliances
           </div>
 
-          <h1 className="text-3xl sm:text-6xl font-black uppercase tracking-tight font-sans italic">
+          <h1 className="text-3xl sm:text-6xl font-michroma uppercase tracking-tight">
             OUR <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">SPONSORS & PARTNERS</span>
           </h1>
 
@@ -51,7 +51,7 @@ export default function SponsorsPage() {
             Loading partners...
           </div>
         ) : sponsors.length === 0 ? (
-          <div className="py-16 text-center text-neutral-500 font-bold uppercase tracking-wider bg-neutral-900/40 border border-white/10 rounded-3xl p-12">
+          <div className="py-16 text-center text-neutral-500 font-bold uppercase tracking-wider bg-[#0a0a0a] border border-white/10 rounded-sm p-12">
             No active sponsors currently listed.
           </div>
         ) : (
@@ -63,11 +63,11 @@ export default function SponsorsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] bg-neutral-900/60 border border-white/10 hover:border-primary/40 backdrop-blur-xl space-y-6 transition-all duration-300 hover:-translate-y-2 group"
+                className="p-6 sm:p-8 rounded-sm bg-neutral-900/60 border border-white/10 hover:border-primary/40 backdrop-blur-xl space-y-6 transition-all duration-300 hover:-translate-y-2 group"
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   {isImageUrl(s.logo) ? (
-                    <div className="relative h-16 w-44 rounded-xl bg-white/5 border border-white/10 p-2 flex items-center justify-center overflow-hidden">
+                    <div className="relative h-16 w-44 rounded-sm bg-white/5 border border-white/10 p-2 flex items-center justify-center overflow-hidden">
                       <img
                         src={s.logo}
                         alt={s.name}
@@ -75,19 +75,19 @@ export default function SponsorsPage() {
                       />
                     </div>
                   ) : (
-                    <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 font-black text-xl text-primary font-sans italic">
+                    <div className="px-4 py-2 rounded-sm bg-white/5 border border-white/10 font-black text-xl text-primary">
                       {s.logo || s.name.substring(0, 8).toUpperCase()}
                     </div>
                   )}
 
-                  <span className="px-3 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest">
+                  <span className="px-3 py-1 rounded-sm bg-primary/10 border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest">
                     {s.badge}
                   </span>
                 </div>
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xl sm:text-2xl font-black uppercase text-white group-hover:text-primary transition-colors">
+                    <h3 className="text-xl sm:text-2xl font-michroma uppercase text-white group-hover:text-primary transition-colors">
                       {s.name}
                     </h3>
                     {s.websiteUrl && (
@@ -95,7 +95,7 @@ export default function SponsorsPage() {
                         href={s.websiteUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 hover:bg-white/10 rounded-full text-neutral-400 hover:text-primary transition-colors"
+                        className="p-2 hover:bg-white/10 rounded-sm text-neutral-400 hover:text-primary transition-colors"
                       >
                         <ExternalLink size={16} />
                       </Link>
@@ -114,9 +114,9 @@ export default function SponsorsPage() {
         )}
 
         {/* Become a Partner Callout */}
-        <div className="mt-12 sm:mt-20 p-6 sm:p-12 rounded-[1.5rem] sm:rounded-[2.5rem] bg-gradient-to-b from-white/10 to-transparent border border-white/10 backdrop-blur-xl text-center space-y-6 max-w-4xl mx-auto">
+        <div className="mt-12 sm:mt-20 p-6 sm:p-12 rounded-sm bg-gradient-to-b from-white/10 to-transparent border border-white/10 backdrop-blur-xl text-center space-y-6 max-w-4xl mx-auto">
           <Zap className="w-10 h-10 sm:w-12 sm:h-12 text-primary mx-auto" />
-          <h2 className="text-2xl sm:text-3xl font-black uppercase">Partner With A1 Esports</h2>
+          <h2 className="text-2xl sm:text-3xl font-michroma uppercase">Partner With A1 Esports</h2>
           <p className="text-neutral-400 text-sm max-w-xl mx-auto leading-relaxed">
             Reach millions of passionate gaming fans across South Asia. Elevate your brand with official jersey placements, video sponsorships, and tournament activations.
           </p>
