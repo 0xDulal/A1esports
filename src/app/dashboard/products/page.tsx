@@ -9,6 +9,7 @@ import { Plus, Edit, Trash2, X, Upload, Image as ImageIcon } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { MediaPicker } from "@/components/dashboard/MediaPicker";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 export default function AdminProducts() {
@@ -176,13 +177,14 @@ export default function AdminProducts() {
             Manage your official store inventory & product gallery images ({products.length} products)
           </p>
         </div>
-        <button
+        <Button
           onClick={handleOpenAdd}
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-bold rounded-sm hover:bg-primary/90 transition-colors shadow-[0_0_20px_rgba(255,0,102,0.3)]"
+          variant="primary"
+          size="md"
         >
-          <Plus size={20} />
+          <Plus size={16} />
           Add Product
-        </button>
+        </Button>
       </div>
 
       {loading ? (
@@ -459,19 +461,21 @@ export default function AdminProducts() {
               </div>
 
               <div className="pt-4 flex justify-end gap-3">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-white/10 text-white rounded-sm text-sm font-bold hover:bg-white/20 transition-colors"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
-                  className="px-4 py-2 bg-primary text-black rounded-sm text-sm font-bold hover:bg-primary/90 transition-colors"
+                  variant="primary"
+                  size="sm"
                 >
                   Save Product
-                </button>
+                </Button>
               </div>
             </form>
           </DialogContent>

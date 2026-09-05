@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Lock, Mail, ShieldCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -143,22 +144,23 @@ export default function LoginPage() {
             </div>
           )}
 
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 bg-primary text-black font-black uppercase tracking-widest text-xs rounded-xl hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(255,0,102,0.2)] disabled:opacity-50"
+            variant="primary"
+            size="lg"
+            className="w-full"
           >
             {loading ? "Authenticating..." : "Sign In To Dashboard"}
-          </button>
+          </Button>
         </form>
 
         <div className="pt-4 border-t border-white/10 text-center">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-400 hover:text-white transition-colors uppercase tracking-wider"
-          >
-            <ArrowLeft size={14} /> Return to Main Website
-          </Link>
+          <Button asChild variant="ghost" size="sm">
+            <Link href="/">
+              <ArrowLeft size={14} /> Return to Main Website
+            </Link>
+          </Button>
         </div>
       </div>
     </div>

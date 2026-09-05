@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 import { motion, HTMLMotionProps } from "framer-motion";
 import React from "react";
 
-interface A1ButtonProps extends HTMLMotionProps<"button"> {
-  variant?: "primary" | "outline" | "ghost" | "secondary";
-  size?: "sm" | "md" | "lg" | "xl";
+export interface A1ButtonProps extends HTMLMotionProps<"button"> {
+  variant?: "primary" | "outline" | "ghost" | "secondary" | "destructive" | "default";
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "default";
   children: React.ReactNode;
   className?: string;
 }
@@ -18,37 +18,42 @@ export function A1Button({
   className,
   ...props
 }: A1ButtonProps) {
-  const baseStyles = "relative inline-flex items-center justify-center font-bold uppercase tracking-widest transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none group";
-  
+  const baseStyles =
+    "font-mono uppercase tracking-widest inline-flex items-center justify-center gap-2 whitespace-nowrap text-xs font-bold transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3.5 shrink-0 outline-none select-none cursor-pointer rounded-none";
+
   const variants = {
-    primary: "bg-primary text-white hover:bg-primary/90 shadow-[0_0_20px_rgba(255,0,102,0.3)] hover:shadow-[0_0_30px_rgba(255,0,102,0.5)]",
-    secondary: "bg-white text-black hover:bg-neutral-100",
-    outline: "border border-white/20 text-white hover:bg-white/10 backdrop-blur-sm",
-    ghost: "text-white hover:bg-white/5",
+    default:
+      "border border-neutral-700 hover:border-primary text-white bg-neutral-900/50 hover:bg-neutral-900/90 hover:shadow-[0_0_15px_rgba(255,0,102,0.25)]",
+    outline:
+      "border border-neutral-700 hover:border-primary text-white bg-neutral-900/50 hover:bg-neutral-900/90 hover:shadow-[0_0_15px_rgba(255,0,102,0.25)]",
+    primary:
+      "border border-primary bg-primary text-black font-black hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(255,0,102,0.45)]",
+    secondary:
+      "border border-neutral-800 bg-neutral-900/40 text-neutral-300 hover:text-white hover:border-neutral-600 hover:bg-neutral-800/60",
+    destructive:
+      "border border-red-500/40 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.3)]",
+    ghost:
+      "border border-transparent text-neutral-400 hover:text-white hover:border-neutral-700 hover:bg-neutral-900/50",
   };
 
   const sizes = {
-    sm: "h-10 px-6 text-xs",
-    md: "h-12 px-8 text-sm",
-    lg: "h-14 px-10 text-lg",
-    xl: "h-16 px-12 text-xl",
+    xs: "h-7 px-2.5 py-1 text-[10px]",
+    sm: "h-8 px-3 py-1.5 text-xs",
+    md: "h-9 px-4 py-2 text-xs",
+    default: "h-9 px-4 py-2 text-xs",
+    lg: "h-11 px-6 py-2.5 text-sm",
+    xl: "h-13 px-8 py-3 text-base",
   };
-
-  const clipPath = variant !== "ghost" ? "[clip-path:polygon(0_0,100%_0,100%_calc(100%-10px),calc(100%-10px)_100%,0_100%)]" : "";
 
   return (
     <motion.button
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: 1.01 }}
       whileTap={{ scale: 0.98 }}
-      className={cn(baseStyles, variants[variant], sizes[size], clipPath, className)}
+      className={cn(baseStyles, variants[variant], sizes[size], className)}
       {...props}
     >
       {children}
-      
-      {/* Glow Effect for Primary */}
-      {variant === "primary" && (
-        <span className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      )}
     </motion.button>
   );
 }
+

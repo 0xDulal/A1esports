@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { A1Button } from "@/components/ui/A1Button";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Image as ImageIcon, Check, Loader2, UploadCloud } from "lucide-react";
 import { uploadImageToSupabase } from "@/lib/supabase/client";
@@ -108,10 +108,10 @@ export function MediaPicker({ open, onOpenChange, onSelect }: MediaPickerProps) 
                 Media Library
               </DialogTitle>
             </div>
-            <A1Button onClick={handleUploadClick} disabled={uploading} variant="primary" size="sm" className="gap-2">
+            <Button onClick={handleUploadClick} disabled={uploading} variant="primary" size="sm" className="gap-2">
               {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
               Upload New
-            </A1Button>
+            </Button>
           </div>
         </DialogHeader>
 

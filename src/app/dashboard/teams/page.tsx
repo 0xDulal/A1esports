@@ -9,6 +9,7 @@ import { Plus, Edit, Trash2, UserPlus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { MediaPicker } from "@/components/dashboard/MediaPicker";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 const PRESET_ROLES = [
@@ -258,13 +259,14 @@ export default function AdminTeams() {
             Create, edit, and delete teams & players. All changes sync live to the website.
           </p>
         </div>
-        <button
+        <Button
           onClick={handleOpenAddTeam}
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-bold rounded-sm hover:bg-primary/90 transition-colors shadow-[0_0_20px_rgba(255,0,102,0.3)]"
+          variant="primary"
+          size="md"
         >
-          <Plus size={20} />
+          <Plus size={16} />
           Add Team
-        </button>
+        </Button>
       </div>
 
       {loading ? (
@@ -293,12 +295,13 @@ export default function AdminTeams() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button
+                  <Button
                     onClick={() => handleOpenAddPlayer(team.id)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/20 text-primary border border-primary/30 rounded-sm text-xs font-bold hover:bg-primary/30 transition-colors"
+                    variant="outline"
+                    size="xs"
                   >
                     <UserPlus size={14} /> Add Player
-                  </button>
+                  </Button>
                   <button
                     onClick={() => handleOpenEditTeam(team)}
                     className="p-2 hover:bg-white/10 text-white rounded-sm transition-colors"
@@ -430,19 +433,21 @@ export default function AdminTeams() {
               </div>
 
               <div className="pt-4 flex justify-end gap-3">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setIsTeamModalOpen(false)}
-                  className="px-4 py-2 bg-white/10 text-white rounded-sm text-sm font-bold hover:bg-white/20 transition-colors"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
-                  className="px-4 py-2 bg-primary text-black rounded-sm text-sm font-bold hover:bg-primary/90 transition-colors"
+                  variant="primary"
+                  size="sm"
                 >
                   Save Team
-                </button>
+                </Button>
               </div>
             </form>
           </DialogContent>
@@ -578,19 +583,21 @@ export default function AdminTeams() {
               </div>
 
               <div className="pt-4 flex justify-end gap-3">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setIsPlayerModalOpen(false)}
-                  className="px-4 py-2 bg-white/10 text-white rounded-sm text-sm font-bold hover:bg-white/20 transition-colors"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
-                  className="px-4 py-2 bg-primary text-black rounded-sm text-sm font-bold hover:bg-primary/90 transition-colors"
+                  variant="primary"
+                  size="sm"
                 >
                   Save Player
-                </button>
+                </Button>
               </div>
             </form>
           </DialogContent>

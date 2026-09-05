@@ -25,6 +25,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { compressAndOptimizeImage } from "@/lib/utils/image-optimizer";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 type MediaFile = {
   id: string;
@@ -389,20 +390,22 @@ export default function AdminMediaLibrary() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
+          <Button
             onClick={fetchMedia}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2.5 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-all text-xs uppercase tracking-wider border border-white/10"
+            variant="outline"
+            size="sm"
           >
-            <RefreshCw size={16} className={loading ? "animate-spin" : ""} /> Refresh Assets
-          </button>
+            <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> Refresh Assets
+          </Button>
 
-          <button
+          <Button
             onClick={() => setIsUploadOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-all text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(255,0,102,0.35)]"
+            variant="primary"
+            size="sm"
           >
-            <Upload size={16} /> Upload Media
-          </button>
+            <Upload size={14} /> Upload Media
+          </Button>
         </div>
       </div>
 
@@ -424,12 +427,14 @@ export default function AdminMediaLibrary() {
           </div>
 
           <div className="flex items-center gap-2">
-            <button
+            <Button
               onClick={handleSelectAllUncompressed}
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-sm text-xs uppercase tracking-wider transition-colors shrink-0 shadow-[0_0_15px_rgba(147,51,234,0.3)]"
+              variant="outline"
+              size="sm"
+              className="border-purple-500/40 text-purple-300 hover:border-purple-400 hover:text-white shrink-0"
             >
               ⚡ Select {stats.unoptimizedCount} Large Assets
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -609,26 +614,28 @@ export default function AdminMediaLibrary() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button
+            <Button
               onClick={handleBulkCompress}
               disabled={optimizing}
-              className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-sm transition-all uppercase text-xs tracking-wider shadow-[0_0_20px_rgba(147,51,234,0.4)] disabled:opacity-50"
+              variant="primary"
+              size="sm"
             >
-              <Zap size={15} className={optimizing ? "animate-spin" : ""} />
+              <Zap size={14} className={optimizing ? "animate-spin" : ""} />
               Bulk Compress ({selectedPaths.size})
-            </button>
+            </Button>
 
-            <button
+            <Button
               onClick={() => setDeleteBulkOpen(true)}
               disabled={deleting}
-              className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-sm transition-all uppercase text-xs tracking-wider shadow-[0_0_20px_rgba(239,68,68,0.3)] disabled:opacity-50"
+              variant="destructive"
+              size="sm"
             >
-              <Trash2 size={15} /> Delete ({selectedPaths.size})
-            </button>
+              <Trash2 size={14} /> Delete ({selectedPaths.size})
+            </Button>
 
-            <button onClick={handleClearSelection} className="text-neutral-400 hover:text-white text-xs px-2">
+            <Button onClick={handleClearSelection} variant="ghost" size="sm">
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -960,13 +967,14 @@ export default function AdminMediaLibrary() {
               )}
 
               <div className="flex items-center justify-between gap-3 pt-2">
-                <button
+                <Button
                   onClick={() => handleOptimizeSingle(previewMedia)}
                   disabled={optimizing}
-                  className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-sm text-xs uppercase tracking-wider transition-colors"
+                  variant="outline"
+                  size="sm"
                 >
                   <Zap size={14} /> Optimize to WebP
-                </button>
+                </Button>
 
                 <div className="flex items-center gap-2 flex-1 max-w-sm">
                   <input
@@ -975,12 +983,13 @@ export default function AdminMediaLibrary() {
                     value={previewMedia.url}
                     className="flex-1 bg-[#0a0a0a] border border-white/10 rounded-sm px-3 py-2 text-xs font-mono text-neutral-300 focus:outline-none"
                   />
-                  <button
+                  <Button
                     onClick={() => handleCopyUrl(previewMedia.url, previewMedia.path)}
-                    className="px-4 py-2 bg-primary text-black font-bold rounded-sm text-xs uppercase tracking-wider hover:bg-primary/90 transition-colors shrink-0"
+                    variant="primary"
+                    size="sm"
                   >
                     Copy URL
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>

@@ -6,6 +6,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { CheckCircle2, ShoppingCart } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"] as const;
 const SLEEVE_TYPES = [
@@ -133,10 +134,10 @@ export function CustomizationModal() {
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`py-3 text-[11px] font-bold uppercase tracking-widest border transition-all rounded-sm ${
+                      className={`py-3 text-[11px] font-mono font-bold uppercase tracking-widest border transition-all rounded-none ${
                         selectedSize === size
-                          ? "bg-primary border-primary text-white"
-                          : "bg-black border-neutral-800 text-neutral-500 hover:text-white hover:border-primary/50"
+                          ? "bg-primary border-primary text-black"
+                          : "bg-black border-neutral-800 text-neutral-500 hover:text-white hover:border-neutral-600"
                       }`}
                     >
                       {size}
@@ -159,7 +160,7 @@ export function CustomizationModal() {
                     value={customName}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCustomName(e.target.value.toUpperCase())}
                     maxLength={12}
-                    className="bg-black border-neutral-800 text-white font-bold uppercase tracking-widest py-6 px-4 rounded-sm focus:ring-0 focus-visible:ring-0 focus:border-primary focus-visible:border-primary placeholder:text-neutral-700"
+                    className="bg-black border-neutral-800 text-white font-bold uppercase tracking-widest py-6 px-4 rounded-none focus:ring-0 focus-visible:ring-0 focus:border-primary focus-visible:border-primary placeholder:text-neutral-700"
                   />
                   <div className={`absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold ${customName.length > 0 ? 'text-primary' : 'text-neutral-600'}`}>
                     {customName.length}/12
@@ -168,19 +169,23 @@ export function CustomizationModal() {
               </div>
 
               <div className="pt-6 space-y-3">
-                <button 
+                <Button 
                   onClick={handleAdd}
                   disabled={!customName.trim() || !selectedSize}
-                  className="w-full flex items-center justify-center gap-2 border border-primary bg-[#1a0a2a] hover:bg-primary disabled:bg-neutral-900 disabled:border-neutral-800 disabled:text-neutral-600 disabled:cursor-not-allowed text-white transition-all py-4 text-sm font-bold uppercase tracking-widest rounded-sm"
+                  variant="primary"
+                  size="lg"
+                  className="w-full"
                 >
                   <ShoppingCart className="w-4 h-4" /> Add to Cart
-                </button>
-                <button 
+                </Button>
+                <Button 
                   onClick={closeCustomModal}
-                  className="w-full text-neutral-500 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors py-3"
+                  variant="ghost"
+                  size="sm"
+                  className="w-full"
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
             </div>
           </div>

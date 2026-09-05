@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase/client";
 import { Order } from "@/types/domain";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function AdminDashboard() {
   const [productsCount, setProductsCount] = useState(0);
@@ -153,24 +154,15 @@ export default function AdminDashboard() {
             <Sparkles size={18} className="text-primary" /> Quick Actions
           </h2>
           <div className="flex flex-wrap gap-3">
-            <Link
-              href="/dashboard/products"
-              className="px-4 py-2 bg-primary text-black font-bold rounded-sm hover:bg-primary/90 transition-colors inline-block text-sm"
-            >
-              Add Product
-            </Link>
-            <Link
-              href="/dashboard/teams"
-              className="px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-colors inline-block text-sm"
-            >
-              Add Team / Player
-            </Link>
-            <Link
-              href="/dashboard/achievements"
-              className="px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-colors inline-block text-sm"
-            >
-              Add Achievement
-            </Link>
+            <Button asChild variant="primary" size="sm">
+              <Link href="/dashboard/products">Add Product</Link>
+            </Button>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/dashboard/teams">Add Team / Player</Link>
+            </Button>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/dashboard/achievements">Add Achievement</Link>
+            </Button>
           </div>
         </div>
 

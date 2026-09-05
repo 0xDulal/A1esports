@@ -10,6 +10,7 @@ import {
   deleteSponsorFromSupabase,
 } from "@/lib/sponsors";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 export default function AdminSponsorsPage() {
@@ -169,12 +170,13 @@ export default function AdminSponsorsPage() {
           </p>
         </div>
 
-        <button
+        <Button
           onClick={handleOpenAdd}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-black font-black uppercase text-xs rounded-sm hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(255,0,102,0.3)]"
+          variant="primary"
+          size="md"
         >
           <Plus size={16} /> Add Sponsor
-        </button>
+        </Button>
       </div>
 
       {loading ? (
@@ -432,19 +434,21 @@ export default function AdminSponsorsPage() {
               </div>
 
               <div className="flex justify-end gap-3 pt-4">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 bg-white/5 border border-white/10 text-white rounded-sm font-bold hover:bg-white/10"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
-                  className="px-5 py-2.5 bg-primary text-black rounded-sm font-black uppercase flex items-center gap-2 hover:bg-primary/90"
+                  variant="primary"
+                  size="sm"
                 >
-                  <Save size={16} /> Save Sponsor
-                </button>
+                  <Save size={14} /> Save Sponsor
+                </Button>
               </div>
             </form>
           </div>

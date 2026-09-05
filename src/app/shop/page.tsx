@@ -8,6 +8,7 @@ import { ProductCard } from "@/components/ui/ProductCard";
 import { Section } from "@/components/ui/Section";
 import { GlowBar } from "@/components/ui/GlowBar";
 import { ShoppingBag, SlidersHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const CATEGORIES = ["ALL", "JERSEYS", "HOODIES", "LIFESTYLE", "ACCESSORIES"] as const;
 
@@ -70,17 +71,14 @@ export default function ShopPage() {
           {/* Category Tabs */}
           <div className="flex flex-wrap justify-center gap-2">
             {CATEGORIES.map((cat) => (
-              <button
+              <Button
                 key={cat}
+                variant={activeCategory === cat ? "primary" : "outline"}
+                size="sm"
                 onClick={() => setActiveCategory(cat)}
-                className={`px-6 py-2 rounded-sm text-xs font-black tracking-widest transition-all duration-300 border ${
-                  activeCategory === cat
-                    ? "bg-primary border-primary text-black"
-                    : "bg-white/5 border-white/10 text-neutral-500 hover:text-white hover:border-white/20"
-                }`}
               >
                 {cat}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -149,12 +147,13 @@ export default function ShopPage() {
           {!loading && filteredProducts.length === 0 && (
             <div className="py-24 text-center space-y-4">
               <p className="text-4xl font-michroma text-white/20 uppercase tracking-tighter">No items found</p>
-              <button
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={() => setActiveCategory("ALL")}
-                className="text-primary font-bold uppercase tracking-widest text-sm hover:underline"
               >
                 Clear all filters
-              </button>
+              </Button>
             </div>
           )}
         </div>

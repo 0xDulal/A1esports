@@ -4,7 +4,7 @@ import { useCart } from "@/context/CartContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { ShoppingBag, X, Plus, Minus, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { A1Button } from "@/components/ui/A1Button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export function CartDrawer() {
@@ -37,13 +37,13 @@ export function CartDrawer() {
                 <p className="text-white font-bold text-lg uppercase tracking-tight">Your cart is empty</p>
                 <p className="text-neutral-500 text-sm">Looks like you haven't added anything yet.</p>
               </div>
-              <A1Button 
+              <Button 
                 variant="primary" 
                 onClick={() => setIsOpen(false)}
                 className="mt-4"
               >
                 Start Shopping
-              </A1Button>
+              </Button>
             </div>
           ) : (
             <div className="space-y-6">
@@ -146,17 +146,19 @@ export function CartDrawer() {
             </div>
 
             <div className="grid grid-cols-1 gap-3 pt-2">
-              <Link href="/checkout" onClick={() => setIsOpen(false)} className="w-full">
-                <A1Button variant="primary" className="w-full py-4 text-sm">
+              <Button asChild variant="primary" size="lg" className="w-full">
+                <Link href="/checkout" onClick={() => setIsOpen(false)}>
                   Proceed to Checkout
-                </A1Button>
-              </Link>
-              <button 
+                </Link>
+              </Button>
+              <Button 
+                variant="ghost"
+                size="sm"
                 onClick={() => setIsOpen(false)}
-                className="text-neutral-500 hover:text-white text-[10px] font-black uppercase tracking-[0.2em] transition-colors"
+                className="w-full"
               >
                 Continue Shopping
-              </button>
+              </Button>
             </div>
           </div>
         )}

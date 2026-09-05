@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Tag, Plus, Trash2, RefreshCw, CheckCircle2, XCircle, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 export default function AdminCoupons() {
@@ -114,19 +115,21 @@ export default function AdminCoupons() {
           <p className="text-neutral-400">Create promo codes, set claim limits (e.g. WinnerPMC), and 100% free discounts</p>
         </div>
         <div className="flex items-center gap-3">
-          <button
+          <Button
             onClick={fetchCoupons}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-colors text-xs uppercase"
+            variant="outline"
+            size="sm"
           >
-            <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+            <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
             Refresh
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setIsAddOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-colors uppercase tracking-wider text-xs"
+            variant="primary"
+            size="sm"
           >
             <Plus size={16} /> Create Coupon
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -326,19 +329,21 @@ export default function AdminCoupons() {
             </div>
 
             <div className="pt-4 flex justify-end gap-3">
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="sm"
                 onClick={() => setIsAddOpen(false)}
-                className="px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 text-xs uppercase"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
-                className="px-5 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 text-xs uppercase tracking-wider"
+                variant="primary"
+                size="sm"
               >
                 Save Coupon
-              </button>
+              </Button>
             </div>
           </form>
         </DialogContent>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Product } from "@/lib/data/shop";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface ProductCardProps {
   product: Product;
@@ -102,25 +103,24 @@ export function ProductCard({ product, index, className }: ProductCardProps) {
 
             {/* Action Buttons */}
             <div className="flex gap-2 pt-1 mt-auto shrink-0">
-              <button
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 text-[10px]"
                 onClick={handleAddToCart}
-                className="flex-1 bg-neutral-800 hover:bg-neutral-700 text-white font-bold py-2.5 text-[11px] uppercase tracking-widest rounded-lg transition-colors duration-200"
                 aria-label="Add to cart"
               >
                 {product.canCustomise ? "Personalize" : "Add to Cart"}
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                className="flex-1 text-[10px]"
                 onClick={handleAddToCart}
-                className={cn(
-                  "flex-1 font-bold py-2.5 text-[11px] uppercase tracking-widest rounded-lg transition-all duration-200",
-                  product.isSoldOut 
-                  ? 'bg-neutral-800/50 text-neutral-600 cursor-not-allowed' 
-                  : 'bg-primary hover:bg-primary/90 text-white'
-                )}
                 disabled={product.isSoldOut}
               >
                 {product.isSoldOut ? 'Out of Stock' : 'Buy Now'}
-              </button>
+              </Button>
             </div>
 
           </div>

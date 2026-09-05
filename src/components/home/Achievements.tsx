@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { Trophy, Calendar, Medal, ExternalLink, Filter, Terminal } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const LIQUIPEDIA_URL = "https://liquipedia.net/pubgmobile/A1_RG_Esports/Results";
 
@@ -20,33 +21,31 @@ export function Achievements({ achievements }: { achievements: any[] }) {
         return cleanItemTier.includes(cleanSelectedTier);
       })
       .sort((a, b) => {
-        const timeA = a.date ? new Date(a.date).getTime() : Number(a.year || 0) * 10000;
-        const timeB = b.date ? new Date(b.date).getTime() : Number(b.year || 0) * 10000;
-        return timeB - timeA;
-      })
-      .slice(0, 6);
+        return parseInt(b.year || "0", 10) - parseInt(a.year || "0", 10);
+      });
   }, [achievements, selectedTier]);
 
   return (
-    <section className="bg-black text-neutral-400 py-24 px-4 md:px-8 font-mono border-t border-neutral-800">
+    <section className="bg-[#050505] text-neutral-400 py-24 px-4 md:px-8 font-mono border-t border-neutral-800">
       <div className="max-w-[1600px] mx-auto">
         
-        {/* Hardware Header */}
-        <div className="flex items-center justify-between mb-8">
+        {/* Section Header */}
+        <div className="flex items-center justify-between mb-12">
           <div className="flex items-center gap-4">
             <Trophy className="w-6 h-6 text-primary" />
-            <h2 className="text-2xl font-bold tracking-widest text-white uppercase">Recent Achievements</h2>
+            <h2 className="text-2xl font-bold tracking-widest text-white uppercase">Tournament Records</h2>
             <div className="hidden md:block w-32 h-px bg-neutral-800 ml-4" />
           </div>
           
-          <Link
-            href={LIQUIPEDIA_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-xs border border-neutral-700 hover:border-primary text-white px-4 py-2 bg-neutral-900/50 transition-colors"
-          >
-            Liquipedia Results <ExternalLink className="w-3 h-3" />
-          </Link>
+          <Button asChild variant="outline">
+            <Link
+              href={LIQUIPEDIA_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Liquipedia Results <ExternalLink className="w-3 h-3" />
+            </Link>
+          </Button>
         </div>
 
         {/* Filter Controls Bar */}
@@ -56,17 +55,14 @@ export function Achievements({ achievements }: { achievements: any[] }) {
           </span>
           <div className="flex flex-wrap items-center gap-2">
             {["ALL", "S-Tier", "A-Tier", "B-Tier"].map((t) => (
-              <button
+              <Button
                 key={t}
+                variant={selectedTier === t ? "primary" : "secondary"}
+                size="xs"
                 onClick={() => setSelectedTier(t)}
-                className={`px-3 py-1 text-xs font-bold tracking-widest uppercase transition-all border ${
-                  selectedTier === t
-                    ? "border-primary text-white bg-primary/10"
-                    : "border-neutral-800 text-neutral-500 hover:text-white hover:border-neutral-600"
-                }`}
               >
                 {t}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

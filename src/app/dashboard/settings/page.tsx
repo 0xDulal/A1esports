@@ -5,6 +5,7 @@ import { CheckCircle2, Truck, CreditCard, Plus, Trash2, Edit2, RefreshCw } from 
 import { PaymentMethod, DeliveryCharges, DEFAULT_DELIVERY_CHARGES, DEFAULT_PAYMENT_METHODS } from "@/lib/supabase/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -194,13 +195,14 @@ export default function AdminSettings() {
           <h1 className="text-3xl font-michroma uppercase mb-2">Store Settings</h1>
           <p className="text-neutral-400">Configure delivery charges, payment options, and store preferences</p>
         </div>
-        <button
+        <Button
           onClick={fetchSettings}
-          className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-colors"
+          variant="outline"
+          size="sm"
         >
-          <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+          <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           Refresh
-        </button>
+        </Button>
       </div>
 
       {/* Appearance Settings Box */}
@@ -211,22 +213,23 @@ export default function AdminSettings() {
           </h2>
           {appearanceSaved && (
             <span className="flex items-center gap-1.5 text-xs text-green-400 font-bold bg-green-500/10 border border-green-500/20 px-3 py-1 rounded-full">
-              <CheckCircle2 size={14} /> Saved!
+              <CheckCircle2 size={14} /> Appearance Saved!
             </span>
           )}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
-              Primary Color (Hex)
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Primary Accent Color */}
+          <div className="space-y-3">
+            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400">
+              Primary Brand Color (Accent Glow & Borders)
             </label>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <input
                 type="color"
                 value={primaryColor}
                 onChange={(e) => setPrimaryColor(e.target.value)}
-                className="w-16 h-12 rounded cursor-pointer bg-transparent border-0"
+                className="h-10 w-12 rounded-sm cursor-pointer border border-white/20 bg-transparent"
               />
               <input
                 type="text"
@@ -237,16 +240,18 @@ export default function AdminSettings() {
               />
             </div>
           </div>
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
-              Secondary / Gradient Color (Hex)
+
+          {/* Secondary Accent Color */}
+          <div className="space-y-3">
+            <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400">
+              Secondary Accent Color (Highlights & Gradients)
             </label>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <input
                 type="color"
                 value={secondaryColor}
                 onChange={(e) => setSecondaryColor(e.target.value)}
-                className="w-16 h-12 rounded cursor-pointer bg-transparent border-0"
+                className="h-10 w-12 rounded-sm cursor-pointer border border-white/20 bg-transparent"
               />
               <input
                 type="text"
@@ -260,13 +265,14 @@ export default function AdminSettings() {
         </div>
 
         <div className="flex justify-end">
-          <button
+          <Button
             type="submit"
             disabled={savingAppearance}
-            className="px-6 py-2.5 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-colors uppercase text-xs tracking-wider disabled:opacity-50"
+            variant="primary"
+            size="sm"
           >
             {savingAppearance ? "Saving..." : "Save Appearance"}
-          </button>
+          </Button>
         </div>
       </form>
 
@@ -312,13 +318,14 @@ export default function AdminSettings() {
         </div>
 
         <div className="flex justify-end">
-          <button
+          <Button
             type="submit"
             disabled={savingDelivery}
-            className="px-6 py-2.5 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-colors uppercase text-xs tracking-wider disabled:opacity-50"
+            variant="primary"
+            size="sm"
           >
             {savingDelivery ? "Saving Charges..." : "Save Delivery Fees"}
-          </button>
+          </Button>
         </div>
       </form>
 
@@ -331,12 +338,13 @@ export default function AdminSettings() {
             </h2>
             <p className="text-xs text-neutral-400 mt-1">Enable/disable payment methods or update account numbers & instructions</p>
           </div>
-          <button
+          <Button
             onClick={() => setIsAddPmOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-colors uppercase tracking-wider text-xs"
+            variant="primary"
+            size="sm"
           >
             <Plus size={16} /> Add Payment Method
-          </button>
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -476,19 +484,21 @@ export default function AdminSettings() {
             )}
 
             <div className="pt-4 flex justify-end gap-3">
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="sm"
                 onClick={() => setIsAddPmOpen(false)}
-                className="px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 text-xs uppercase"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
-                className="px-5 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 text-xs uppercase tracking-wider"
+                variant="primary"
+                size="sm"
               >
                 Save Payment Method
-              </button>
+              </Button>
             </div>
           </form>
         </DialogContent>

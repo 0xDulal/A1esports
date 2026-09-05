@@ -39,12 +39,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Fetch site appearance settings for dynamic primary color
-  const { data: appearanceSettings } = await supabase
-    .from("site_settings")
-    .select("value")
-    .eq("key", "site_appearance")
-    .single();
+  // Fetch site appearance settings for dynamic primary color safely
+  let appearanceSettings = null;
+  try {
+    const res = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "site_appearance")
+      .single();
+    appearanceSettings = res.data;
+  } catch {
+    // Graceful fallback during build or offline
+  }
 
   const primaryColor = appearanceSettings?.value?.primary_color;
   const secondaryColor = appearanceSettings?.value?.secondary_color;

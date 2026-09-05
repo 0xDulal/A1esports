@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Plus, Edit, Trash2, Trophy, RefreshCw, Layers, Globe, Database, CheckCircle2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 type AchievementEntry = {
@@ -165,20 +166,22 @@ export default function AdminAchievements() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
+          <Button
             onClick={fetchData}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-colors text-xs uppercase"
+            variant="outline"
+            size="sm"
           >
-            <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+            <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
             Refresh
-          </button>
+          </Button>
 
-          <button
+          <Button
             onClick={handleOpenAdd}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-colors text-xs uppercase tracking-wider"
+            variant="primary"
+            size="sm"
           >
             <Plus size={16} /> Add Achievement
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -396,19 +399,21 @@ export default function AdminAchievements() {
               </div>
 
               <div className="pt-4 flex justify-end gap-3">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-white/10 text-white rounded-sm text-xs font-bold uppercase hover:bg-white/20 transition-colors"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
-                  className="px-5 py-2 bg-primary text-black rounded-sm text-xs font-black uppercase tracking-wider hover:bg-primary/90 transition-colors"
+                  variant="primary"
+                  size="sm"
                 >
                   Save Achievement
-                </button>
+                </Button>
               </div>
             </form>
           </DialogContent>

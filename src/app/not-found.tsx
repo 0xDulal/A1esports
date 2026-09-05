@@ -1,6 +1,8 @@
+"use client";
+
 import Link from "next/link";
-import { ShieldAlert, Home } from "lucide-react";
-import { A1Button } from "@/components/ui/A1Button";
+import { ShieldAlert, Home, ShoppingBag } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
@@ -21,16 +23,16 @@ export default function NotFound() {
         </div>
 
         <div className="pt-4 flex flex-col sm:flex-row justify-center gap-3">
-          <Link href="/">
-            <A1Button variant="primary" size="md">
-              <Home size={16} className="mr-2" /> Back to Home
-            </A1Button>
-          </Link>
-          <Link href="/shop">
-            <A1Button variant="outline" size="md">
-              Visit Store
-            </A1Button>
-          </Link>
+          <Button asChild variant="primary" size="md">
+            <Link href="/">
+              <Home size={14} /> Back to Home
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="md">
+            <Link href="/shop">
+              <ShoppingBag size={14} /> Visit Store
+            </Link>
+          </Button>
         </div>
       </div>
     </main>

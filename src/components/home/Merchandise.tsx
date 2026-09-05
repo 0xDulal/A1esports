@@ -8,6 +8,7 @@ import { Product } from "@/lib/data/shop";
 import { getProductsFromSupabase } from "@/lib/supabase/db";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
+import { Button } from "@/components/ui/button";
 
 export function Merchandise() {
   const [recentProducts, setRecentProducts] = useState<Product[]>([]);
@@ -30,12 +31,11 @@ export function Merchandise() {
             <div className="hidden md:block w-32 h-px bg-neutral-800 ml-4" />
           </div>
           
-          <Link
-            href="/shop"
-            className="flex items-center gap-2 text-xs border border-neutral-700 hover:border-primary text-white px-4 py-2 bg-neutral-900/50 transition-colors"
-          >
-            VIEW ALL <ArrowRight className="w-3 h-3" />
-          </Link>
+          <Button asChild variant="outline">
+            <Link href="/shop">
+              VIEW ALL <ArrowRight className="w-3 h-3" />
+            </Link>
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -116,12 +116,14 @@ function HardwareProductCard({ product, index }: { product: Product; index: numb
           {product.category || "Merch"}
         </div>
         
-        <button 
+        <Button 
           onClick={handleAddToCart}
-          className="w-full mt-auto flex items-center justify-center gap-2 border border-primary bg-[#1a0a2a] hover:bg-primary text-white transition-all py-3 text-sm font-bold uppercase tracking-widest rounded-sm"
+          variant="primary"
+          size="md"
+          className="w-full mt-auto"
         >
           {product.canCustomise ? "Personalize" : "Add to Cart"}
-        </button>
+        </Button>
       </div>
     </motion.div>
   );

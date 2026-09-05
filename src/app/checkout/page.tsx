@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { A1Button } from "@/components/ui/A1Button";
+import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -595,14 +596,15 @@ export default function CheckoutPage() {
                         onChange={(e) => setCouponInput(e.target.value)}
                         className="flex-1 bg-neutral-800 border border-white/10 rounded-xl px-4 py-2.5 text-xs font-bold tracking-widest uppercase focus:outline-none focus:border-primary text-white"
                       />
-                      <button
+                      <Button
                         type="button"
+                        variant="primary"
+                        size="sm"
                         onClick={handleApplyCoupon}
                         disabled={couponLoading || !couponInput.trim()}
-                        className="px-4 py-2.5 bg-primary text-black font-black text-xs uppercase tracking-widest rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50"
                       >
                         {couponLoading ? "..." : "Apply"}
-                      </button>
+                      </Button>
                     </div>
                   )}
 

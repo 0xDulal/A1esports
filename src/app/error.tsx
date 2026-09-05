@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 import Link from "next/link";
-import { A1Button } from "@/components/ui/A1Button";
+import { Button } from "@/components/ui/button";
 
 export default function GlobalError({
   error,
@@ -32,14 +32,14 @@ export default function GlobalError({
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <A1Button variant="primary" size="md" onClick={() => reset()}>
-            <RefreshCw size={16} className="mr-2" /> Try Again
-          </A1Button>
-          <Link href="/">
-            <A1Button variant="outline" size="md">
-              <Home size={16} className="mr-2" /> Back to Home
-            </A1Button>
-          </Link>
+          <Button variant="primary" size="md" onClick={() => reset()}>
+            <RefreshCw size={14} /> Try Again
+          </Button>
+          <Button asChild variant="outline" size="md">
+            <Link href="/">
+              <Home size={14} /> Back to Home
+            </Link>
+          </Button>
         </div>
       </div>
     </main>

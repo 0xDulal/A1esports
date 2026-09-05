@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { AlertTriangle, Trash2, Info, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export interface ConfirmModalProps {
   isOpen: boolean;
@@ -93,23 +94,25 @@ export function ConfirmModal({
         </DialogHeader>
 
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="sm"
             onClick={onClose}
             disabled={isLoading}
-            className="px-4 py-2 bg-white/5 border border-white/10 text-white rounded-xl text-xs font-bold uppercase hover:bg-white/10 transition-colors disabled:opacity-50"
           >
             {cancelText}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant={variant === "danger" ? "destructive" : variant === "warning" ? "primary" : "default"}
+            size="sm"
             onClick={handleConfirmClick}
             disabled={isLoading}
-            className={`flex items-center justify-center gap-2 px-5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-colors disabled:opacity-50 ${getConfirmBtnStyle()}`}
           >
             {isLoading && <Loader2 size={14} className="animate-spin" />}
-            {isLoading ? "Deleting..." : confirmText}
-          </button>
+            {isLoading ? "Processing..." : confirmText}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

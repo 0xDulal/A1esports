@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 export default function AdminOrders() {
@@ -225,46 +226,46 @@ export default function AdminOrders() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <button
+          <Button
             onClick={fetchOrders}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 transition-colors text-xs uppercase"
+            variant="outline"
+            size="sm"
           >
-            <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+            <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
             Refresh
-          </button>
+          </Button>
 
           {selectedIds.length > 0 && (
-            <button
+            <Button
               onClick={() => setConfirmBulkDeleteOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 font-bold rounded-sm hover:bg-red-500/30 transition-colors text-xs uppercase"
+              variant="destructive"
+              size="sm"
             >
-              <Trash2 size={16} /> Delete ({selectedIds.length})
-            </button>
+              <Trash2 size={14} /> Delete ({selectedIds.length})
+            </Button>
           )}
 
-          <button
+          <Button
             onClick={handleExportCSV}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 transition-colors text-xs uppercase tracking-wider"
+            variant="primary"
+            size="sm"
           >
-            <Download size={16} /> Export to CSV
-          </button>
+            <Download size={14} /> Export to CSV
+          </Button>
         </div>
       </div>
 
       {/* Filter Tabs */}
       <div className="flex flex-wrap gap-2 border-b border-white/10 pb-4">
         {["ALL", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"].map((st) => (
-          <button
+          <Button
             key={st}
             onClick={() => setStatusFilter(st)}
-            className={`px-4 py-2 rounded-sm text-xs font-bold uppercase tracking-wider transition-colors ${
-              statusFilter === st
-                ? "bg-primary text-black"
-                : "bg-white/5 text-neutral-400 hover:text-white"
-            }`}
+            variant={statusFilter === st ? "primary" : "secondary"}
+            size="sm"
           >
             {st}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -634,19 +635,21 @@ export default function AdminOrders() {
               </div>
 
               <div className="pt-4 flex justify-end gap-3">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setEditingOrder(null)}
-                  className="px-4 py-2 bg-white/10 text-white font-bold rounded-sm hover:bg-white/20 text-xs uppercase"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
-                  className="px-5 py-2 bg-primary text-black font-black rounded-sm hover:bg-primary/90 text-xs uppercase tracking-wider"
+                  variant="primary"
+                  size="sm"
                 >
                   Save All Changes
-                </button>
+                </Button>
               </div>
             </form>
           </DialogContent>

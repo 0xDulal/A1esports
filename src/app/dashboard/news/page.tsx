@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 export default function DashboardNewsPage() {
@@ -204,12 +205,13 @@ export default function DashboardNewsPage() {
           </p>
         </div>
 
-        <button
+        <Button
           onClick={handleOpenAddModal}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-black font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-primary/90 transition-colors shadow-[0_0_20px_rgba(255,0,102,0.2)]"
+          variant="primary"
+          size="md"
         >
           <Plus size={16} /> Create Article
-        </button>
+        </Button>
       </div>
 
       {/* Grid List */}
@@ -224,12 +226,13 @@ export default function DashboardNewsPage() {
           <p className="text-neutral-400 text-sm">
             Create your first news story to engage fans and improve site SEO.
           </p>
-          <button
+          <Button
             onClick={handleOpenAddModal}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-black font-bold text-xs uppercase tracking-widest rounded-sm hover:bg-primary/90 transition-colors"
+            variant="primary"
+            size="md"
           >
             <Plus size={16} /> Publish First Article
-          </button>
+          </Button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -457,20 +460,22 @@ export default function DashboardNewsPage() {
               </div>
 
               <div className="pt-4 flex justify-end gap-3 border-t border-white/10">
-                <button
+                <Button
                   type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white font-bold rounded-sm transition-colors"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsModalOpen(false)}
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2.5 bg-primary text-black font-bold uppercase tracking-widest rounded-sm hover:bg-primary/90 transition-colors disabled:opacity-50"
+                  variant="primary"
+                  size="sm"
                 >
                   {saving ? "Saving..." : editingArticle ? "Update Article" : "Publish Article"}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

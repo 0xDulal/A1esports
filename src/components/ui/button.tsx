@@ -5,30 +5,35 @@ import { Slot } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "font-mono uppercase tracking-widest inline-flex items-center justify-center gap-2 whitespace-nowrap text-xs font-bold transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3.5 shrink-0 outline-none select-none cursor-pointer rounded-none active:scale-[0.98]",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        default:
+          "border border-neutral-700 hover:border-primary text-white bg-neutral-900/50 hover:bg-neutral-900/90 hover:shadow-[0_0_15px_rgba(255,0,102,0.25)]",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border border-neutral-700 hover:border-primary text-white bg-neutral-900/50 hover:bg-neutral-900/90 hover:shadow-[0_0_15px_rgba(255,0,102,0.25)]",
+        primary:
+          "border border-primary bg-primary text-black font-black hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(255,0,102,0.45)]",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "border border-neutral-800 bg-neutral-900/40 text-neutral-300 hover:text-white hover:border-neutral-600 hover:bg-neutral-800/60",
+        destructive:
+          "border border-red-500/40 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.3)]",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
+          "border border-transparent text-neutral-400 hover:text-white hover:border-neutral-700 hover:bg-neutral-900/50",
+        link: "text-primary underline-offset-4 hover:underline border-b border-transparent hover:border-primary",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        xs: "h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9",
-        "icon-xs": "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
-        "icon-sm": "size-8",
-        "icon-lg": "size-10",
+        default: "h-9 px-4 py-2",
+        xs: "h-7 px-2.5 py-1 text-[10px] [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-8 px-3 py-1.5 text-xs",
+        md: "h-9 px-4 py-2 text-xs",
+        lg: "h-11 px-6 py-2.5 text-sm",
+        xl: "h-13 px-8 py-3 text-base",
+        icon: "size-9 p-0",
+        "icon-xs": "size-6 p-0 [&_svg:not([class*='size-'])]:size-3",
+        "icon-sm": "size-8 p-0",
+        "icon-lg": "size-10 p-0",
       },
     },
     defaultVariants: {
@@ -62,3 +67,4 @@ function Button({
 }
 
 export { Button, buttonVariants }
+
