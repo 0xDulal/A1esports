@@ -48,7 +48,7 @@ export function Footer() {
       {/* Hardware Schematic Background */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,0,102,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,102,0.05)_1px,transparent_1px)] bg-[size:20px_20px] opacity-10 pointer-events-none" />
 
-      <div className="relative mx-auto max-w-[1600px] px-4 md:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
           {/* Brand Column */}
           <div className="flex flex-col gap-8">
