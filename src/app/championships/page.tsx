@@ -93,7 +93,7 @@ export default function ChampionshipsPage() {
       />
 
       {/* Filter Bar Section */}
-      <section className="py-12 max-w-7xl mx-auto px-6">
+      <section className="py-12 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8">
         <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-4 mb-10 space-y-4 backdrop-blur-xl">
           <div className="flex flex-wrap items-center justify-between gap-4">
             {/* Place Filter */}

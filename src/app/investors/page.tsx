@@ -33,7 +33,7 @@ export default function InvestorsPage() {
       />
 
       {/* Investment Highlights */}
-      <section className="py-24 max-w-7xl mx-auto px-6">
+      <section className="py-24 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8">
         <div className="text-center mb-16 space-y-3">
           <span className="text-xs font-black uppercase tracking-widest text-primary">Strategic Growth</span>
           <h2 className="text-3xl font-michroma uppercase">Why Invest In A1 Esports</h2>
@@ -90,7 +90,7 @@ export default function InvestorsPage() {
       </section>
 
       {/* Investor Inquiry Callout */}
-      <section className="py-16 max-w-4xl mx-auto px-6 text-center">
+      <section className="py-16 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 text-center">
         <div className="p-12 rounded-sm bg-neutral-900 border border-white/10 backdrop-blur-xl space-y-6">
           <ShieldCheck className="w-12 h-12 text-primary mx-auto" />
           <h2 className="text-3xl font-michroma uppercase">Request Investor Deck</h2>

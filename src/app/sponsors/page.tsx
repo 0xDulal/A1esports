@@ -34,7 +34,7 @@ export default function SponsorsPage() {
       />
 
       {/* Sponsors Grid */}
-      <section className="py-12 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6">
+      <section className="py-12 sm:py-24 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8">
         {loading ? (
           <div className="py-16 text-center text-neutral-400 font-bold uppercase tracking-widest animate-pulse">
             Loading partners...
@@ -103,7 +103,7 @@ export default function SponsorsPage() {
         )}
 
         {/* Become a Partner Callout */}
-        <div className="mt-12 sm:mt-20 p-6 sm:p-12 rounded-sm bg-gradient-to-b from-white/10 to-transparent border border-white/10 backdrop-blur-xl text-center space-y-6 max-w-4xl mx-auto">
+        <div className="mt-12 sm:mt-20 p-6 sm:p-12 rounded-sm bg-gradient-to-b from-white/10 to-transparent border border-white/10 backdrop-blur-xl text-center space-y-6 max-w-[1600px] mx-auto">
           <Zap className="w-10 h-10 sm:w-12 sm:h-12 text-primary mx-auto" />
           <h2 className="text-2xl sm:text-3xl font-michroma uppercase">Partner With A1 Esports</h2>
           <p className="text-neutral-400 text-sm max-w-xl mx-auto leading-relaxed">

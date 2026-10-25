@@ -48,7 +48,7 @@ export default function ShopPage() {
 
       {/* Shop Controls */}
       <div className="sticky top-24 z-40 bg-black/80 backdrop-blur-md border-y border-white/5 py-4 mb-12">
-        <div className="mx-auto max-w-[1800px] px-4 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="mx-auto max-w-[1600px] px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Category Tabs */}
           <div className="flex flex-wrap justify-center gap-2">
             {CATEGORIES.map((cat) => (
@@ -103,7 +103,7 @@ export default function ShopPage() {
 
       {/* Product Grid */}
       <Section className="py-0">
-        <div className="mx-auto max-w-[1800px]">
+        <div className="mx-auto max-w-[1600px]">
           {loading ? (
             <div className="py-24 text-center text-neutral-400 font-bold uppercase tracking-widest animate-pulse">
               Loading Products...

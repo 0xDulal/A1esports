@@ -43,7 +43,7 @@ export default function NewsPage() {
             <p className="text-neutral-400 text-sm">Check back soon for the latest tournament announcements, roster updates, and community news.</p>
           </div>
         ) : (
-          <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="mx-auto max-w-[1600px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {articles.map((article, index) => (
               <motion.div
                 key={article.id}

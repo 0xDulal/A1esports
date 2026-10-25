@@ -18,7 +18,7 @@ export default function AboutPage() {
       />
 
       {/* Core Values / Pillar Cards */}
-      <section className="py-12 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6">
+      <section className="py-12 sm:py-24 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8">
         <div className="text-center mb-12 sm:mb-16 space-y-3">
           <span className="text-xs font-black uppercase tracking-widest text-primary">Core Pillars</span>
           <h2 className="text-2xl sm:text-3xl font-michroma uppercase tracking-tight">What Drives Our Empire</h2>
@@ -62,7 +62,7 @@ export default function AboutPage() {
 
       {/* Stats Counter Bar */}
       <section className="py-12 sm:py-16 border-y border-white/10 bg-neutral-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
           {[
             { label: "Major Titles", val: "15+" },
             { label: "Prize Money Won", val: "$150K+" },
@@ -80,7 +80,7 @@ export default function AboutPage() {
       </section>
 
       {/* Join / CTA Section */}
-      <section className="py-12 sm:py-24 max-w-5xl mx-auto px-4 sm:px-6 text-center">
+      <section className="py-12 sm:py-24 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 text-center">
         <div className="p-6 sm:p-12 rounded-sm bg-gradient-to-b from-white/10 to-transparent border border-white/10 backdrop-blur-xl space-y-6">
           <Shield className="w-10 h-10 sm:w-12 sm:h-12 text-primary mx-auto" />
           <h2 className="text-2xl sm:text-4xl font-michroma uppercase">Ready to Join The Movement?</h2>

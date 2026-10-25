@@ -31,7 +31,7 @@ export default function HistoryPage() {
 
       {/* Legacy Telemetry HUD Strip */}
       <section className="relative border-y border-white/10 bg-neutral-950/90 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 py-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y lg:divide-y-0 lg:divide-x divide-white/10">
             <div className="flex items-center gap-4 pt-3 lg:pt-0">
               <div className="w-12 h-12 rounded-sm bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-[0_0_15px_rgba(255,0,102,0.25)]">
@@ -93,7 +93,7 @@ export default function HistoryPage() {
       </section>
 
       {/* Bento Grid Showcase */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
+      <main className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 auto-rows-fr">
           {/* Card 1: 2025-2026 Dynasty (Hero Large Bento - 2 cols, 2 rows on desktop) */}
           <motion.div

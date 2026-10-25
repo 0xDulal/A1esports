@@ -38,7 +38,7 @@ export default function TeamsPage() {
         {/* Ambient Purple UV Glow */}
         <div className="absolute top-0 right-1/4 w-[600px] h-[400px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
 
-        <div className="max-w-[1700px] mx-auto relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-12">
+        <div className="max-w-[1600px] mx-auto relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-12">
           
           {/* Hero Left: Title & Designation */}
           <div className="space-y-6">
@@ -84,7 +84,7 @@ export default function TeamsPage() {
       </section>
 
       {/* ROSTER DATAGRID */}
-      <section className="max-w-[1700px] mx-auto px-4 md:px-8 py-16 space-y-24">
+      <section className="max-w-[1600px] mx-auto px-4 md:px-8 py-16 space-y-24">
         {loading ? (
           <div className="w-full py-32 flex flex-col items-center justify-center gap-4 border border-white/10 bg-[#0a0a0a] rounded-sm">
             <div className="w-12 h-12 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
@@ -102,7 +102,7 @@ export default function TeamsPage() {
       </section>
 
       {/* HARDWARE FOOTER CTA */}
-      <section className="max-w-[1700px] mx-auto px-4 md:px-8 mb-12">
+      <section className="max-w-[1600px] mx-auto px-4 md:px-8 mb-12">
         <div className="relative bg-[#0a0a0a] border border-white/10 rounded-sm p-8 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_100%,rgba(255,0,102,0.1),transparent_50%)]" />
           

@@ -45,7 +45,7 @@ export function Hero() {
       </div>
 
       {/* Hero Image Composition */}
-      <div className="relative z-10 flex items-end justify-center w-full max-w-[1800px] h-full mx-auto px-2 sm:px-4 mt-4 sm:mt-4">
+      <div className="relative z-10 flex items-end justify-center w-full max-w-[1600px] h-full mx-auto px-2 sm:px-4 md:px-8 mt-4 sm:mt-4">
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}

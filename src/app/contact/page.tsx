@@ -32,7 +32,7 @@ export default function ContactPage() {
         icon={MessageSquare}
       />
 
-      <Section containerClassName="max-w-7xl">
+      <Section containerClassName="max-w-[1600px]">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pt-8">
           {/* Left Side Info */}
           <div className="lg:col-span-5 space-y-8">

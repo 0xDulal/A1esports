@@ -35,7 +35,7 @@ export function Section({
           <div className={cn("absolute bottom-0 right-0 w-96 h-96 rounded-full blur-[120px]", glowColor)} />
         </div>
       )}
-      <div className={cn("relative z-10 mx-auto max-w-7xl px-4", containerClassName)}>
+      <div className={cn("relative z-10 mx-auto max-w-[1600px] px-4 md:px-8", containerClassName)}>
         {children}
       </div>
     </motion.section>
