@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { TrendingUp, PieChart, ShieldCheck, Mail, Globe2, Building } from "lucide-react";
 import Link from "next/link";
 import { InvestorHighlight, getInvestors } from "@/lib/investors";
+import { PageHero } from "@/components/ui/PageHero";
 
 export default function InvestorsPage() {
   const [investors, setInvestors] = useState<InvestorHighlight[]>([]);
@@ -25,23 +26,11 @@ export default function InvestorsPage() {
   return (
     <div className="min-h-screen bg-black text-white selection:bg-primary selection:text-black">
       {/* Hero Header */}
-      <section className="relative overflow-hidden pt-32 pb-24 border-b border-white/10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,0,102,0.15),rgba(255,255,255,0))]" />
-
-        <div className="relative max-w-7xl mx-auto px-6 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase">
-            <TrendingUp size={14} /> Investor Relations
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl font-michroma uppercase tracking-tight">
-            INVEST IN <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">THE FUTURE OF ESPORTS</span>
-          </h1>
-
-          <p className="text-neutral-400 max-w-2xl mx-auto font-medium text-base">
-            Capitalize on South Asia&apos;s fastest-growing mobile esports organization. High engagement, global brand expansion, and merchandise monetization.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        subtitle="Investor Relations"
+        title="Investors"
+        icon={TrendingUp}
+      />
 
       {/* Investment Highlights */}
       <section className="py-24 max-w-7xl mx-auto px-6">

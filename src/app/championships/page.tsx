@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, Medal, ExternalLink, Calendar, Filter } from "lucide-react";
 import Link from "next/link";
 import { Achievement, getLiquipediaAchievements } from "@/lib/liquipedia";
+import { PageHero } from "@/components/ui/PageHero";
 
 const LIQUIPEDIA_URL = "https://liquipedia.net/pubgmobile/A1_RG_Esports/Results";
 
@@ -85,23 +86,11 @@ export default function ChampionshipsPage() {
   return (
     <div className="min-h-screen bg-black text-white selection:bg-primary selection:text-black">
       {/* Hero Header */}
-      <section className="relative overflow-hidden pt-32 pb-20 border-b border-white/10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,0,102,0.15),rgba(255,255,255,0))]" />
-
-        <div className="relative max-w-7xl mx-auto px-6 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase">
-            <Trophy size={14} /> Trophy Cabinet
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl font-michroma uppercase tracking-tight">
-            HALL OF <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">CHAMPIONSHIPS</span>
-          </h1>
-
-          <p className="text-neutral-400 max-w-2xl mx-auto font-medium text-base">
-            Explore the trophy cabinet, major titles, and prize achievements won by A1 Esports across official global and regional leagues.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        subtitle="Trophy Cabinet"
+        title="Championships"
+        icon={Trophy}
+      />
 
       {/* Filter Bar Section */}
       <section className="py-12 max-w-7xl mx-auto px-6">

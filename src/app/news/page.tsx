@@ -7,7 +7,7 @@ import Link from "next/link";
 import { NewsArticle } from "@/types/domain";
 import { getNewsFromSupabase } from "@/services/supabase/db.service";
 import { Section } from "@/components/ui/Section";
-import { GlowBar } from "@/components/ui/GlowBar";
+import { PageHero } from "@/components/ui/PageHero";
 import { Newspaper, Calendar, Clock, ArrowUpRight } from "lucide-react";
 
 export default function NewsPage() {
@@ -24,30 +24,11 @@ export default function NewsPage() {
   return (
     <main className="min-h-screen bg-black text-white pb-24">
       {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[300px] w-full overflow-hidden flex items-center justify-center">
-        <div className="absolute inset-0 z-0 text-white/5 flex items-center justify-center pointer-events-none select-none">
-          <Newspaper size={400} strokeWidth={0.5} className="opacity-10" />
-        </div>
-
-        <div className="relative z-20 text-center px-4">
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-block text-primary font-bold tracking-[0.3em] uppercase mb-4 text-sm md:text-base"
-          >
-            Latest Updates & Coverage
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl font-michroma uppercase tracking-tighter"
-          >
-            News<span className="text-primary">.</span>
-          </motion.h1>
-        </div>
-        <GlowBar position="bottom" />
-      </section>
+      <PageHero
+        subtitle="Latest Updates & Coverage"
+        title="News"
+        icon={Newspaper}
+      />
 
       <Section className="pt-12">
         {loading ? (

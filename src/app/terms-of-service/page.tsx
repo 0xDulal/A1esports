@@ -2,12 +2,20 @@
 
 import { Section } from "@/components/ui/Section";
 import { GlowBar } from "@/components/ui/GlowBar";
+import { PageHero } from "@/components/ui/PageHero";
 import Link from "next/link";
 import { ArrowLeft, FileText } from "lucide-react";
 
 export default function TermsOfServicePage() {
   return (
-    <main className="min-h-screen bg-black text-white pt-24 pb-24">
+    <main className="min-h-screen bg-black text-white pb-24">
+      {/* Hero Section */}
+      <PageHero
+        subtitle="Legal & Compliance"
+        title="Terms"
+        icon={FileText}
+      />
+
       <Section containerClassName="max-w-4xl">
         <Link
           href="/"
@@ -18,14 +26,6 @@ export default function TermsOfServicePage() {
         </Link>
 
         <div className="space-y-6">
-          <div className="flex items-center gap-3 text-primary">
-            <FileText size={28} />
-            <span className="font-bold text-xs uppercase tracking-[0.3em]">Legal & Compliance</span>
-          </div>
-
-          <h1 className="text-4xl md:text-6xl font-michroma uppercase tracking-tighter">
-            Terms of Service
-          </h1>
           <p className="text-neutral-500 text-xs font-bold uppercase tracking-widest">
             Last Updated: August 2026
           </p>

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { History as HistoryIcon, Trophy, Flag, Star, Globe, Shield, Sparkles, ChevronRight, Zap, Medal } from "lucide-react";
 import Link from "next/link";
 import { A1Button } from "@/components/ui/A1Button";
+import { PageHero } from "@/components/ui/PageHero";
 
 interface Milestone {
   year: string;
@@ -98,37 +99,11 @@ export default function HistoryPage() {
   return (
     <div className="min-h-screen bg-black text-white selection:bg-primary selection:text-black">
       {/* Hero Header */}
-      <section className="relative overflow-hidden pt-32 pb-24 border-b border-white/10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,0,102,0.18),rgba(0,0,0,0))]" />
-
-        <div className="relative max-w-7xl mx-auto px-6 text-center space-y-6">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase"
-          >
-            <HistoryIcon size={14} /> Interactive Legacy Roadmap
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-7xl font-michroma uppercase tracking-tight"
-          >
-            THE CHRONICLES OF <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">A1 ESPORTS</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-neutral-400 max-w-2xl mx-auto font-medium text-base sm:text-lg leading-relaxed"
-          >
-            Trace six years of competitive dominance, global world finals, and unbroken championship streaks across South Asia.
-          </motion.p>
-        </div>
-      </section>
+      <PageHero
+        subtitle="Interactive Legacy Roadmap"
+        title="History"
+        icon={HistoryIcon}
+      />
 
       {/* Era Filter Selector */}
       <section className="py-12 max-w-7xl mx-auto px-6">

@@ -5,35 +5,17 @@ import { Shield, Target, Trophy, Flame, Users, Sparkles, Award } from "lucide-re
 import Image from "next/image";
 import Link from "next/link";
 import { A1Button } from "@/components/ui/A1Button";
+import { PageHero } from "@/components/ui/PageHero";
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-black text-white selection:bg-primary selection:text-black">
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-20 sm:pt-32 pb-16 sm:pb-24 border-b border-white/10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(255,0,102,0.15),rgba(255,255,255,0))]" />
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center space-y-6 max-w-3xl mx-auto"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase">
-              <Sparkles size={14} /> Organization Overview
-            </div>
-            
-            <h1 className="text-3xl sm:text-6xl font-michroma uppercase tracking-tight">
-              WE ARE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">A1 ESPORTS</span>
-            </h1>
-
-            <p className="text-base sm:text-lg text-neutral-400 font-medium leading-relaxed">
-              Founded in Bangladesh, A1 Esports has grown into one of South Asia&apos;s premier esports organizations. Dominating battlegrounds globally, we build champions, foster talent, and deliver unforgettable competitive experiences.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      <PageHero
+        subtitle="Organization Overview"
+        title="About Us"
+        icon={Sparkles}
+      />
 
       {/* Core Values / Pillar Cards */}
       <section className="py-12 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6">

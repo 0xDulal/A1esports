@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
-import { GlowBar } from "@/components/ui/GlowBar";
+import { PageHero } from "@/components/ui/PageHero";
 import { A1Button } from "@/components/ui/A1Button";
 import { Mail, MapPin, Phone, Send, CheckCircle2, MessageSquare, Globe } from "lucide-react";
 import { FaDiscord, FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
@@ -26,26 +26,11 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-black text-white pb-24">
       {/* Hero Section */}
-      <section className="relative h-[35vh] min-h-[250px] w-full overflow-hidden flex items-center justify-center">
-        <div className="relative z-20 text-center px-4">
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-block text-primary font-bold tracking-[0.3em] uppercase mb-4 text-sm"
-          >
-            Get In Touch
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl font-michroma uppercase tracking-tighter"
-          >
-            Contact<span className="text-primary">.</span>
-          </motion.h1>
-        </div>
-        <GlowBar position="bottom" />
-      </section>
+      <PageHero
+        subtitle="Get In Touch"
+        title="Contact"
+        icon={MessageSquare}
+      />
 
       <Section containerClassName="max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pt-8">

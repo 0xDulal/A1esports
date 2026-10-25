@@ -6,7 +6,7 @@ import { shopProducts as fallbackProducts, Product } from "@/lib/data/shop";
 import { getProductsFromSupabase } from "@/lib/supabase/db";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { Section } from "@/components/ui/Section";
-import { GlowBar } from "@/components/ui/GlowBar";
+import { PageHero } from "@/components/ui/PageHero";
 import { ShoppingBag, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -40,30 +40,11 @@ export default function ShopPage() {
   return (
     <main className="min-h-screen bg-black text-white pb-24">
       {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[300px] w-full overflow-hidden flex items-center justify-center">
-        <div className="absolute inset-0 z-0 text-white/5 flex items-center justify-center pointer-events-none select-none">
-          <ShoppingBag size={400} strokeWidth={0.5} className="opacity-10" />
-        </div>
-
-        <div className="relative z-20 text-center px-4">
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-block text-primary font-bold tracking-[0.3em] uppercase mb-4 text-sm md:text-base"
-          >
-            Official Merchandise
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl font-michroma uppercase tracking-tighter"
-          >
-            Store<span className="text-primary">.</span>
-          </motion.h1>
-        </div>
-        <GlowBar position="bottom" />
-      </section>
+      <PageHero
+        subtitle="Official Merchandise"
+        title="Store"
+        icon={ShoppingBag}
+      />
 
       {/* Shop Controls */}
       <div className="sticky top-24 z-40 bg-black/80 backdrop-blur-md border-y border-white/5 py-4 mb-12">

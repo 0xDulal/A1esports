@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
-import { GlowBar } from "@/components/ui/GlowBar";
+import { PageHero } from "@/components/ui/PageHero";
 import { A1Button } from "@/components/ui/A1Button";
 import { Trophy, CheckCircle2, UserCheck, Gamepad2, FileText, Send } from "lucide-react";
 import Link from "next/link";
@@ -30,26 +30,11 @@ export default function ApplyPage() {
   return (
     <main className="min-h-screen bg-black text-white pb-24">
       {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[300px] w-full overflow-hidden flex items-center justify-center">
-        <div className="relative z-20 text-center px-4">
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-block text-primary font-bold tracking-[0.3em] uppercase mb-4 text-sm"
-          >
-            Join A1 Esports
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl font-michroma uppercase tracking-tighter"
-          >
-            Applications<span className="text-primary">.</span>
-          </motion.h1>
-        </div>
-        <GlowBar position="bottom" />
-      </section>
+      <PageHero
+        subtitle="Join A1 Esports"
+        title="Applications"
+        icon={Gamepad2}
+      />
 
       <Section containerClassName="max-w-4xl">
         <div className="bg-[#0a0a0a] border border-white/10 rounded-sm p-8 md:p-14 space-y-8 backdrop-blur-xl">
