@@ -23,7 +23,7 @@ export function Merchandise() {
 
   return (
     <section className="bg-[#0a0a0a] text-neutral-400 py-24 px-4 md:px-8 font-mono border-t border-neutral-800">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1600px] mx-auto">
         <div className="flex items-center justify-between mb-12">
           <div className="flex items-center gap-4">
             <Package className="w-6 h-6 text-primary" />

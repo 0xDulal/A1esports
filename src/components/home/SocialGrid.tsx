@@ -22,7 +22,7 @@ export function SocialGrid({ stats }: { stats?: Stats }) {
 
   return (
     <section className="bg-[#0a0a0a] text-neutral-400 py-24 px-4 md:px-8 font-mono border-t border-neutral-800">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1600px] mx-auto">
         <div className="flex items-center gap-4 mb-12">
           <Share2 className="w-6 h-6 text-primary" />
           <h2 className="text-2xl font-bold tracking-widest text-white uppercase">Connect With Us</h2>
