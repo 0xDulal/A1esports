@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { TrendingUp, PieChart, ShieldCheck, Mail, Globe2, Building } from "lucide-react";
-import Link from "next/link";
+import { TrendingUp, PieChart, Globe2, Building } from "lucide-react";
 import { InvestorHighlight, getInvestors } from "@/lib/investors";
 import { PageHero } from "@/components/ui/PageHero";
 
@@ -33,12 +32,7 @@ export default function InvestorsPage() {
       />
 
       {/* Investment Highlights */}
-      <section className="py-24 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8">
-        <div className="text-center mb-16 space-y-3">
-          <span className="text-xs font-black uppercase tracking-widest text-primary">Strategic Growth</span>
-          <h2 className="text-3xl font-michroma uppercase">Why Invest In A1 Esports</h2>
-        </div>
-
+      <section className="py-12 sm:py-20 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8">
         {loading ? (
           <div className="py-16 text-center text-neutral-400 font-bold uppercase tracking-widest animate-pulse">
             Loading investment highlights...
@@ -87,23 +81,6 @@ export default function InvestorsPage() {
             ))}
           </div>
         )}
-      </section>
-
-      {/* Investor Inquiry Callout */}
-      <section className="py-16 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 text-center">
-        <div className="p-12 rounded-sm bg-neutral-900 border border-white/10 backdrop-blur-xl space-y-6">
-          <ShieldCheck className="w-12 h-12 text-primary mx-auto" />
-          <h2 className="text-3xl font-michroma uppercase">Request Investor Deck</h2>
-          <p className="text-neutral-400 text-sm max-w-xl mx-auto leading-relaxed">
-            Interested institutional investors, venture funds, or strategic partners can connect with our executive board for financial metrics and pitch presentations.
-          </p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-sm bg-primary text-black font-black uppercase text-xs tracking-widest hover:bg-primary/90 transition-all shadow-[0_0_30px_rgba(255,0,102,0.4)]"
-          >
-            <Mail size={16} /> Contact Investor Relations
-          </Link>
-        </div>
       </section>
     </div>
   );

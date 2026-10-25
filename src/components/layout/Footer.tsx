@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaDiscord, FaYoutube, FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
+import { FaDiscord, FaYoutube, FaFacebookF, FaInstagram } from "react-icons/fa";
 import { Mail, MapPin, ArrowUpRight } from "lucide-react";
 
 const footerLinks = {
@@ -32,7 +32,6 @@ const socialLinks = [
   { icon: FaInstagram, href: "https://www.instagram.com/a1esports.bd", label: "Instagram" },
   { icon: FaYoutube, href: "https://youtube.com/@a1esportsbd", label: "YouTube" },
   { icon: FaDiscord, href: "https://discord.gg/EKRQMA83", label: "Discord" },
-  { icon: FaTwitter, href: "#", label: "Twitter" },
 ];
 
 export function Footer() {

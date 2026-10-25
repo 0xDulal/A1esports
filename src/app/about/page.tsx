@@ -1,10 +1,7 @@
 ﻿"use client";
 
 import { motion } from "framer-motion";
-import { Shield, Target, Trophy, Flame, Users, Sparkles, Award } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { A1Button } from "@/components/ui/A1Button";
+import { Target, Flame, Users, Sparkles } from "lucide-react";
 import { PageHero } from "@/components/ui/PageHero";
 
 export default function AboutPage() {
@@ -76,29 +73,6 @@ export default function AboutPage() {
               <div className="text-xs font-bold text-neutral-400 uppercase tracking-widest">{st.label}</div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* Join / CTA Section */}
-      <section className="py-12 sm:py-24 max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 text-center">
-        <div className="p-6 sm:p-12 rounded-sm bg-gradient-to-b from-white/10 to-transparent border border-white/10 backdrop-blur-xl space-y-6">
-          <Shield className="w-10 h-10 sm:w-12 sm:h-12 text-primary mx-auto" />
-          <h2 className="text-2xl sm:text-4xl font-michroma uppercase">Ready to Join The Movement?</h2>
-          <p className="text-neutral-400 max-w-xl mx-auto text-sm leading-relaxed">
-            Whether you want to represent A1 Esports as a pro player, content creator, or brand partner, we welcome elite talent.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <Link href="/apply">
-              <A1Button variant="primary" size="md">
-                Apply For Roster
-              </A1Button>
-            </Link>
-            <Link href="/contact">
-              <A1Button variant="outline" size="md">
-                Contact Leadership
-              </A1Button>
-            </Link>
-          </div>
         </div>
       </section>
     </div>

@@ -37,7 +37,7 @@ export default function NewsPage() {
             <p className="mt-4 text-sm text-neutral-400 font-bold uppercase tracking-wider">Loading articles...</p>
           </div>
         ) : articles.length === 0 ? (
-          <div className="text-center py-20 bg-[#0a0a0a] border border-white/10 rounded-sm p-12 max-w-xl mx-auto">
+          <div className="text-center py-20 bg-[#0a0a0a] border border-white/10 rounded-sm p-12 max-w-[1600px] mx-auto">
             <Newspaper size={48} className="mx-auto text-neutral-600 mb-4" />
             <h3 className="text-xl font-bold font-michroma text-white mb-2">No News Articles Found</h3>
             <p className="text-neutral-400 text-sm">Check back soon for the latest tournament announcements, roster updates, and community news.</p>
