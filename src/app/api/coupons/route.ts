@@ -1,12 +1,15 @@
 ﻿import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase/client";
 import { DEFAULT_COUPONS } from "@/lib/supabase/db";
+import { requireAdmin, publicClient } from "@/lib/supabase/server-auth";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
-    const { data, error } = await supabase
+    const { data, error } = await auth.supabase
       .from("coupons")
       .select("*")
       .order("created_at", { ascending: false });
@@ -36,7 +39,7 @@ export async function POST(req: Request) {
       let coupon: any = null;
 
       try {
-        const { data } = await supabase
+        const { data } = await publicClient()
           .from("coupons")
           .select("*")
           .eq("code", cleanCode)
@@ -101,6 +104,9 @@ export async function POST(req: Request) {
     }
 
     // Admin: Create new coupon
+    const auth = await requireAdmin(req);
+    if (!auth.ok) return auth.response;
+
     const { code, discount_type, discount_value, min_order_amount, max_uses, is_active } = body;
     if (!code || !discount_type || discount_value === undefined) {
       return NextResponse.json({ error: "Code, discount type, and value are required." }, { status: 400 });
@@ -119,7 +125,7 @@ export async function POST(req: Request) {
     };
 
     try {
-      await supabase.from("coupons").insert([newCoupon]);
+      await auth.supabase.from("coupons").insert([newCoupon]);
     } catch (e: any) {
       console.warn("Supabase insert warning:", e);
     }
@@ -131,6 +137,9 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const body = await req.json();
     const { id, is_active, discount_value, min_order_amount, max_uses } = body;
@@ -140,7 +149,7 @@ export async function PUT(req: Request) {
     }
 
     try {
-      await supabase
+      await auth.supabase
         .from("coupons")
         .update({
           ...(is_active !== undefined && { is_active }),
@@ -158,6 +167,9 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
@@ -167,7 +179,7 @@ export async function DELETE(req: Request) {
     }
 
     try {
-      await supabase.from("coupons").delete().eq("id", id);
+      await auth.supabase.from("coupons").delete().eq("id", id);
     } catch {}
 
     return NextResponse.json({ success: true });

@@ -18,12 +18,9 @@ const nextConfig: NextConfig = {
         hostname: 'a1esportsbd.com',
       },
       {
+        // Supabase-hosted images (cloud or self-hosted/Coolify)
         protocol: 'https',
-        hostname: '*.supabase.co',
-      },
-      {
-        protocol: 'https',
-        hostname: 'jaaqlnbdhqcllzrogrfb.supabase.co',
+        hostname: '**',
       },
     ],
   },

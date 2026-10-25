@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import { adminFetch } from "@/lib/admin-fetch";
 import { useEffect, useState } from "react";
 import { Plus, Edit, Trash2, Trophy, RefreshCw, Layers, Globe, Database, CheckCircle2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -41,8 +42,8 @@ export default function AdminAchievements() {
     setLoading(true);
     try {
       const [achRes, settingsRes] = await Promise.all([
-        fetch("/api/achievements"),
-        fetch("/api/settings"),
+        adminFetch("/api/achievements"),
+        adminFetch("/api/settings"),
       ]);
 
       const achData = await achRes.json();
@@ -69,7 +70,7 @@ export default function AdminAchievements() {
     setSourceSaved(false);
 
     try {
-      const res = await fetch("/api/settings", {
+      const res = await adminFetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -116,7 +117,7 @@ export default function AdminAchievements() {
     const targetId = deleteId;
     setAchievements((prev) => prev.filter((a) => String(a.id) !== String(targetId)));
     try {
-      await fetch(`/api/achievements?id=${targetId}`, { method: "DELETE" });
+      await adminFetch(`/api/achievements?id=${targetId}`, { method: "DELETE" });
       toast.success("Achievement deleted successfully.");
     } catch (err) {
       toast.error("Failed to delete achievement.");
@@ -137,13 +138,13 @@ export default function AdminAchievements() {
 
     try {
       if (editingAch && editingAch.id) {
-        await fetch("/api/achievements", {
+        await adminFetch("/api/achievements", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: editingAch.id, ...payload }),
         });
       } else {
-        await fetch("/api/achievements", {
+        await adminFetch("/api/achievements", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),

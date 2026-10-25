@@ -1,5 +1,6 @@
 ﻿import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase/client";
+import { requireAdmin } from "@/lib/supabase/server-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const body = await req.json();
     const { title, rank, event, year, date, tier, prize } = body;
@@ -41,7 +45,7 @@ export async function POST(req: Request) {
       created_at: new Date().toISOString(),
     };
 
-    const { data, error } = await supabase
+    const { data, error } = await auth.supabase
       .from("achievements")
       .insert([newAch])
       .select();
@@ -57,6 +61,9 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const body = await req.json();
     const { id, title, rank, event, year, date, tier, prize } = body;
@@ -65,7 +72,7 @@ export async function PUT(req: Request) {
       return NextResponse.json({ error: "Achievement ID is required" }, { status: 400 });
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await auth.supabase
       .from("achievements")
       .update({
         ...(title && { title }),
@@ -90,6 +97,9 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
@@ -98,7 +108,7 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Achievement ID is required" }, { status: 400 });
     }
 
-    const { error } = await supabase.from("achievements").delete().eq("id", id);
+    const { error } = await auth.supabase.from("achievements").delete().eq("id", id);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });

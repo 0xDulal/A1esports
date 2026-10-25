@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import { adminFetch } from "@/lib/admin-fetch";
 import { useEffect, useState } from "react";
 import { Tag, Plus, Trash2, RefreshCw, CheckCircle2, XCircle, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -23,7 +24,7 @@ export default function AdminCoupons() {
   const fetchCoupons = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/coupons");
+      const res = await adminFetch("/api/coupons");
       const data = await res.json();
       setCoupons(data.coupons || []);
     } catch (e) {
@@ -40,7 +41,7 @@ export default function AdminCoupons() {
   const handleCreateCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/coupons", {
+      const res = await adminFetch("/api/coupons", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -68,7 +69,7 @@ export default function AdminCoupons() {
 
   const handleToggleStatus = async (coupon: any) => {
     try {
-      await fetch("/api/coupons", {
+      await adminFetch("/api/coupons", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -90,7 +91,7 @@ export default function AdminCoupons() {
     const targetId = deleteId;
     setCoupons((prev) => prev.filter((c) => String(c.id) !== String(targetId)));
     try {
-      await fetch(`/api/coupons?id=${targetId}`, { method: "DELETE" });
+      await adminFetch(`/api/coupons?id=${targetId}`, { method: "DELETE" });
       toast.success("Coupon deleted successfully.");
     } catch {
       toast.error("Failed to delete coupon.");

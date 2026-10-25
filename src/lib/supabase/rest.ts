@@ -10,11 +10,34 @@
   return { url, key };
 }
 
-export function supabaseHeaders() {
+/**
+ * Returns the logged-in user's access token when available, so writes go
+ * through the is_admin() RLS policies instead of the anon role.
+ */
+async function userToken(): Promise<string | null> {
+  if (typeof window === "undefined") return null;
+  try {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+    let ref = "supabase";
+    try {
+      const host = new URL(url).hostname;
+      ref = host.startsWith("supabase.") ? "supabase" : host.split(".")[0];
+    } catch {}
+    const raw = window.localStorage.getItem(`sb-${ref}-auth-token`);
+    if (!raw) return null;
+    const session = JSON.parse(raw);
+    return session?.access_token || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function supabaseHeaders() {
   const { key } = getSupabaseConfig();
+  const token = (await userToken()) || key;
   return {
     apikey: key,
-    Authorization: `Bearer ${key}`,
+    Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
     Prefer: "return=representation",
   } as Record<string, string>;
@@ -25,7 +48,7 @@ export async function sbSelect<T = any>(table: string, query: Record<string, str
   if (!url) return [];
   const qs = new URLSearchParams(query).toString();
   const res = await fetch(`${url}/rest/v1/${table}${qs ? `?${qs}` : ""}`, {
-    headers: supabaseHeaders(),
+    headers: await supabaseHeaders(),
     cache: "no-store",
   });
   if (!res.ok) return [];
@@ -41,7 +64,7 @@ export async function sbInsert<T = any>(table: string, payload: any): Promise<T 
   if (!url) return null;
   const res = await fetch(`${url}/rest/v1/${table}`, {
     method: "POST",
-    headers: supabaseHeaders(),
+    headers: await supabaseHeaders(),
     body: JSON.stringify(payload),
   });
   if (!res.ok) return null;
@@ -58,7 +81,7 @@ export async function sbUpdate<T = any>(table: string, id: string, payload: any)
   if (!url) return null;
   const res = await fetch(`${url}/rest/v1/${table}?id=eq.${id}`, {
     method: "PATCH",
-    headers: supabaseHeaders(),
+    headers: await supabaseHeaders(),
     body: JSON.stringify(payload),
   });
   if (!res.ok) return null;
@@ -75,7 +98,7 @@ export async function sbDelete(table: string, id: string): Promise<boolean> {
   if (!url) return false;
   const res = await fetch(`${url}/rest/v1/${table}?id=eq.${id}`, {
     method: "DELETE",
-    headers: supabaseHeaders(),
+    headers: await supabaseHeaders(),
   });
   return res.ok;
 }

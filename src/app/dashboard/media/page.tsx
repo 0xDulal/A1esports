@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import { adminFetch } from "@/lib/admin-fetch";
 import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import {
@@ -64,7 +65,7 @@ export default function AdminMediaLibrary() {
   const fetchMedia = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/media");
+      const res = await adminFetch("/api/media");
       const data = await res.json();
       if (data.success) {
         setMediaList(data.media || []);
@@ -198,7 +199,7 @@ export default function AdminMediaLibrary() {
           const formData = new FormData();
           formData.append("file", optResult.file);
 
-          const uploadRes = await fetch("/api/media", {
+          const uploadRes = await adminFetch("/api/media", {
             method: "POST",
             body: formData,
           });
@@ -236,7 +237,7 @@ export default function AdminMediaLibrary() {
 
     setDeleting(true);
     try {
-      const res = await fetch("/api/media", {
+      const res = await adminFetch("/api/media", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ paths: [deleteSingleItem.path] }),
@@ -261,7 +262,7 @@ export default function AdminMediaLibrary() {
 
     setDeleting(true);
     try {
-      const res = await fetch("/api/media", {
+      const res = await adminFetch("/api/media", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ paths: pathsArray }),
@@ -312,7 +313,7 @@ export default function AdminMediaLibrary() {
       const formData = new FormData();
       formData.append("file", optResult.file);
 
-      const uploadRes = await fetch("/api/media", {
+      const uploadRes = await adminFetch("/api/media", {
         method: "POST",
         body: formData,
       });
@@ -357,7 +358,7 @@ export default function AdminMediaLibrary() {
         const formData = new FormData();
         formData.append("file", optimizedFile);
 
-        const res = await fetch("/api/media", {
+        const res = await adminFetch("/api/media", {
           method: "POST",
           body: formData,
         });

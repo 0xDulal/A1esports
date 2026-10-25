@@ -1,6 +1,7 @@
 ﻿import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase/client";
 import { DEFAULT_DELIVERY_CHARGES, DEFAULT_PAYMENT_METHODS } from "@/lib/supabase/db";
+import { requireAdmin } from "@/lib/supabase/server-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +35,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const body = await req.json();
     const { action } = body;
@@ -48,7 +52,7 @@ export async function POST(req: Request) {
       };
 
       try {
-        await supabase.from("site_settings").upsert(payload);
+        await auth.supabase.from("site_settings").upsert(payload);
       } catch {}
 
       return NextResponse.json({ success: true, achievementSource: mode });
@@ -67,7 +71,7 @@ export async function POST(req: Request) {
       };
 
       try {
-        await supabase.from("site_settings").upsert(payload);
+        await auth.supabase.from("site_settings").upsert(payload);
       } catch {}
 
       return NextResponse.json({ success: true, deliveryCharges: payload.value });
@@ -83,7 +87,7 @@ export async function POST(req: Request) {
       };
 
       try {
-        await supabase.from("site_settings").upsert(payload);
+        await auth.supabase.from("site_settings").upsert(payload);
       } catch {}
 
       return NextResponse.json({ success: true, siteAppearance: payload.value });
@@ -107,7 +111,7 @@ export async function POST(req: Request) {
       };
 
       try {
-        await supabase.from("payment_methods").insert([newPm]);
+        await auth.supabase.from("payment_methods").insert([newPm]);
       } catch {}
 
       return NextResponse.json({ success: true, paymentMethod: newPm });
@@ -120,6 +124,9 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const body = await req.json();
     const { id, name, account_number, instructions, is_active } = body;
@@ -129,7 +136,7 @@ export async function PUT(req: Request) {
     }
 
     try {
-      await supabase
+      await auth.supabase
         .from("payment_methods")
         .update({
           ...(name && { name }),
@@ -147,6 +154,9 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
@@ -156,7 +166,7 @@ export async function DELETE(req: Request) {
     }
 
     try {
-      await supabase.from("payment_methods").delete().eq("id", id);
+      await auth.supabase.from("payment_methods").delete().eq("id", id);
     } catch {}
 
     return NextResponse.json({ success: true });

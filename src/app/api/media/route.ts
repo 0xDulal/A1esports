@@ -1,5 +1,6 @@
 ﻿import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase/client";
+import { requireAdmin } from "@/lib/supabase/server-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -98,6 +99,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File;
@@ -114,7 +118,7 @@ export async function POST(req: Request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const { error } = await supabase.storage.from(bucket).upload(filePath, buffer, {
+    const { error } = await auth.supabase.storage.from(bucket).upload(filePath, buffer, {
       contentType: file.type,
       upsert: true,
     });
@@ -137,6 +141,9 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const { searchParams } = new URL(req.url);
     const singlePath = searchParams.get("path");
@@ -149,7 +156,7 @@ export async function DELETE(req: Request) {
     }
 
     const bucket = "images";
-    const { error, data } = await supabase.storage.from(bucket).remove(pathsToDelete);
+    const { error, data } = await auth.supabase.storage.from(bucket).remove(pathsToDelete);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });

@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import { adminFetch } from "@/lib/admin-fetch";
 import { useEffect, useState } from "react";
 import {
   Package,
@@ -35,7 +36,7 @@ export default function AdminOrders() {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/orders");
+      const res = await adminFetch("/api/orders");
       const data = await res.json();
       setOrders(data.orders || []);
     } catch (e) {
@@ -61,7 +62,7 @@ export default function AdminOrders() {
   const handleConfirmSingleDelete = async () => {
     if (!confirmSingleDeleteId) return;
     try {
-      const res = await fetch(`/api/orders?id=${confirmSingleDeleteId}`, { method: "DELETE" });
+      const res = await adminFetch(`/api/orders?id=${confirmSingleDeleteId}`, { method: "DELETE" });
       if (res.ok) {
         setSelectedOrder(null);
         toast.success("Order deleted successfully.");
@@ -79,7 +80,7 @@ export default function AdminOrders() {
     if (selectedIds.length === 0) return;
 
     try {
-      const res = await fetch("/api/orders", {
+      const res = await adminFetch("/api/orders", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids: selectedIds }),
@@ -120,7 +121,7 @@ export default function AdminOrders() {
     if (!editingOrder) return;
 
     try {
-      const res = await fetch("/api/orders", {
+      const res = await adminFetch("/api/orders", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

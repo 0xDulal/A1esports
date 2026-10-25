@@ -1,5 +1,6 @@
 ﻿import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase/client";
+import { requireAdmin, publicClient } from "@/lib/supabase/server-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +29,66 @@ export async function POST(req: Request) {
       );
     }
 
-    const isFreeOrder = total === 0 || (paymentMethod && paymentMethod.includes("100%"));
+    // Server-side price recompute: trust DB prices, not the client's total.
+    const dbClient = publicClient();
+    const productIds = [...new Set(items.map((i: any) => String(i.id)))];
+    const { data: dbProducts } = await dbClient
+      .from("products")
+      .select("id, price, half_sleeve_price, full_sleeve_price")
+      .in("id", productIds);
+
+    const priceMap = new Map<string, any>();
+    (dbProducts || []).forEach((p: any) => priceMap.set(String(p.id), p));
+
+    let verifiedTotal = 0;
+    const verifiedItems: any[] = [];
+    for (const item of items) {
+      const p = priceMap.get(String(item.id));
+      if (!p) {
+        return NextResponse.json({ error: `Unknown product: ${item.id}` }, { status: 400 });
+      }
+      const qty = Math.max(1, Math.min(99, Math.floor(Number(item.quantity) || 1)));
+      let unitPrice = Number(p.price) || 0;
+      if (p.half_sleeve_price && item.size === "Half Sleeve") {
+        unitPrice = Number(p.half_sleeve_price);
+      } else if (p.full_sleeve_price && item.size === "Full Sleeve") {
+        unitPrice = Number(p.full_sleeve_price);
+      }
+      verifiedTotal += unitPrice * qty;
+      verifiedItems.push({ ...item, quantity: qty, price: unitPrice });
+    }
+
+    // Server-side coupon revalidation
+    let verifiedDiscount = 0;
+    let couponCodeClean = "";
+    if (couponCode) {
+      couponCodeClean = String(couponCode).trim().toUpperCase();
+      const { data: cpn } = await dbClient
+        .from("coupons")
+        .select("*")
+        .eq("code", couponCodeClean)
+        .eq("is_active", true)
+        .maybeSingle();
+
+      if (cpn) {
+        const maxUses = Number(cpn.max_uses || 0);
+        const usesCount = Number(cpn.uses_count || 0);
+        if (!(maxUses > 0 && usesCount >= maxUses) && verifiedTotal >= Number(cpn.min_order_amount || 0)) {
+          const isPercentage100 = cpn.discount_type === "percentage" && Number(cpn.discount_value) >= 100;
+          if (isPercentage100) {
+            verifiedDiscount = verifiedTotal;
+          } else if (cpn.discount_type === "percentage") {
+            verifiedDiscount = Math.round((verifiedTotal * Number(cpn.discount_value)) / 100);
+          } else {
+            verifiedDiscount = Math.min(verifiedTotal, Number(cpn.discount_value));
+          }
+          if (verifiedDiscount > verifiedTotal) verifiedDiscount = verifiedTotal;
+        }
+      }
+    }
+
+    const payable = Math.max(0, verifiedTotal - verifiedDiscount);
+    const isFreeOrder = payable <= 0;
     const orderId = `A1-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
     const newOrder = {
       id: orderId,
@@ -37,14 +97,14 @@ export async function POST(req: Request) {
       customer_phone: customer.phone,
       country: customer.country || "Bangladesh",
       shipping_address: `${customer.address}, ${customer.city}${customer.district ? `, ${customer.district}` : ""}`,
-      items: items,
-      total_amount: total,
+      items: verifiedItems,
+      total_amount: payable,
       payment_method: paymentMethod || "COD",
       payment_number: paymentNumber || "",
       transaction_id: transactionId || "",
       payment_proof_url: paymentProofUrl || "",
-      coupon_code: couponCode || "",
-      discount_amount: discountAmount || 0,
+      coupon_code: couponCodeClean,
+      discount_amount: verifiedDiscount,
       payment_status: isFreeOrder ? "Paid (100% Coupon)" : paymentMethod === "COD" ? "Pending" : "Awaiting Verification",
       order_status: "Processing",
       created_at: new Date().toISOString(),
@@ -54,36 +114,17 @@ export async function POST(req: Request) {
     localOrdersCache.unshift(newOrder);
 
     try {
-      const { error } = await supabase
+      const { error } = await dbClient
         .from("orders")
-        .insert([newOrder])
-        .select();
+        .insert([newOrder]);
 
       if (error) {
         console.warn("Supabase order insert warning:", error.message);
       }
 
-      // Increment Coupon Uses Counter if couponCode was used
-      if (couponCode) {
-        const cleanCode = couponCode.trim().toUpperCase();
-        const { data: cpnData } = await supabase
-          .from("coupons")
-          .select("id, uses_count, max_uses")
-          .eq("code", cleanCode)
-          .single();
-
-        if (cpnData) {
-          const currentCount = Number(cpnData.uses_count || 0);
-          const newCount = currentCount + 1;
-          const maxUses = Number(cpnData.max_uses || 0);
-
-          const updates: any = { uses_count: newCount };
-          if (maxUses > 0 && newCount >= maxUses) {
-            updates.is_active = false;
-          }
-
-          await supabase.from("coupons").update(updates).eq("id", cpnData.id);
-        }
+      // Atomically count coupon redemption (bypasses admin-only RLS via RPC)
+      if (couponCodeClean) {
+        await dbClient.rpc("redeem_coupon", { p_code: couponCodeClean });
       }
     } catch (e) {
       console.warn("Supabase connection warning:", e);
@@ -103,9 +144,12 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
-    const { data, error } = await supabase
+    const { data, error } = await auth.supabase
       .from("orders")
       .select("*")
       .order("created_at", { ascending: false });
@@ -125,6 +169,9 @@ export async function GET() {
 }
 
 export async function PUT(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const body = await req.json();
     const {
@@ -163,7 +210,7 @@ export async function PUT(req: Request) {
     localOrdersCache = localOrdersCache.map((o) => (o.id === id ? { ...o, ...updates } : o));
 
     try {
-      await supabase.from("orders").update(updates).eq("id", id);
+      await auth.supabase.from("orders").update(updates).eq("id", id);
     } catch (e) {
       console.warn("Supabase update warning:", e);
     }
@@ -178,6 +225,9 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return auth.response;
+
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
@@ -199,7 +249,7 @@ export async function DELETE(req: Request) {
       localOrdersCache = localOrdersCache.filter((o) => !idsToDelete.includes(o.id));
 
       try {
-        await supabase.from("orders").delete().in("id", idsToDelete);
+        await auth.supabase.from("orders").delete().in("id", idsToDelete);
       } catch (e) {
         console.warn("Supabase delete warning:", e);
       }

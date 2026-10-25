@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import { adminFetch } from "@/lib/admin-fetch";
 import { useEffect, useState } from "react";
 import { CheckCircle2, Truck, CreditCard, Plus, Trash2, Edit2, RefreshCw } from "lucide-react";
 import { PaymentMethod, DeliveryCharges, DEFAULT_DELIVERY_CHARGES, DEFAULT_PAYMENT_METHODS } from "@/lib/supabase/db";
@@ -34,7 +35,7 @@ export default function AdminSettings() {
   const fetchSettings = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/settings");
+      const res = await adminFetch("/api/settings");
       const data = await res.json();
       if (data.deliveryCharges) setDelivery(data.deliveryCharges);
       if (data.paymentMethods) setPaymentMethods(data.paymentMethods);
@@ -58,7 +59,7 @@ export default function AdminSettings() {
     setDeliverySaved(false);
 
     try {
-      const res = await fetch("/api/settings", {
+      const res = await adminFetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -87,7 +88,7 @@ export default function AdminSettings() {
     setAppearanceSaved(false);
 
     try {
-      const res = await fetch("/api/settings", {
+      const res = await adminFetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -113,7 +114,7 @@ export default function AdminSettings() {
   // Toggle Payment Method Active
   const handleTogglePmStatus = async (pm: PaymentMethod) => {
     try {
-      await fetch("/api/settings", {
+      await adminFetch("/api/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -131,7 +132,7 @@ export default function AdminSettings() {
   // Update Payment Method details
   const handleUpdatePm = async (id: string, account_number: string, instructions: string) => {
     try {
-      await fetch("/api/settings", {
+      await adminFetch("/api/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, account_number, instructions }),
@@ -147,7 +148,7 @@ export default function AdminSettings() {
   const handleAddPm = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/settings", {
+      const res = await adminFetch("/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -181,7 +182,7 @@ export default function AdminSettings() {
     const targetId = deletePmId;
     setPaymentMethods((prev) => prev.filter((p) => String(p.id) !== String(targetId)));
     try {
-      await fetch(`/api/settings?id=${targetId}`, { method: "DELETE" });
+      await adminFetch(`/api/settings?id=${targetId}`, { method: "DELETE" });
       toast.success("Payment method deleted.");
     } catch (err) {
       toast.error("Failed to delete payment method");
