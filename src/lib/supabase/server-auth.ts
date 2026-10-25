@@ -21,6 +21,15 @@ function anonClient(): SupabaseClient {
   return createClient(url, key, { auth: { persistSession: false } });
 }
 
+function userClient(accessToken: string): SupabaseClient {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "";
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || "";
+  return createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: { headers: { Authorization: `Bearer ${accessToken}` } },
+  });
+}
+
 export type AuthResult =
   | { ok: true; supabase: SupabaseClient; userId: string }
   | { ok: false; response: NextResponse };
@@ -51,22 +60,40 @@ export async function requireAdmin(req: Request): Promise<AuthResult> {
     };
   }
 
+  const authenticatedSupabase = userClient(token);
+
   // Membership check via RLS: admin_users SELECT policy only lets the
   // user see their own row, so a row existing means they are an admin.
-  const { data: membership } = await supabase
+  const { data: membership } = await authenticatedSupabase
     .from("admin_users")
     .select("user_id")
     .eq("user_id", data.user.id)
     .maybeSingle();
 
   if (!membership) {
+    const email = data.user.email?.trim().toLowerCase();
+    if (email && adminEmails.includes(email)) {
+      const elevatedClient = serviceClient();
+      if (elevatedClient) {
+        return { ok: true, supabase: elevatedClient, userId: data.user.id };
+      }
+
+      return {
+        ok: false,
+        response: NextResponse.json(
+          { error: "Admin email is allowlisted, but server admin credentials are not configured." },
+          { status: 500 }
+        ),
+      };
+    }
+
     return {
       ok: false,
       response: NextResponse.json({ error: "Forbidden" }, { status: 403 }),
     };
   }
 
-  return { ok: true, supabase, userId: data.user.id };
+  return { ok: true, supabase: authenticatedSupabase, userId: data.user.id };
 }
 
 /** Client used for public (unauthenticated) operations: checkout order insert. */

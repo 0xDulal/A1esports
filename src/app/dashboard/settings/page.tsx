@@ -98,14 +98,17 @@ export default function AdminSettings() {
         }),
       });
 
-      if (res.ok) {
-        setAppearanceSaved(true);
-        toast.success("Appearance settings saved!");
-        router.refresh();
-        setTimeout(() => setAppearanceSaved(false), 3000);
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error || "Failed to save appearance settings");
       }
+
+      setAppearanceSaved(true);
+      toast.success("Appearance settings saved!");
+      router.refresh();
+      setTimeout(() => setAppearanceSaved(false), 3000);
     } catch (err) {
-      toast.error("Failed to save appearance settings");
+      toast.error(err instanceof Error ? err.message : "Failed to save appearance settings");
     } finally {
       setSavingAppearance(false);
     }

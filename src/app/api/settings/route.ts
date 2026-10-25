@@ -86,9 +86,10 @@ export async function POST(req: Request) {
         updated_at: new Date().toISOString(),
       };
 
-      try {
-        await auth.supabase.from("site_settings").upsert(payload);
-      } catch {}
+      const { error } = await auth.supabase.from("site_settings").upsert(payload);
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
 
       return NextResponse.json({ success: true, siteAppearance: payload.value });
     }

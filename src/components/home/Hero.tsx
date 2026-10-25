@@ -45,18 +45,18 @@ export function Hero() {
       </div>
 
       {/* Hero Image Composition */}
-      <div className="relative z-10 flex items-end justify-center w-full max-w-[1600px] h-full mx-auto px-2 sm:px-4 mt-4 sm:mt-4">
+      <div className="relative z-10 flex items-end justify-center w-full max-w-[1800px] h-full mx-auto px-2 sm:px-4 mt-4 sm:mt-4">
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="relative w-full h-full max-h-[50vh] sm:max-h-[85vh] flex items-end justify-center"
+          className="relative w-full h-full max-h-[50vh] sm:max-h-[95vh] lg:max-h-screen flex items-end justify-center"
         >
            {/* Glow effect behind the team */}
            
            
            <div 
-            className="relative w-full h-full translate-y-[4%] sm:translate-y-[10%] lg:translate-y-[15%]"
+            className="relative w-full h-full translate-y-[4%] sm:translate-y-[10%] sm:scale-110 lg:translate-y-[15%] lg:scale-150"
             style={{
               maskImage: 'linear-gradient(to top, transparent 5%, black 40%)',
               WebkitMaskImage: 'linear-gradient(to top, transparent 5%, black 40%)'
@@ -75,7 +75,7 @@ export function Hero() {
       </div>
 
       {/* Foreground Overlay Gradient for Text Readability */}
-      <div className="absolute bottom-0 left-0 right-0 h-1/2 sm:h-2/3 bg-gradient-to-t from-background via-background/60 to-transparent z-20 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-1/2 sm:h-2/3 bg-linear-to-t from-background via-background/60 to-transparent z-20 pointer-events-none" />
 
       {/* Main Headline Text */}
       <div className="relative z-30 w-full text-center px-2 sm:px-4 mb-2 sm:mb-4">
