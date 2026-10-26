@@ -183,6 +183,7 @@ export default function CheckoutPage() {
           paymentProofUrl: grandTotal === 0 ? "" : (isDigitalPayment ? paymentProofUrl : ""),
           couponCode: appliedCoupon ? appliedCoupon.code : "",
           discountAmount: discountAmount,
+          deliveryCharge: shippingCost,
         }),
       });
 

@@ -20,6 +20,7 @@ export async function POST(req: Request) {
       paymentProofUrl,
       couponCode,
       discountAmount,
+      deliveryCharge,
     } = body;
 
     if (!customer || !customer.name || !customer.phone || !items || items.length === 0) {
@@ -87,7 +88,8 @@ export async function POST(req: Request) {
       }
     }
 
-    const payable = Math.max(0, verifiedTotal - verifiedDiscount);
+    const verifiedDeliveryCharge = Math.max(0, Number(deliveryCharge) || 0);
+    const payable = Math.max(0, verifiedTotal - verifiedDiscount + verifiedDeliveryCharge);
     const isFreeOrder = payable <= 0;
     const orderId = `A1-${Date.now().toString().slice(-6)}-${Math.floor(100 + Math.random() * 900)}`;
     const newOrder = {
@@ -105,8 +107,9 @@ export async function POST(req: Request) {
       payment_proof_url: paymentProofUrl || "",
       coupon_code: couponCodeClean,
       discount_amount: verifiedDiscount,
+      delivery_charge: verifiedDeliveryCharge,
       payment_status: isFreeOrder ? "Paid (100% Coupon)" : paymentMethod === "COD" ? "Pending" : "Awaiting Verification",
-      order_status: "Processing",
+      order_status: "Payment Pending",
       created_at: new Date().toISOString(),
     };
 
