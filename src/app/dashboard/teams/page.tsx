@@ -54,7 +54,7 @@ export default function AdminTeams() {
     ign: "",
     name: "",
     role: "Assaulter",
-    image: "https://a1esportsbd.com/wp-content/uploads/2026/02/POSTER-1-1024x1024.png",
+    image: "/A1esports_logo_white.svg",
     facebook: "",
     twitter: "",
     instagram: "",

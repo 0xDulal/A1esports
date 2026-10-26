@@ -191,6 +191,33 @@ export default function ProductPage() {
 
   return (
     <main className="min-h-screen bg-[#050505] text-white pt-8 sm:pt-12 pb-32 font-mono selection:bg-primary selection:text-black">
+      {/* Product JSON-LD Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: product.title,
+            image: productImages.length > 0 ? productImages : [product.image],
+            description: product.description,
+            brand: {
+              "@type": "Brand",
+              name: "A1 Esports",
+            },
+            offers: {
+              "@type": "Offer",
+              url: `https://a1esportsbd.com/shop/${product.slug}`,
+              priceCurrency: "BDT",
+              price: product.price,
+              availability: product.isSoldOut
+                ? "https://schema.org/OutOfStock"
+                : "https://schema.org/InStock",
+            },
+          }),
+        }}
+      />
+
       {/* Background Cyber Grid */}
       <div className="fixed inset-0 bg-[linear-gradient(rgba(255,0,102,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,102,0.02)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none z-0" />
 

@@ -53,6 +53,36 @@ export default function SingleNewsPage({ params }: { params: Promise<{ slug: str
 
   return (
     <main className="min-h-screen bg-black text-white pb-24">
+      {/* Article Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            headline: article.title,
+            description: article.summary,
+            image: article.image ? [article.image] : [],
+            datePublished: article.date,
+            dateModified: article.date,
+            author: [
+              {
+                "@type": "Organization",
+                name: article.author || "A1 Esports",
+              },
+            ],
+            publisher: {
+              "@type": "Organization",
+              name: "A1 Esports",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://a1esportsbd.com/A1esports_logo_white.svg",
+              },
+            },
+          }),
+        }}
+      />
+
       {/* Header Banner */}
       <section className="relative min-h-[400px] md:min-h-[500px] w-full overflow-hidden flex flex-col justify-end p-6 md:p-16">
         {article.image && (

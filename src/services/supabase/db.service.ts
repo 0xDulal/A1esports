@@ -33,21 +33,34 @@ export async function getProductsFromSupabase(): Promise<Product[]> {
       return [];
     }
 
-    return data.map((item: any) => ({
-      id: String(item.id),
-      slug: item.slug || "",
-      title: item.title || "",
-      price: Number(item.price) || 0,
-      halfSleevePrice: item.half_sleeve_price ? Number(item.half_sleeve_price) : undefined,
-      fullSleevePrice: item.full_sleeve_price ? Number(item.full_sleeve_price) : undefined,
-      image: item.image || "",
-      images: item.images || [item.image || ""],
-      category: item.category || "JERSEYS",
-      isSoldOut: Boolean(item.is_sold_out),
-      description: item.description || "",
-      canCustomise: Boolean(item.can_customise),
-      specs: Array.isArray(item.specs) ? item.specs : undefined,
-    }));
+    return data.map((item: any) => {
+      const cleanImg = (img?: string) => {
+        if (!img || img.includes("wp-content") || img.includes("POSTER-")) {
+          return "/A1esports_logo_white.svg";
+        }
+        return img;
+      };
+
+      const mainImg = cleanImg(item.image);
+      const rawImages = Array.isArray(item.images) && item.images.length > 0 ? item.images : [mainImg];
+      const cleanedImages = rawImages.map(cleanImg);
+
+      return {
+        id: String(item.id),
+        slug: item.slug || "",
+        title: item.title || "",
+        price: Number(item.price) || 0,
+        halfSleevePrice: item.half_sleeve_price ? Number(item.half_sleeve_price) : undefined,
+        fullSleevePrice: item.full_sleeve_price ? Number(item.full_sleeve_price) : undefined,
+        image: mainImg,
+        images: cleanedImages,
+        category: item.category || "JERSEYS",
+        isSoldOut: Boolean(item.is_sold_out),
+        description: item.description || "",
+        canCustomise: Boolean(item.can_aim_customise || item.can_customise),
+        specs: Array.isArray(item.specs) ? item.specs : undefined,
+      };
+    });
   } catch (err) {
     console.error("Failed to fetch products from Supabase:", err);
     return [];
@@ -71,8 +84,8 @@ export async function getTeamsFromSupabase(): Promise<Team[]> {
       id: String(t.id),
       name: t.name || "",
       game: t.game || "",
-      logo: t.logo || "",
-      banner: t.banner || "",
+      logo: t.logo && !t.logo.includes("wp-content") ? t.logo : "/A1esports_logo_white.svg",
+      banner: t.banner && !t.banner.includes("wp-content") ? t.banner : "",
       players: (playersData || [])
         .filter((p: any) => String(p.team_id) === String(t.id))
         .map((p: any): Player => ({
@@ -80,7 +93,9 @@ export async function getTeamsFromSupabase(): Promise<Team[]> {
           ign: p.ign || "",
           name: p.name || "",
           role: p.role || "",
-          image: p.image || "",
+          image: p.image && !p.image.includes("wp-content") && !p.image.includes("POSTER-")
+            ? p.image
+            : "/A1esports_logo_white.svg",
           socials: p.socials || {},
         })),
     }));
@@ -113,7 +128,7 @@ export async function getNewsFromSupabase(): Promise<NewsArticle[]> {
       date: item.date || new Date().toISOString().split("T")[0],
       readTime: item.read_time || item.readTime || "3 min read",
       author: item.author || "A1 Esports",
-      image: item.image || "",
+      image: item.image && !item.image.includes("wp-content") ? item.image : "",
       summary: item.summary || "",
       content: Array.isArray(item.content) ? item.content : [item.content || ""],
       tags: Array.isArray(item.tags) ? item.tags : [],
