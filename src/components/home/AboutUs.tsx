@@ -58,13 +58,9 @@ export function AboutUs() {
             transition={{ delay: 0.1 }}
             className="lg:col-span-4 border border-primary/50 bg-neutral-900/30 p-2 relative overflow-hidden transition-colors"
           >
-            <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-              <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-              <span className="text-[10px] text-white bg-black/50 px-2 py-1 uppercase tracking-widest">Live Feed</span>
-            </div>
-            <div className="relative h-full min-h-[300px] w-full border border-neutral-800 bg-black overflow-hidden flex items-center justify-center">
+            <div className="relative h-full min-h-[300px] w-full border border-neutral-800 bg-black overflow-hidden flex items-start justify-center">
               {/* Technical schematic overlay */}
-              <div className="absolute inset-0 bg-[url('/images/regular/a1team.jpg')] bg-cover bg-center opacity-90 transition-all duration-700" />
+              <div className="absolute inset-0 bg-[url('/images/regular/a1team.png')] bg-cover bg-top opacity-90 transition-all duration-700" />
               <div className="absolute inset-0 border border-primary/20 m-4 pointer-events-none" />
               <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(138,43,226, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(138,43,226, 0.15) 1px, transparent 1px)', backgroundSize: '20px 20px', opacity: 0.8 }} />
             </div>

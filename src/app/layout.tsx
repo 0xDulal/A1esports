@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     siteName: "A1 ESPORTS",
     images: [
       {
-        url: "/images/regular/a1team.jpg",
+        url: "/images/regular/a1team.png",
         width: 1200,
         height: 630,
         alt: "A1 Esports Championship Team",
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     title: "A1 ESPORTS | South Asia's Premier Esports Powerhouse",
     description:
       "Official website of A1 Esports BD. High-performance gaming, elite rosters, and official merchandise.",
-    images: ["/images/regular/a1team.jpg"],
+    images: ["/images/regular/a1team.png"],
   },
   robots: {
     index: true,
@@ -129,7 +129,7 @@ export default async function RootLayout({
     alternateName: ["A1 Esports BD", "A1 RG Esports"],
     url: siteUrl,
     logo: `${siteUrl}/A1esports_logo_white.svg`,
-    image: `${siteUrl}/images/regular/a1team.jpg`,
+    image: `${siteUrl}/images/regular/a1team.png`,
     description:
       "South Asia's premier esports powerhouse competing in Tier-1 PUBG Mobile tournaments globally.",
     foundingDate: "2020",
