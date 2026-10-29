@@ -252,7 +252,7 @@ export default function AdminTeams() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-michroma uppercase mb-2">Teams & Roster Management</h1>
           <p className="text-neutral-400">
@@ -471,7 +471,7 @@ export default function AdminTeams() {
             </DialogHeader>
 
             <form onSubmit={handleSavePlayer} className="space-y-4 pt-4">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-neutral-400 uppercase mb-1">In-Game Name (IGN)</label>
                   <input

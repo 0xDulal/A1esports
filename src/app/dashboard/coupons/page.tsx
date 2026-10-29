@@ -270,7 +270,7 @@ export default function AdminCoupons() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
                   Discount Type *
@@ -300,7 +300,7 @@ export default function AdminCoupons() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-neutral-400 mb-2">
                   Claim Limit (Max Uses)

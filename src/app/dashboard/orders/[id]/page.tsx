@@ -140,8 +140,8 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
               <span>RETURN TO ORDERS</span>
             </Link>
           </Button>
-          <div className="flex items-center gap-4 pt-1">
-            <h1 className="text-3xl font-michroma uppercase tracking-tight text-white">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1">
+            <h1 className="text-2xl sm:text-3xl font-michroma uppercase tracking-tight text-white break-all">
               Order #{order.id}
             </h1>
             <span

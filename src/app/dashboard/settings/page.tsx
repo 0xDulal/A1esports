@@ -194,7 +194,7 @@ export default function AdminSettings() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-michroma uppercase mb-2">Store Settings</h1>
           <p className="text-neutral-400">Configure delivery charges, payment options, and store preferences</p>

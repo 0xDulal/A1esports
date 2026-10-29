@@ -124,10 +124,10 @@ export default function DashboardLayout({
               <span className="sr-only">Toggle Dashboard Menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="bg-[#0a0a0a] border-r border-white/10 p-0 w-[280px]">
+          <SheetContent side="left" className="bg-[#0a0a0a] border-r border-white/10 p-0 w-full sm:max-w-sm">
             <SheetTitle className="sr-only">Admin Navigation</SheetTitle>
             <SheetDescription className="sr-only">Admin dashboard navigation links</SheetDescription>
-            <DashboardSidebar user={user} onLogout={handleLogout} onLinkClick={() => setMobileOpen(false)} />
+            <DashboardSidebar mobile user={user} onLogout={handleLogout} onLinkClick={() => setMobileOpen(false)} />
           </SheetContent>
         </Sheet>
       </div>

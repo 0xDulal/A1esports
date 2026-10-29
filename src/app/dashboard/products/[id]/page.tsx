@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useState, use, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Product } from "@/lib/data/shop";
@@ -36,6 +36,7 @@ export default function ProductFormPage({ params }: { params: Promise<{ id: stri
   const [isGalleryPickerOpen, setIsGalleryPickerOpen] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
   const [uploadingGallery, setUploadingGallery] = useState(false);
+  const dragIndex = useRef<number | null>(null);
 
   const [formData, setFormData] = useState<Partial<Product>>({
     title: "",
@@ -182,6 +183,18 @@ export default function ProductFormPage({ params }: { params: Promise<{ id: stri
     }));
   };
 
+  const handleGalleryDrop = (targetIndex: number) => {
+    const from = dragIndex.current;
+    dragIndex.current = null;
+    if (from === null || from === targetIndex) return;
+    setFormData((prev) => {
+      const images = [...(prev.images || [])];
+      const [moved] = images.splice(from, 1);
+      images.splice(targetIndex > from ? targetIndex - 1 : targetIndex, 0, moved);
+      return { ...prev, images };
+    });
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -276,9 +289,26 @@ export default function ProductFormPage({ params }: { params: Promise<{ id: stri
             )}
           </div>
         </div>
+        <button
+          type="submit"
+          form="product-form"
+          disabled={isSaving}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm bg-primary text-black font-mono font-black text-xs uppercase tracking-widest hover:bg-primary/90 transition-colors disabled:opacity-50"
+        >
+          {isSaving ? (
+            <>
+              <Loader2 size={14} className="animate-spin" />
+              Saving...
+            </>
+          ) : isEditing ? (
+            "Update Product"
+          ) : (
+            "Create Product"
+          )}
+        </button>
       </div>
 
-      <form onSubmit={handleSave} className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <form id="product-form" onSubmit={handleSave} className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Core Info & Pricing */}
         <div className="lg:col-span-7 space-y-5">
           <div className="bg-[#0a0a0a] border border-white/10 p-4 space-y-4">
@@ -321,7 +351,7 @@ export default function ProductFormPage({ params }: { params: Promise<{ id: stri
 
             <div>
               <label className="block text-[11px] font-mono font-bold text-neutral-400 uppercase mb-2">Category</label>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {(["JERSEYS", "HOODIES", "LIFESTYLE", "ACCESSORIES"] as const).map((cat) => (
                   <button
                     key={cat}
@@ -364,19 +394,16 @@ export default function ProductFormPage({ params }: { params: Promise<{ id: stri
               <label className="block text-xs font-mono font-bold text-neutral-300 uppercase mb-1.5">
                 Base Price (BDT) <span className="text-primary">*</span>
               </label>
-              <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-mono text-neutral-500 font-bold">BDT</span>
-                <input
-                  type="number"
-                  min="0"
-                  step="1"
-                  required
-                  value={formData.price ?? ""}
-                  onChange={(e) => handleBasePriceChange(e.target.value)}
-                  placeholder="e.g. 650"
-                  className="w-full bg-neutral-950 border border-neutral-700 focus:border-primary pl-8 pr-4 py-2.5 text-sm font-mono text-white placeholder:text-neutral-600 outline-none font-bold"
-                />
-              </div>
+              <input
+                type="number"
+                min="0"
+                step="1"
+                required
+                value={formData.price ?? ""}
+                onChange={(e) => handleBasePriceChange(e.target.value)}
+                placeholder="e.g. 650"
+                className="w-full bg-neutral-950 border border-neutral-700 focus:border-primary px-3.5 pr-4 py-2.5 text-sm font-mono text-white placeholder:text-neutral-600 outline-none font-bold"
+              />
             </div>
 
             {formData.category === "JERSEYS" && (
@@ -555,7 +582,7 @@ export default function ProductFormPage({ params }: { params: Promise<{ id: stri
               )}
             </div>
 
-            <div className="relative aspect-square w-full bg-neutral-950 border border-neutral-800 flex items-center justify-center overflow-hidden group">
+            <div className="relative h-64 aspect-square mx-auto bg-neutral-950 border border-neutral-800 flex items-center justify-center overflow-hidden group">
               {formData.image ? (
                 <>
                   <Image src={formData.image} alt="Product cover preview" fill className="object-cover" />
@@ -604,9 +631,19 @@ export default function ProductFormPage({ params }: { params: Promise<{ id: stri
               <span className="text-[10px] font-mono text-neutral-400">{(formData.images || []).length} images</span>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 min-h-[80px]">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 min-h-[80px]">
               {(formData.images || []).map((imgUrl, idx) => (
-                <div key={idx} className="relative aspect-square border border-neutral-800 bg-neutral-950 overflow-hidden group">
+                <div
+                  key={idx}
+                  draggable
+                  onDragStart={() => { dragIndex.current = idx; }}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => { e.preventDefault(); handleGalleryDrop(idx); }}
+                  onDragEnd={() => { dragIndex.current = null; }}
+                  className={`relative aspect-square border bg-neutral-950 overflow-hidden group transition-colors ${
+                    dragIndex.current === idx ? "opacity-40 border-primary" : "border-neutral-800"
+                  }`}
+                >
                   <Image src={imgUrl} alt={`gallery shot ${idx + 1}`} fill className="object-cover" />
                   <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5 p-1">
                     <button
@@ -625,6 +662,9 @@ export default function ProductFormPage({ params }: { params: Promise<{ id: stri
                     >
                       Remove
                     </button>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 text-center text-[8px] font-mono text-neutral-500 group-hover:text-neutral-300 bg-black/50 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    Drag to reorder
                   </div>
                 </div>
               ))}
@@ -654,28 +694,6 @@ export default function ProductFormPage({ params }: { params: Promise<{ id: stri
               </label>
               <Button type="button" variant="outline" size="xs" onClick={() => setIsGalleryPickerOpen(true)} className="w-full">
                 <ImageIcon size={12} /> Import Library
-              </Button>
-            </div>
-          </div>
-
-          {/* Form Actions */}
-          <div className="flex items-center justify-between gap-3 bg-[#0a0a0a] border border-white/10 p-4">
-            <div className="text-xs font-mono text-neutral-500 hidden sm:block">* Required fields</div>
-            <div className="flex items-center gap-3">
-              <Button asChild type="button" variant="outline" size="sm">
-                <Link href="/dashboard/products">Cancel</Link>
-              </Button>
-              <Button type="submit" variant="primary" size="sm" disabled={isSaving} className="min-w-[140px]">
-                {isSaving ? (
-                  <>
-                    <Loader2 size={14} className="animate-spin mr-1" />
-                    Saving...
-                  </>
-                ) : isEditing ? (
-                  "Update Product"
-                ) : (
-                  "Create Product"
-                )}
               </Button>
             </div>
           </div>

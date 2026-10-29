@@ -23,6 +23,7 @@ interface DashboardSidebarProps {
   user: any;
   onLogout: () => void;
   onLinkClick?: () => void;
+  mobile?: boolean;
 }
 
 const NAV_ITEMS = [
@@ -39,8 +40,79 @@ const NAV_ITEMS = [
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
-export function DashboardSidebar({ user, onLogout, onLinkClick }: DashboardSidebarProps) {
+export function DashboardSidebar({ user, onLogout, onLinkClick, mobile }: DashboardSidebarProps) {
   const pathname = usePathname();
+
+  if (mobile) {
+    return (
+      <aside className="flex flex-col h-full bg-[#0a0a0a] w-full">
+        {/* Compact brand header */}
+        <div className="px-4 pt-4 pb-3 flex items-center gap-2.5 border-b border-white/10 shrink-0">
+          <div className="relative h-8 w-8 shrink-0">
+            <img src="/A1esports_logo_white.svg" alt="A1 Esports" className="object-contain w-full h-full" />
+          </div>
+          <span className="font-michroma text-sm tracking-wider text-white uppercase">A1 ADMIN</span>
+        </div>
+
+        {/* 2-col nav tiles, no page scroll needed */}
+        <div className="flex-1 overflow-y-auto p-3">
+          <div className="grid grid-cols-3 gap-2">
+            {NAV_ITEMS.map((item) => {
+              const isActive = item.exact
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={onLinkClick}
+                  className={`flex flex-col items-start gap-2.5 p-3 rounded-sm border transition-all text-[11px] font-bold uppercase tracking-wider ${
+                    isActive
+                      ? "bg-primary/10 text-primary border-primary/30"
+                      : "bg-white/[0.02] border-white/5 text-neutral-300 hover:bg-white/5 hover:text-white"
+                  }`}
+                >
+                  <Icon size={18} />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+            <Link
+              href="/"
+              onClick={onLinkClick}
+              className="flex flex-col items-start gap-2.5 p-3 rounded-sm border border-white/5 bg-white/[0.02] text-neutral-400 hover:bg-white/5 hover:text-white transition-all text-[11px] font-bold uppercase tracking-wider"
+            >
+              <Home size={18} />
+              <span>Back to Website</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* User footer */}
+        {user && (
+          <div className="p-3 border-t border-white/10 space-y-2 shrink-0">
+            <div className="flex items-center gap-2.5 px-1">
+              <div className="h-8 w-8 rounded-sm bg-primary/20 border border-primary/30 flex items-center justify-center font-bold text-primary text-xs">
+                {user.email?.charAt(0).toUpperCase()}
+              </div>
+              <p className="text-xs font-bold text-white truncate">{user.email}</p>
+            </div>
+            <Button
+              onClick={onLogout}
+              variant="destructive"
+              size="sm"
+              className="w-full justify-start gap-3"
+            >
+              <LogOut size={14} />
+              <span>Logout</span>
+            </Button>
+          </div>
+        )}
+      </aside>
+    );
+  }
 
   return (
     <aside className="flex flex-col h-full bg-[#0a0a0a] p-6 border-r border-white/10 w-64">

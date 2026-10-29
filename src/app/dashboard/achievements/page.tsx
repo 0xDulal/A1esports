@@ -160,7 +160,7 @@ export default function AdminAchievements() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-michroma uppercase mb-2">Tournament Achievements</h1>
           <p className="text-neutral-400">Configure homepage source priority and manage custom tournament records</p>
@@ -347,7 +347,7 @@ export default function AdminAchievements() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-neutral-400 uppercase mb-2">Rank / Placement *</label>
                   <input
@@ -375,7 +375,7 @@ export default function AdminAchievements() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-neutral-400 uppercase mb-2">Prize Money</label>
                   <input
