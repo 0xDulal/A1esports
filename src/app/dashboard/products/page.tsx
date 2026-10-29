@@ -56,7 +56,7 @@ export default function AdminProducts() {
     return (
       <div className="relative overflow-hidden rounded-sm bg-[#0a0a0a] border border-white/10">
         {/* Swipe-revealed actions (behind the card) */}
-        <div className="absolute inset-y-0 right-0 flex items-center gap-2 pr-3">
+        <div className="absolute inset-y-0 right-0 flex items-center gap-2 pr-3 bg-[#0a0a0a]">
           <Link
             href={`/shop/${product.slug}`}
             target="_blank"
@@ -83,7 +83,9 @@ export default function AdminProducts() {
 
         {/* Card face that slides left on swipe */}
         <div
-          className="relative bg-[#0a0a0a] transition-transform"
+          className={`relative bg-[#0a0a0a] will-change-transform [-webkit-tap-highlight-color:transparent] touch-pan-y ${
+            startX === null ? "transition-transform" : ""
+          }`}
           style={{ transform: `translateX(${offset}px)` }}
           onTouchStart={(e) => setStartX(e.touches[0].clientX)}
           onTouchMove={(e) => {
